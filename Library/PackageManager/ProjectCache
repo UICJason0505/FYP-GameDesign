@@ -5,16 +5,26 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
+<<<<<<< HEAD
       ticks: 638852171917740915
     m_Hash: 2019128767
+=======
+      ticks: 638852196060842779
+    m_Hash: 321485606
+>>>>>>> 55fad385c7f985d765d604e3b4ad3bef206fbd37
   m_LockFileStatus:
     m_FilePath: D:/FYP/FYP-GameDesign/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
+<<<<<<< HEAD
       ticks: 638852171917836842
     m_Hash: 3032316398
+=======
+      ticks: 638852196060898000
+    m_Hash: 1327973194
+>>>>>>> 55fad385c7f985d765d604e3b4ad3bef206fbd37
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:

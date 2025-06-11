@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 Base path: 'D:/Applications/2022.3.62f1/Editor/Data', plugins path 'D:/Applications/2022.3.62f1/Editor/Data/PlaybackEngines'
+=======
+Base path: 'C:/Program Files/Unity/Hub/Editor/2022.3.62f1/Editor/Data', plugins path 'C:/Program Files/Unity/Hub/Editor/2022.3.62f1/Editor/Data/PlaybackEngines'
+>>>>>>> 55fad385c7f985d765d604e3b4ad3bef206fbd37
 Cmd: initializeCompiler
 
 Cmd: shutdown
