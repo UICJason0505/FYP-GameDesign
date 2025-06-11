@@ -52,17 +52,27 @@ public class HexGridGenerator : MonoBehaviour
         float xOffset = hexRadius * 1.5f;
         float zOffset = Mathf.Sqrt(3) * hexRadius;
 
+        // 计算实际棋盘中心点（基于最小格子和最大格子范围）
+        float gridWidth = (width - 1) * xOffset;
+        float gridHeight = (height - 1) * zOffset + zOffset / 2f; // 包括奇数列偏移
+        Vector3 gridCenterOffset = new Vector3(gridWidth / 2f, 0, gridHeight / 2f);
+
         for (int x = 0; x < width; x++)
         {
             for (int z = 0; z < height; z++)
             {
                 float xPos = x * xOffset;
                 float zPos = z * zOffset + (x % 2 == 0 ? 0 : zOffset / 2);
-                Vector3 spawnPos = transform.position + new Vector3(xPos, 0, zPos);
+                Vector3 localPos = new Vector3(xPos, 0, zPos);
+
+                // 修正：以当前生成器位置为中心，减去整个棋盘一半的宽高
+                Vector3 spawnPos = transform.position + localPos - gridCenterOffset;
 
                 GameObject hex = Instantiate(hexTilePrefab, spawnPos, Quaternion.identity, transform);
                 hex.transform.localScale = new Vector3(1, hexHeight, 1);
             }
         }
     }
+
+
 }
