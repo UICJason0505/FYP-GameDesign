@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class Chess : MonoBehaviour
 {
+    public int number = 2;
     // Start is called before the first frame update
     void Start()
     {
