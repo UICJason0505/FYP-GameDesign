@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Chess : MonoBehaviour
 {
-    public int number = 2;
+    public int number = 0;
     // Start is called before the first frame update
     void Start()
     {
