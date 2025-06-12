@@ -991,7 +991,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01fe293a1213a4c4e92334092913d846, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hexTilePrefab: {fileID: 3304254722221782764, guid: 97ed985e7115c7b4db09d9ba8f4f757f, type: 3}
+  hexTilePrefab: {fileID: 3304254722221782764, guid: 04cddbcacfa05f64c8544fef7afcf691, type: 3}
   width: 3
   height: 3
   hexRadius: 0.5
