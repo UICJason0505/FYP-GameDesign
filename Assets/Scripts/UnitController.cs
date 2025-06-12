@@ -4,8 +4,7 @@ using UnityEngine.ProBuilder.MeshOperations;
 public class UnitController : MonoBehaviour
 {
     public bool isSelected = false;
-    public Chess chess;
-    public Collider target;
+    private Chess chess;
     public void Select()
     {
         isSelected = true;
@@ -22,9 +21,10 @@ public class UnitController : MonoBehaviour
     {
         if (other.CompareTag("Chess"))
         {
-            Debug.Log($"{name} 进入 {target.name} 的触发区");
+            if (!other.CompareTag("Chess") || other.gameObject == gameObject) return;
+            if (GetInstanceID() > other.GetInstanceID()) return;
             Chess self = GetComponent<Chess>();
-            Chess enemy = target.GetComponent<Chess>();
+            Chess enemy = other.GetComponent<Chess>();
             if (self.number > enemy.number)
             {
                 self.number -= enemy.number;
