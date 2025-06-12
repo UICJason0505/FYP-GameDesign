@@ -122,58 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &626604
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 626606}
-  - component: {fileID: 626605}
-  m_Layer: 0
-  m_Name: HexGridGenerator (2)
-  m_TagString: Untagged
-  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &626605
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 626604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01fe293a1213a4c4e92334092913d846, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hexTilePrefab: {fileID: 3304254722221782764, guid: 97ed985e7115c7b4db09d9ba8f4f757f, type: 3}
-  width: 10
-  height: 10
-  hexRadius: 0.5
-  hexHeight: 0.2
-  normalY: 0.2
-  sunkenOffset: -0.7
-  transitionTime: 1
---- !u!4 &626606
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 626604}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10, y: 10, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &196512673
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,58 +225,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &377759539
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 377759541}
-  - component: {fileID: 377759540}
-  m_Layer: 0
-  m_Name: HexGridGenerator (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &377759540
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 377759539}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01fe293a1213a4c4e92334092913d846, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hexTilePrefab: {fileID: 3304254722221782764, guid: 97ed985e7115c7b4db09d9ba8f4f757f, type: 3}
-  width: 2
-  height: 2
-  hexRadius: 0.5
-  hexHeight: 0.2
-  normalY: 0.2
-  sunkenOffset: -0.7
-  transitionTime: 1
---- !u!4 &377759541
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 377759539}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,8 +594,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grids:
   - {fileID: 1709362427}
-  - {fileID: 377759540}
-  - {fileID: 626605}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &1382502662
 Transform:
   m_ObjectHideFlags: 0
@@ -1096,8 +992,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexTilePrefab: {fileID: 3304254722221782764, guid: 97ed985e7115c7b4db09d9ba8f4f757f, type: 3}
-  width: 10
-  height: 10
+  width: 3
+  height: 3
   hexRadius: 0.5
   hexHeight: 0.2
   normalY: 0.2
@@ -1383,8 +1279,6 @@ SceneRoots:
   - {fileID: 963194228}
   - {fileID: 705507995}
   - {fileID: 1709362428}
-  - {fileID: 377759541}
-  - {fileID: 626606}
   - {fileID: 1382502662}
   - {fileID: 196512677}
   - {fileID: 1512009816}
