@@ -4,7 +4,6 @@
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
 /[Ll]ibrary/
-/Library/Bee/
 /[Tt]emp/
 /[Oo]bj/
 /[Bb]uild/
@@ -515,3 +514,9 @@ FodyWeavers.xsd
 # Built Visual Studio Code Extensions
 *.vsix
 
+# Unity 本地缓存
+Library/
+Library/Bee/
+Temp/
+obj/
+Logs/
