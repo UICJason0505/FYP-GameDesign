@@ -18,6 +18,9 @@ public class Text : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (!string.Equals(text.text, chess.number.ToString()))
+        {
+            text.text = chess.number.ToString();
+        }
     }
 }
