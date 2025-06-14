@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 6517947061827782984}
   - component: {fileID: 7343022673922044341}
   m_Layer: 6
-  m_Name: Chess
+  m_Name: Commander
   m_TagString: Chess
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
