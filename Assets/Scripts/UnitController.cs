@@ -19,7 +19,8 @@ public class UnitController : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Chess"))
+        if (other.CompareTag("King")) return;
+            if (other.CompareTag("Chess"))
         {
             if (!other.CompareTag("Chess") || other.gameObject == gameObject) return;
             if (GetInstanceID() > other.GetInstanceID()) return;

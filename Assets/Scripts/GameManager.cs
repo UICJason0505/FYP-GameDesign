@@ -1,9 +1,17 @@
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public HexGridGenerator[] grids;
-
+    public static GameManager Instance { get; private set; }
+    public GameObject gameOverUI;   // 失败时显示的面板，可留空
+    public TMP_Text gameOverText;
+    private void Awake()
+    {
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
     void Update()
     {
         // 按 1 键让第一个棋盘沉下
@@ -21,5 +29,11 @@ public class GameManager : MonoBehaviour
         // 按 4 键让第二个棋盘浮起
         if (Input.GetKeyDown(KeyCode.Alpha4))
             grids[1].Rise();
+    }
+    public void GameOver(string reason = null)
+    {
+        Time.timeScale = 0;
+        gameOverUI.SetActive(true);
+        if (gameOverText != null) gameOverText.text = reason;
     }
 }
