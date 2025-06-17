@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlacebleObject : MonoBehaviour
 {
-    /*
+    
     public bool Placed { get; private set; }
     public Vector3Int Size { get; private set; }
     private Vector3[] Vertices;
@@ -30,7 +30,7 @@ public class PlacebleObject : MonoBehaviour
         for (int i = 0; i < Vertices.Length; i++)
         {
             Vector3 worldPos = transform.TransformPoint(Vertices[i]);
-            vertices[i] = BuildingSystem.instance.gridLayout.WorldToCell(worldPos);
+            vertices[i] = GridBuildingSystem.instance.gridLayout.WorldToCell(worldPos);
         }
 
         Size = new Vector3Int(Mathf.Abs((vertices[0] - vertices[1]).x) + 1,
@@ -72,5 +72,5 @@ public class PlacebleObject : MonoBehaviour
         // Invoke events of placement here
 
     }
-    */
+    
 }
