@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlacebleObject : MonoBehaviour
 {
-
+    /*
     public bool Placed { get; private set; }
     public Vector3Int Size { get; private set; }
     private Vector3[] Vertices;
@@ -72,5 +72,5 @@ public class PlacebleObject : MonoBehaviour
         // Invoke events of placement here
 
     }
-
+    */
 }
