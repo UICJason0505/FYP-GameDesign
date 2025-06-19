@@ -1,0 +1,48 @@
+using UnityEngine;
+
+public class HexMath : MonoBehaviour
+{
+    public static Vector3 originWorld = Vector3.zero;
+
+    public struct Coordinates
+    {
+        public int x;
+        public int z;
+        public int y => -x - z;
+        public Coordinates(int x, int z) { this.x = x; this.z = z; }
+        public override int GetHashCode() => (x, z).GetHashCode();
+    }
+
+    private static Coordinates RoundAxial(float qf, float rf)
+    {
+        float sf = -qf - rf;
+        int qi = Mathf.RoundToInt(qf);
+        int ri = Mathf.RoundToInt(rf);
+        int si = Mathf.RoundToInt(sf);
+
+        float dq = Mathf.Abs(qi - qf);
+        float dr = Mathf.Abs(ri - rf);
+        float ds = Mathf.Abs(si - sf);
+
+        if (dq > dr && dq > ds) qi = -ri - si;
+        else if (dr > ds) ri = -qi - si;
+        else si = -qi - ri;
+
+        return new Coordinates(qi, ri);
+    }
+
+    public static Coordinates WorldToCoordinates(Vector3 world, float radius)
+    {
+        Vector3 rel = world - originWorld;
+        float qf = (2f / 3f * rel.z) / radius;
+        float rf = (-1f / 3f * rel.z + Mathf.Sqrt(3f) / 3f * rel.x) / radius;
+        return RoundAxial(qf, rf);
+    }
+
+    public static Vector3 CoordinatesToWorld(Coordinates c, float radius, float y = 0f)
+    {
+        float wx = radius * Mathf.Sqrt(3f) * (c.z + c.x * 0.5f);
+        float wz = radius * 1.5f * c.x;
+        return originWorld + new Vector3(wx, y, wz);
+    }
+}

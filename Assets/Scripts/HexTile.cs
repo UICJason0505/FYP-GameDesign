@@ -1,13 +1,16 @@
 using UnityEngine;
-
+using static HexMath;
 public class HexTile : MonoBehaviour
 {
-    public Vector3 GetTopCenter()
-    {
-        // 中心点 + 格子高度一半（假设为 0.5f）
-        return transform.position + Vector3.up * 0.5f;
-    }
+    public Coordinates coordinates;            
+    public Vector3 centerWorld;    
 
-    // 检查是否已有棋子（可拓展为占用标志）
-    public bool IsOccupied = false;
+    private void Awake()
+    {
+        MeshRenderer mr = GetComponent<MeshRenderer>();
+        centerWorld = mr.bounds.center;
+        float a = Mathf.Max(mr.bounds.size.x, mr.bounds.size.z) * 0.5f + 0.1f;
+        coordinates = HexMath.WorldToCoordinates(centerWorld, a);
+        TileManager.Register(this, coordinates);
+    }
 }
