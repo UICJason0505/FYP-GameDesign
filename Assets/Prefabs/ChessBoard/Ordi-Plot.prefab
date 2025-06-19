@@ -1723,3 +1723,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   centerWorld: {x: 0, y: 0, z: 0}
+  tileValue: 1

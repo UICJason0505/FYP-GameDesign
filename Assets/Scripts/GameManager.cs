@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public HexGridGenerator[] grids;
     public static GameManager Instance { get; private set; }
     public GameObject gameOverUI;   // 失败时显示的面板，可留空
     public TMP_Text gameOverText;
