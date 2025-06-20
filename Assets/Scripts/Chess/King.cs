@@ -4,16 +4,28 @@ using UnityEngine;
 
 public class King : MonoBehaviour
 {
-    // Start is called before the first frame update
-    public int blood = 1;
+    [Header("基础属性")]
+    public string unitName = "国王";
+    public int blood = 5;
+
+    void OnMouseDown()
+    {
+        Debug.Log("我被点击了！");
+        var panel = FindObjectOfType<UnitInfoPanelController>();
+        if (panel != null)
+        {
+            panel.ShowUnit(unitName, blood);
+        }
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Chess")) TakeDamage();
     }
+
     public void TakeDamage()
     {
         blood--;
-
         if (blood <= 0)
         {
             Die();
