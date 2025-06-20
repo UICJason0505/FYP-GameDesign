@@ -4747,7 +4747,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cc76222e3339664eb775e57f6c8e6f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panSpeed: 20
+  panSpeed: 2
   rotateSpeed: 70
   zoomSpeed: 500
   minY: 10
@@ -6562,6 +6562,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1382502662}
   - component: {fileID: 1382502661}
+  - component: {fileID: 1382502663}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -6598,6 +6599,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1382502663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382502660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efaba264c523eba4c9ec4da6d37f70bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1430134773
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8490,6 +8503,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4281923178117481248, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
+      propertyPath: panel
+      value: 
+      objectReference: {fileID: 621640348}
     - target: {fileID: 5433386401727367742, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
       propertyPath: m_Name
       value: King (1)
@@ -8882,6 +8899,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4281923178117481248, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
+      propertyPath: blood
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281923178117481248, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
+      propertyPath: panel
+      value: 
+      objectReference: {fileID: 621640348}
+    - target: {fileID: 4281923178117481248, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
+      propertyPath: unitName
+      value: King
+      objectReference: {fileID: 0}
     - target: {fileID: 5433386401727367742, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
       propertyPath: m_Name
       value: King

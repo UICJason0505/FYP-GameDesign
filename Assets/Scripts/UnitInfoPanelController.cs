@@ -62,7 +62,7 @@ public class UnitInfoPanelController : MonoBehaviour
     }
     public void ShowUnit(string unitName, int blood)
     {
-        Debug.Log("ShowUnit 调用成功！");
+        //需要挂载在所有棋子中
         nameText.text = unitName;
         numberText.text = blood.ToString();
         gameObject.SetActive(true);
