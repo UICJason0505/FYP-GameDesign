@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Autodesk.Fbx;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using static HexMath;
@@ -8,10 +9,12 @@ public class GridBuildingSystem : MonoBehaviour
 {
     public static GridBuildingSystem Instance { get; private set; }
     [Header("Prefabs")]
-    public GameObject Chess1, Chess2, Chess3;
+    public GameObject Chess1, Chess2;
     private PlacebleObject current;
     private readonly HashSet<Coordinates> occupied = new(); 
     private void Awake() => Instance = this;
+    private int MeeleCount = 0;
+    private int RangedCount = 0;
     public static Vector3 GetMousePos(float offset = 0f)
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -43,7 +46,6 @@ public class GridBuildingSystem : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Keypad0)) StartPlacing(Chess1);
         if (Input.GetKeyDown(KeyCode.Keypad1)) StartPlacing(Chess2);
-        if (Input.GetKeyDown(KeyCode.Keypad2)) StartPlacing(Chess3);
         if (current == null) return;
         if (Input.GetMouseButtonDown(0))
         {
@@ -65,5 +67,10 @@ public class GridBuildingSystem : MonoBehaviour
     {
         if(current) Destroy(current.gameObject);
         current = Instantiate(prefab, Vector3.up * 2, Quaternion.identity).GetComponent<PlacebleObject>();
+        Chess chess = current.GetComponent<Chess>();
+        if (prefab == Chess1)
+            chess.Init("Melee", ++MeeleCount, null);
+        else
+            chess.Init("Ranged", ++RangedCount, null);
     }
 }

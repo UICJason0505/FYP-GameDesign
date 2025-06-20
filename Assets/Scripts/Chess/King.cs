@@ -8,7 +8,13 @@ public class King : MonoBehaviour
     public string unitName = "国王";
     public int blood = 5;
     public UnitInfoPanelController panel;
-
+    void Update()
+    {
+        if(panel == null && Input.GetMouseButtonDown(1))
+        {
+            panel.Hide();
+        }
+    }
     void OnMouseDown()
     {
         if (panel != null)
