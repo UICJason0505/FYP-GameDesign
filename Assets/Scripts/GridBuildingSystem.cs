@@ -44,8 +44,8 @@ public class GridBuildingSystem : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Keypad0)) StartPlacing(Chess1);
-        if (Input.GetKeyDown(KeyCode.Keypad1)) StartPlacing(Chess2);
+        if (Input.GetKeyDown(KeyCode.Alpha0)) StartPlacing(Chess1);
+        if (Input.GetKeyDown(KeyCode.Alpha1)) StartPlacing(Chess2);
         if (current == null) return;
         if (Input.GetMouseButtonDown(0))
         {
