@@ -13,6 +13,7 @@ public class TurnManager : MonoBehaviour
     public TMP_Text turnText;
     public Button nextTurnButton;
     private String[] names = {"Red", "Blue", "Green", "Yellow" };
+    public TMP_Text actionPointText;
 
     void Start()
     {
@@ -32,11 +33,19 @@ public class TurnManager : MonoBehaviour
     {
         players[turnCount].canOperate = false;
         turnCount++;
+
         if (turnCount >= playerNum)
         {
             turnCount = 0;
             fullTurn++;
+
+            // Reset action points for all players at the end of a full turn
+            foreach (var player in players)
+            {
+                player.ResetActionPoints();
+            }
         }
+
         players[turnCount].canOperate = true;
         UpdateTurnText();
     }
@@ -44,5 +53,9 @@ public class TurnManager : MonoBehaviour
     void UpdateTurnText()
     {
         turnText.text = "Turn: " + fullTurn.ToString();
+
+        // Update the action points display for the current player
+        var currentPlayer = players[turnCount];
+        actionPointText.text = "AP: " + currentPlayer.actionPoints.ToString();
     }
 }

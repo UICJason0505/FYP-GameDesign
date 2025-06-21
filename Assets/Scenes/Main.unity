@@ -8359,6 +8359,7 @@ MonoBehaviour:
   playerNum: 2
   turnText: {fileID: 1470640341}
   nextTurnButton: {fileID: 1981053854}
+  actionPointText: {fileID: 1061228030}
 --- !u!4 &1764908832
 Transform:
   m_ObjectHideFlags: 0
