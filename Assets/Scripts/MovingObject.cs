@@ -83,22 +83,9 @@ public class MovingObject : MonoBehaviour
         // 按下 Z 键开始拖动或返回原位置
         if (isObjectSelected && Input.GetKeyDown(KeyCode.Z))
         {
-            if (isDragging)
-            {
-                // 如果已经在拖动，按 Z 键返回原位置并停止拖动
-                if (selectedObj != null)
-                {
-                    selectedObj.transform.position = originalPosition;
-                }
-                isDragging = false;
-                Debug.Log("物体返回原位置，拖动已取消");
-            }
-            else
-            {
-                // 如果没有拖动，开始拖动
-                isDragging = true;
-                Debug.Log("开始拖动物体");
-            }
+            // 如果没有拖动，开始拖动
+            isDragging = true;
+            Debug.Log("开始拖动物体");
         }
 
         // 如果正在拖动物体
