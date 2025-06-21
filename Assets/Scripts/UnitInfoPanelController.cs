@@ -11,8 +11,8 @@ public class UnitInfoPanelController : MonoBehaviour
     public Image cIndicator;
     public Image vIndicator;
     
-    private Color normalColor = Color.white;
-    private Color activeColor = new Color(0.7f, 0.7f, 0.7f); // 70%亮度灰色
+    private Color normalColor = Color.grey; // 默认灰色
+    private Color activeColor = Color.white; // 70%亮度灰色
     
     // 当前选中的技能键
     private KeyCode? selectedKey = null;

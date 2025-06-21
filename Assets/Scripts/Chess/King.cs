@@ -10,7 +10,7 @@ public class King : MonoBehaviour
     public UnitInfoPanelController panel;
     void Update()
     {
-        if(panel == null && Input.GetMouseButtonDown(1))
+        if(panel != null && Input.GetMouseButtonDown(1))
         {
             panel.Hide();
         }
