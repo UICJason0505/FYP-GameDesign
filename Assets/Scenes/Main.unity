@@ -4793,7 +4793,6 @@ MonoBehaviour:
   xIndicator: {fileID: 1311508914}
   cIndicator: {fileID: 2132268851}
   vIndicator: {fileID: 1644978903}
-  subPanel: {fileID: 0}
 --- !u!43 &677121747
 Mesh:
   m_ObjectHideFlags: 0
@@ -12642,6 +12641,7 @@ GameObject:
   - component: {fileID: 1613563791}
   - component: {fileID: 1613563790}
   - component: {fileID: 1613563792}
+  - component: {fileID: 1613563793}
   m_Layer: 5
   m_Name: SubPanal
   m_TagString: Untagged
@@ -12728,6 +12728,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panelRoot: {fileID: 1613563788}
+--- !u!114 &1613563793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1613563788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beceb256d9333654ca1d69b99e337caf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slots:
+  - {fileID: 1847372140}
+  - {fileID: 1387060874}
+  - {fileID: 94266669}
+  - {fileID: 1246632528}
+  - {fileID: 937386425}
+  - {fileID: 1534738719}
+  - {fileID: 43332690}
+  - {fileID: 729656223}
+  - {fileID: 831496424}
+  normalColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  activeColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!43 &1618416950
 Mesh:
   m_ObjectHideFlags: 0

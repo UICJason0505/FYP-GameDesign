@@ -10,8 +10,9 @@ public class UnitInfoPanelController : MonoBehaviour
     public Image xIndicator;
     public Image cIndicator;
     public Image vIndicator;
-    public SubPanelController subPanel;
-    
+
+    //public SubPanelController SubPanelUI;
+
     private Color normalColor = Color.grey; // 默认灰色
     private Color activeColor = Color.white; // 70%亮度灰色
     
