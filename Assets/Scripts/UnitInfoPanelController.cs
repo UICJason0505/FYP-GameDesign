@@ -10,6 +10,7 @@ public class UnitInfoPanelController : MonoBehaviour
     public Image xIndicator;
     public Image cIndicator;
     public Image vIndicator;
+    public SubPanelController subPanel;
     
     private Color normalColor = Color.grey; // 默认灰色
     private Color activeColor = Color.white; // 70%亮度灰色
@@ -22,16 +23,24 @@ public class UnitInfoPanelController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-        void Update()
+    void Update()
     {
         // 仅当面板可见时处理快捷键
         if (!gameObject.activeSelf) return;
-        
+
         // 检测ZXCV按键状态
         CheckKeyPress(KeyCode.Z, zIndicator);
         CheckKeyPress(KeyCode.X, xIndicator);
         CheckKeyPress(KeyCode.C, cIndicator);
         CheckKeyPress(KeyCode.V, vIndicator);
+
+        //if (Input.GetKeyDown(KeyCode.C))//King的C键显示子面板
+        //{
+        //    if (currentUnit.unitName == "King")
+        //    {
+        //        subPanel.Show();
+        //    }
+        //}
     }
 
     private void CheckKeyPress(KeyCode key, Image indicator)
@@ -67,7 +76,6 @@ public class UnitInfoPanelController : MonoBehaviour
         numberText.text = blood.ToString();
         gameObject.SetActive(true);
     }
-
     public void Hide()
     {
         gameObject.SetActive(false);
