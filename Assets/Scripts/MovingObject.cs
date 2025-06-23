@@ -1,8 +1,8 @@
 using UnityEngine;
 using static HexMath;
-
 public class MovingObject : MonoBehaviour
 {
+    public TurnManager turnManager;
     public static GameObject selectedObj; // 当前选中的物体
     private static Coordinates coordinates; // 棋子的坐标(using HexMath)
     private Vector3 offset; // 物体与鼠标的偏移量
@@ -25,13 +25,17 @@ public class MovingObject : MonoBehaviour
         lineRenderer.positionCount = 0;  // 初始时没有任何点
         lineRenderer.startWidth = 0.1f;  // 设置路径线的宽度
         lineRenderer.endWidth = 0.1f;    // 设置路径线的宽度
-
+        turnManager = FindObjectOfType<TurnManager>(); // 获取 TurnManager 实例
         // 初始化 Player
-        player = new Player(1, "Player 1");  // 玩家 ID 为 1，名字为 "Player 1"
+        // player = new Player(1, "name");
+
     }
 
     void Update()
     {
+        // 初始化 Player
+        player = turnManager.players[turnManager.turnCount];
+
         // 如果鼠标左键按下，选中物体
         if (Input.GetMouseButtonDown(0))
         {
@@ -137,7 +141,7 @@ public class MovingObject : MonoBehaviour
         }
 
         // 如果正在拖动物体
-        if (isDragging && selectedObj != null && player.actionPoints >= 0)
+        if (isDragging && selectedObj != null && player.actionPoints > 0)
         {
             // 获取鼠标位置并将物体拖动到该位置，同时使用 Snap 函数来对齐到网格
             Vector3 mousePosition = GridBuildingSystem.GetMousePos();
@@ -146,10 +150,10 @@ public class MovingObject : MonoBehaviour
 
             if (HasMovedOneStep(startCoordinates, coordinates))
             {
-                Debug.Log($"当前行动点: " + player.actionPoints);
                 Debug.Log($"当前物体坐标: ({coordinates.x}, {coordinates.z})");
                 player.actionPoints--;  // 每次走一格消耗 1 点行动点
-                //想办法在这里调用CollectTileValue(tile)；
+                Debug.Log($"当前行动点: " + player.actionPoints);
+
                 startCoordinates = coordinates;  // 更新起始坐标
             }
             UpdatePath(selectedObj.transform.position);
@@ -176,7 +180,7 @@ public class MovingObject : MonoBehaviour
     private bool HasMovedOneStep(Coordinates start, Coordinates current)
     {
         // 检查 x 或 z 坐标差值是否为 1（即移动了一格）
-        return Mathf.Abs(current.x - start.x) >= 1 || Mathf.Abs(current.z - start.z) >= 1;
+        return Mathf.Abs(current.x - start.x) == 1 || Mathf.Abs(current.z - start.z) == 1;
     }
 
     // Snap 方法，通过调用 GridBuildingSystem 的 Snap 函数来实现对齐
