@@ -8,6 +8,7 @@ public class PlacebleObject : MonoBehaviour
     private Collider[] allCols;
     private Vector3 mouseOffset;
     public bool Placed { get; private set; }
+    public bool Dragging { get; private set; }
     public Coordinates GridPos { get; private set; }
     private void Awake()
     {
@@ -25,11 +26,17 @@ public class PlacebleObject : MonoBehaviour
         Vector3 root = GridBuildingSystem.GetMousePos() + mouseOffset;
         transform.position = GridBuildingSystem.Instance.Snap(root);
     }
+    public void BeginDrag()
+    {
+        Placed = false;
+        foreach (var c in allCols) c.enabled = false;
+        mouseOffset = transform.position - GridBuildingSystem.GetMousePos();
+    }
     public void FinalizePlacement(Coordinates a, Vector3 center)
     {
         Placed = true;
         GridPos = a;
-        transform.position = center + Vector3.up * 0.5f;
+        transform.position = center + Vector3.up * 0.7f;
         foreach (var c in allCols) c.enabled = true;
     }
 

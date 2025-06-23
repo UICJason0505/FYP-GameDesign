@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Autodesk.Fbx;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using static HexMath;
@@ -11,10 +10,17 @@ public class GridBuildingSystem : MonoBehaviour
     [Header("Prefabs")]
     public GameObject Chess1, Chess2;
     private PlacebleObject current;
-    private readonly HashSet<Coordinates> occupied = new(); 
+    private readonly HashSet<Coordinates> occupied = new();
     private void Awake() => Instance = this;
     private int MeeleCount = 0;
     private int RangedCount = 0;
+    public void Pickup(PlacebleObject obj)
+    {
+        if (!obj.Placed) return;
+        occupied.Remove(obj.GridPos);
+        current = obj;
+        obj.BeginDrag();
+    }
     public static Vector3 GetMousePos(float offset = 0f)
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -39,13 +45,13 @@ public class GridBuildingSystem : MonoBehaviour
     {
         if (TryGetHoveredTile(out HexTile tile))
             return tile.centerWorld + Vector3.up * 0.5f;
-        rootPos.y = 0.5f;                     
+        rootPos.y = 0.5f;
         return rootPos;
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha0)) StartPlacing(Chess1);
-        if (Input.GetKeyDown(KeyCode.Alpha1)) StartPlacing(Chess2);
+        if (Input.GetKeyDown(KeyCode.Keypad0)) StartPlacing(Chess1);
+        if (Input.GetKeyDown(KeyCode.Keypad1)) StartPlacing(Chess2);
         if (current == null) return;
         if (Input.GetMouseButtonDown(0))
         {
@@ -65,7 +71,7 @@ public class GridBuildingSystem : MonoBehaviour
     }
     private void StartPlacing(GameObject prefab)
     {
-        if(current) Destroy(current.gameObject);
+        if (current) Destroy(current.gameObject);
         current = Instantiate(prefab, Vector3.up * 2, Quaternion.identity).GetComponent<PlacebleObject>();
         Chess chess = current.GetComponent<Chess>();
         if (prefab == Chess1)
