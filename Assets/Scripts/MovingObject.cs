@@ -1,13 +1,16 @@
 using UnityEngine;
-using static GridBuildingSystem;
+using static HexMath;
+using static Player;
 
 public class MovingObject : MonoBehaviour
 {
     private static GameObject selectedObj; // 当前选中的物体
+    private static Coordinates coordinates; //棋子的坐标
     private Vector3 offset; // 物体与鼠标的偏移量
     private Vector3 originalPosition; // 存储物体的原始位置
     private bool isDragging = false; // 是否正在拖动物体
     private bool isObjectSelected = false; // 标记物体是否已经选中
+    private Player player;  // 当前玩家
 
     // LineRenderer 用来绘制路径
     private LineRenderer lineRenderer;
@@ -20,6 +23,9 @@ public class MovingObject : MonoBehaviour
         lineRenderer.positionCount = 0;  // 初始时没有任何点
         lineRenderer.startWidth = 0.1f;  // 设置路径线的宽度
         lineRenderer.endWidth = 0.1f;    // 设置路径线的宽度
+
+        // 初始化 Player
+        player = new Player(1, "Player 1");  // 玩家 ID 为 1，名字为 "Player 1"
     }
 
     void Update()
@@ -28,21 +34,12 @@ public class MovingObject : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             // 执行射线检测，获取点击的物体
-            RaycastHit hit = CastRay();
-            if (hit.collider == null) { return; }
+            GameObject clickedObject = RayToGetObj();
+            if (clickedObject == null) { return; }
 
-            GameObject clickedObject = hit.collider.gameObject;
 
-            /*
-            // 检查是否有MovableObject脚本
-            MovableObject movableObject = clickedObject.GetComponent<MovableObject>();
-            if (movableObject == null)
-            {
-                // 如果没有MovableObject脚本，忽略该物体
-                return;
-            }
+            coordinates = WorldToCoordinates(clickedObject.transform.position, 1);
 
-            
             // 检查是否有PlacebleObject脚本
             PlacebleObject placebleObject = clickedObject.GetComponent<PlacebleObject>();
             if (placebleObject == null)
@@ -50,12 +47,11 @@ public class MovingObject : MonoBehaviour
                 // 如果没有MovableObject脚本，忽略该物体
                 return;
             }
-            */
 
             // 如果当前有物体被选中，取消选中并取消高亮
             if (isObjectSelected && selectedObj != clickedObject)
             {
-                Unhighlight();  // 取消当前物体的高亮
+                Unhighlight();
                 isObjectSelected = false;
             }
 
@@ -65,11 +61,10 @@ public class MovingObject : MonoBehaviour
                 selectedObj = clickedObject;
                 isObjectSelected = true;
 
-                // 高亮表示被选中
                 Highlight();
 
                 // 计算选中物体与鼠标之间的偏移
-                offset = selectedObj.transform.position - hit.point;
+                offset = selectedObj.transform.position - clickedObject.transform.position;
 
                 // 存储物体的原始位置
                 originalPosition = selectedObj.transform.position;
@@ -91,7 +86,6 @@ public class MovingObject : MonoBehaviour
                 Unhighlight();
                 Debug.Log("物体已放下");
 
-                // 清除路径（物体放下后，隐藏路径）
                 ClearPath();
             }
         }
@@ -112,7 +106,6 @@ public class MovingObject : MonoBehaviour
                 isObjectSelected = false;
                 Debug.Log("物体已返回原位置并取消拖动");
 
-                // 清除路径（物体返回原位置后，隐藏路径）
                 ClearPath();
             }
             else if (isObjectSelected)
@@ -123,7 +116,6 @@ public class MovingObject : MonoBehaviour
                 selectedObj = null;
                 Debug.Log("物体已取消选中");
 
-                // 清除路径（取消选中物体后，隐藏路径）
                 ClearPath();
             }
         }
@@ -149,17 +141,17 @@ public class MovingObject : MonoBehaviour
     }
 
     // 执行射线检测
-    private RaycastHit CastRay()
+    public GameObject RayToGetObj()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // 从鼠标位置发射射线
-
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit)) // 检测射线是否击中物体
+
+        if (Physics.Raycast(ray, out hit)) // 如果射线击中了物体
         {
-            return hit;
+            return hit.collider.gameObject; // 返回被点击的物体
         }
 
-        return default;
+        return null; // 如果没有击中物体，返回 null
     }
 
     // Snap 方法，通过调用 GridBuildingSystem 的 Snap 函数来实现对齐

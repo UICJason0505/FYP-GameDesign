@@ -44,8 +44,8 @@ public class GridBuildingSystem : MonoBehaviour
     public Vector3 Snap(Vector3 rootPos)
     {
         if (TryGetHoveredTile(out HexTile tile))
-            return tile.centerWorld + Vector3.up * 0.5f;
-        rootPos.y = 0.5f;
+            return tile.centerWorld + Vector3.up * 0.8f;
+        rootPos.y = 0.8f;
         return rootPos;
     }
     private void Update()

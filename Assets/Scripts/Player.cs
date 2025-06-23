@@ -8,17 +8,17 @@ public class Player
     public int playerID;
     public string playerName;
     public bool canOperate = false;
-    public int actionPoints = 10;
+    public int actionPoints;
     public Player(int id, string name)
     {
         this.playerID = id;
         this.playerName = name;
         canOperate = false;
-        actionPoints = 10; // Default action points
+        actionPoints = 5; // Default action points
     }
     public void ResetActionPoints()
     {
-        actionPoints = 10;
+        actionPoints = 5;
     }
 
     public bool HasActionPoints()
