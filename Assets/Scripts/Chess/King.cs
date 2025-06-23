@@ -10,9 +10,18 @@ public class King : MonoBehaviour
     public UnitInfoPanelController panel;
     void Update()
     {
-        if(panel != null && Input.GetMouseButtonDown(1))
+        if (panel != null && Input.GetMouseButtonDown(1))
         {
             panel.Hide();
+        }
+        //if (!isSelected) return; 
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            GridBuildingSystem.Instance.SpawnChess1();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            GridBuildingSystem.Instance.SpawnChess2();
         }
     }
     void OnMouseDown()

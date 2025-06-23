@@ -4869,7 +4869,6 @@ MonoBehaviour:
   xIndicator: {fileID: 1311508914}
   cIndicator: {fileID: 2132268851}
   vIndicator: {fileID: 1644978903}
-  Panel: {fileID: 1613563793}
   subPanelUI: {fileID: 1613563793}
 --- !u!43 &677121747
 Mesh:
@@ -12045,9 +12044,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4281923178117481248, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
+      propertyPath: blood
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281923178117481248, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
       propertyPath: panel
       value: 
       objectReference: {fileID: 621640348}
+    - target: {fileID: 4281923178117481248, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
+      propertyPath: unitName
+      value: King
+      objectReference: {fileID: 0}
     - target: {fileID: 5433386401727367742, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
       propertyPath: m_Name
       value: King (2)
@@ -15018,9 +15025,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4281923178117481248, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
+      propertyPath: blood
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281923178117481248, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
       propertyPath: panel
       value: 
       objectReference: {fileID: 621640348}
+    - target: {fileID: 4281923178117481248, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
+      propertyPath: unitName
+      value: King
+      objectReference: {fileID: 0}
     - target: {fileID: 5433386401727367742, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
       propertyPath: m_Name
       value: King (1)

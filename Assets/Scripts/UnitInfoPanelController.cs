@@ -11,7 +11,6 @@ public class UnitInfoPanelController : MonoBehaviour
     public Image cIndicator;
     public Image vIndicator;
 
-    public SubPanelUI Panel;
     public SubPanelUI subPanelUI;
 
     private Color normalColor = Color.grey; // 默认灰色

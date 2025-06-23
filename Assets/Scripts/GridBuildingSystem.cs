@@ -50,8 +50,9 @@ public class GridBuildingSystem : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Keypad0)) StartPlacing(Chess1);
-        if (Input.GetKeyDown(KeyCode.Keypad1)) StartPlacing(Chess2);
+        //测试
+        //if (Input.GetKeyDown(KeyCode.Keypad0)) StartPlacing(Chess1);
+        //if (Input.GetKeyDown(KeyCode.Keypad1)) StartPlacing(Chess2);
         if (current == null) return;
         if (Input.GetMouseButtonDown(0))
         {
@@ -61,7 +62,7 @@ public class GridBuildingSystem : MonoBehaviour
                 occupied.Add(tile.coordinates);
                 current = null;
             }
-            else Debug.LogWarning("�Ƿ�λ�ã�");
+            else Debug.LogWarning("�Ƿ�λ�ã�");
         }
         else if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -79,4 +80,7 @@ public class GridBuildingSystem : MonoBehaviour
         else
             chess.Init("Ranged", ++RangedCount, null);
     }
+
+    public void SpawnChess1() => StartPlacing(Chess1);
+    public void SpawnChess2() => StartPlacing(Chess2);
 }
