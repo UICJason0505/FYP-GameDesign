@@ -10,8 +10,12 @@ public class PlacebleObject : MonoBehaviour
     public bool Placed { get; private set; }
     public bool Dragging { get; private set; }
     public Coordinates GridPos { get; private set; }
+    public GridBuildingSystem gridBuildingSystem;
+    public Chess chess;
+    private Vector3 pos;
     private void Awake()
     {
+        gridBuildingSystem = GetComponent<GridBuildingSystem>();
         if (this.CompareTag("King"))
         {
             Placed = true;
@@ -39,6 +43,8 @@ public class PlacebleObject : MonoBehaviour
     }
     public void FinalizePlacement(Coordinates a, Vector3 center)
     {
+        chess = GetComponent<Chess>();
+        chess.position = a;
         Placed = true;
         GridPos = a;
         transform.position = center + Vector3.up * 0.7f;

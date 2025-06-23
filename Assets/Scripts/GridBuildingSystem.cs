@@ -14,6 +14,7 @@ public class GridBuildingSystem : MonoBehaviour
     private void Awake() => Instance = this;
     private int MeeleCount = 0;
     private int RangedCount = 0;
+    private Vector3 position;
     public void Pickup(PlacebleObject obj)
     {
         if (!obj.Placed) return;
@@ -44,9 +45,9 @@ public class GridBuildingSystem : MonoBehaviour
     public Vector3 Snap(Vector3 rootPos)
     {
         if (TryGetHoveredTile(out HexTile tile))
+            position = tile.centerWorld + Vector3.up * 0.8f;
             return tile.centerWorld + Vector3.up * 0.8f;
-        rootPos.y = 0.8f;
-        return rootPos;
+        return position;
     }
     private void Update()
     {
