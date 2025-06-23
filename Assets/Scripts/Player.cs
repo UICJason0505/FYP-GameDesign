@@ -25,10 +25,18 @@ public class Player
     {
         return actionPoints > 0;
     }
-
+    public bool HasEnoughActionPoints(int amount)
+    {
+        return actionPoints >= amount;
+    }
     public void UseActionPoint()
     {
         if (actionPoints > 0)
             actionPoints--;
     }
+        public void UseActionPoint(int amount = 1)
+    {
+        actionPoints = Mathf.Max(actionPoints - amount, 0);
+    }
+
 }

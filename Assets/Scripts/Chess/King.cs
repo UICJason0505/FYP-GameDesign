@@ -5,7 +5,7 @@ using UnityEngine;
 public class King : MonoBehaviour
 {
     [Header("基础属性")]
-    public string unitName = "国王";
+    public string unitName = "King";
     public int blood = 5;
     public UnitInfoPanelController panel;
     void Update()

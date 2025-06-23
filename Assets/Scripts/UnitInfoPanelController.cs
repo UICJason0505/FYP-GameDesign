@@ -11,7 +11,8 @@ public class UnitInfoPanelController : MonoBehaviour
     public Image cIndicator;
     public Image vIndicator;
 
-    //public SubPanelController SubPanelUI;
+    public SubPanelUI Panel;
+    public SubPanelUI subPanelUI;
 
     private Color normalColor = Color.grey; // 默认灰色
     private Color activeColor = Color.white; // 70%亮度灰色
@@ -29,19 +30,24 @@ public class UnitInfoPanelController : MonoBehaviour
         // 仅当面板可见时处理快捷键
         if (!gameObject.activeSelf) return;
 
-        // 检测ZXCV按键状态
         CheckKeyPress(KeyCode.Z, zIndicator);
         CheckKeyPress(KeyCode.X, xIndicator);
-        CheckKeyPress(KeyCode.C, cIndicator);
+        //CheckKeyPress(KeyCode.C, cIndicator);
         CheckKeyPress(KeyCode.V, vIndicator);
+        // 手动处理 C 键逻辑（包含打开 SubPanel）
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            ResetAllIndicators();
+            cIndicator.color = activeColor;
+            selectedKey = KeyCode.C;
 
-        //if (Input.GetKeyDown(KeyCode.C))//King的C键显示子面板
-        //{
-        //    if (currentUnit.unitName == "King")
-        //    {
-        //        subPanel.Show();
-        //    }
-        //}
+            // ✅ 如果当前显示的是 King，打开子面板
+            if (nameText.text == "King" && subPanelUI != null)
+            {
+                subPanelUI.ShowPanel();
+            }
+        }
+
     }
 
     private void CheckKeyPress(KeyCode key, Image indicator)
