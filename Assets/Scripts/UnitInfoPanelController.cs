@@ -48,20 +48,12 @@ public class UnitInfoPanelController : MonoBehaviour
     {
         if (Input.GetKeyDown(key))
         {
-            // 如果再次按下已选中的键，则取消选中
-            if (selectedKey == key)
-            {
-                indicator.color = normalColor;
-                selectedKey = null;
-            }
-            else
-            {
-                ResetAllIndicators();
-                indicator.color = activeColor;
-                selectedKey = key;
-            }
+            ResetAllIndicators();
+            indicator.color = activeColor;
+            selectedKey = key;
         }
     }
+
     private void ResetAllIndicators()
     {
         zIndicator.color = normalColor;
@@ -79,6 +71,7 @@ public class UnitInfoPanelController : MonoBehaviour
     }
     public void Hide()
     {
+        ResetAllIndicators(); // 每次关闭时重置按钮颜色
         gameObject.SetActive(false);
     }
 }
