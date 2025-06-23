@@ -63,7 +63,6 @@ public class GridBuildingSystem : MonoBehaviour
                 occupied.Add(tile.coordinates);
                 current = null;
             }
-            else Debug.LogWarning("�Ƿ�λ�ã�");
         }
         else if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -74,7 +73,7 @@ public class GridBuildingSystem : MonoBehaviour
     private void StartPlacing(GameObject prefab)
     {
         if (current) Destroy(current.gameObject);
-        current = Instantiate(prefab, Vector3.up * 2, Quaternion.identity).GetComponent<PlacebleObject>();
+        current = Instantiate(prefab,GetMousePos(), Quaternion.identity).GetComponent<PlacebleObject>();
         Chess chess = current.GetComponent<Chess>();
         if (prefab == Chess1)
             chess.Init("Melee", ++MeeleCount, null);
