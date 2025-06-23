@@ -6,7 +6,8 @@ public class HexTile : MonoBehaviour
     public Vector3 centerWorld;
     public Renderer rend;
     public bool canAttack = true;
-    public Color highlighColor;
+    public Color highlighColor = Color.gray;
+    public Color baseColor;
     [Header("格子数值（棋子经过时加成）")]
     public int tileValue = 1;
     private void Awake()
@@ -17,6 +18,7 @@ public class HexTile : MonoBehaviour
         coordinates = HexMath.WorldToCoordinates(centerWorld, a);
         TileManager.Register(this, coordinates);
         rend = GetComponent<Renderer>();
+        baseColor = rend.material.color;
     }
 
     public int GetTileValue()
@@ -36,11 +38,11 @@ public class HexTile : MonoBehaviour
         }
         else
         {
-            rend.material.color = Color.white;
+            rend.material.color = baseColor;
         }
     }
     public void ResetTile()
     {
-        rend.material.color = Color.white;
+        rend.material.color = baseColor;
     }
 }

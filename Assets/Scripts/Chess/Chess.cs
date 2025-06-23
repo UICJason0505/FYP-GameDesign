@@ -10,7 +10,7 @@ public class Chess : MonoBehaviour
     private string name;
     private string className;
     private int id;
-    public int attackArea = 1;
+    private int attackArea = 2;
     public Coordinates position;
     public HexTile[] tiles;
     public GameManager gameManager;
@@ -18,29 +18,30 @@ public class Chess : MonoBehaviour
     public void Init(string className, int id, Player owner)
     {
         gameManager = GetComponent<GameManager>();
-        this.className = className;
-        this.id = id;
+        this.className = className; 
+        this.id = id;          
         this.player = owner;
-        this.name = className + "_" + id;
+        this.name = className + "_" + id; 
         gameObject.name = this.name;
     }
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
     // Update is called once per frame
     void Update()
     {
         if (MovingObject.selectedObj == null) return;
-        if (Input.GetKeyDown(KeyCode.X) && MovingObject.selectedObj == this && isInAttackMode == false)
+        if (Input.GetKeyDown(KeyCode.X) && isInAttackMode == false)
         {
             showAttackableTiles();
             isInAttackMode = true;
+            return;
         }
-        if (Input.GetKeyDown(KeyCode.X) && MovingObject.selectedObj == this && isInAttackMode == true)
+        if (Input.GetKeyDown(KeyCode.X) && isInAttackMode == true)
         {
-            showAttackableTiles();
+            ResetTiles();
             isInAttackMode = false;
         }
     }
@@ -49,19 +50,27 @@ public class Chess : MonoBehaviour
         for (int i = 0; i < GameManager.Instance.tiles.Length; i++)
         {
             HexTile tile = GameManager.Instance.tiles[i];
-            int distX = Mathf.Abs(tile.coordinates.x - position.x);
-            int distZ = Mathf.Abs(tile.coordinates.z - position.z);
-            if (distX + distZ <= attackArea)
+            int distX = tile.coordinates.x - position.x;
+            int distZ = tile.coordinates.z - position.z;
+            int dist = distX + distZ;
+            if ((Mathf.Abs(distX) + Mathf.Abs(distZ) + Mathf.Abs(dist))/2 <= attackArea)
             {
                 tile.HighlightTile();
             }
+        }
+    }
+    public void ResetTiles()
+    {
+        for (int i = 0; i < GameManager.Instance.tiles.Length; i++)
+        {
+            HexTile tile = GameManager.Instance.tiles[i];
+            tile.ResetTile();
         }
     }
     public void CollectTileValue(HexTile tile)
     {
         int value = tile.GetTileValue();
         number += value;
-        Debug.Log($"{name} ç»è¿‡ {tile.name}ï¼ŒèŽ·å¾— {value} ç‚¹ï¼Œå½“å‰å€¼ä¸ºï¼š{number}");
+        Debug.Log($"{name} ¾­¹ý {tile.name}£¬»ñµÃ {value} µã£¬µ±Ç°ÖµÎª£º{number}");
     }
-
 }
