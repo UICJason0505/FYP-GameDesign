@@ -4,7 +4,7 @@ using static Player;
 
 public class MovingObject : MonoBehaviour
 {
-    private static GameObject selectedObj; // 当前选中的物体
+    public static GameObject selectedObj; // 当前选中的物体
     private static Coordinates coordinates; //棋子的坐标
     private Vector3 offset; // 物体与鼠标的偏移量
     private Vector3 originalPosition; // 存储物体的原始位置
@@ -37,7 +37,7 @@ public class MovingObject : MonoBehaviour
             GameObject clickedObject = RayToGetObj();
             if (clickedObject == null) { return; }
 
-
+            //物体的坐标
             coordinates = WorldToCoordinates(clickedObject.transform.position, 1);
 
             // 检查是否有PlacebleObject脚本
@@ -123,9 +123,16 @@ public class MovingObject : MonoBehaviour
         // 按下 Z 键开始拖动或返回原位置
         if (isObjectSelected && Input.GetKeyDown(KeyCode.Z))
         {
-            // 如果没有拖动，开始拖动
-            isDragging = true;
-            Debug.Log("开始拖动物体");
+            if (player.HasActionPoints())  // 检查玩家是否有足够的行动点
+            {
+                isDragging = true;
+                //player.UseActionPoint();  // 每次移动消耗 1 点行动点
+                Debug.Log("开始拖动物体，剩余行动点: " + player.actionPoints);
+            }
+            else
+            {
+                Debug.Log("没有足够的行动点！");
+            }
         }
 
         // 如果正在拖动物体
