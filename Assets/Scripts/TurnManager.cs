@@ -14,6 +14,7 @@ public class TurnManager : MonoBehaviour
     public Button nextTurnButton;
     private String[] names = {"Red", "Blue", "Green", "Yellow" };
     public TMP_Text actionPointText;
+    public TMP_Text currentPlayerText;
 
     void Start()
     {
@@ -52,10 +53,16 @@ public class TurnManager : MonoBehaviour
 
     void UpdateTurnText()
     {
-        turnText.text = "Turn: " + fullTurn.ToString();
+        // ✅ 改名称显示为 Round 而不是 Turn
+        turnText.text = "Round: " + fullTurn.ToString();
 
-        // Update the action points display for the current player
         var currentPlayer = players[turnCount];
+
+        // ✅ 更新行动点数
         actionPointText.text = "AP: " + currentPlayer.actionPoints.ToString();
+
+        // ✅ 显示当前玩家的名称
+        currentPlayerText.text = "Current Player: " + currentPlayer.playerName;
     }
+
 }
