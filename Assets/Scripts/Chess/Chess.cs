@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static HexMath;
 
 public class Chess : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class Chess : MonoBehaviour
     private string name;
     private string className;
     private int id;
+    public int attackArea = 1;
+    public Coordinates position;
     public void Init(string className, int id, Player owner)
     {
         this.className = className; 
@@ -27,5 +30,9 @@ public class Chess : MonoBehaviour
     void Update()
     {
         
+    }
+    public void showAttackableTiles()
+    {
+
     }
 }

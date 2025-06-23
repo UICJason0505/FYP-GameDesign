@@ -12,6 +12,11 @@ public class PlacebleObject : MonoBehaviour
     public Coordinates GridPos { get; private set; }
     private void Awake()
     {
+        if (this.CompareTag("King"))
+        {
+            Placed = true;
+            return;
+        }
         allCols = GetComponentsInChildren<Collider>(true);
         foreach (var c in allCols) c.enabled = false;
     }

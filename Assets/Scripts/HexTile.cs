@@ -3,7 +3,10 @@ using static HexMath;
 public class HexTile : MonoBehaviour
 {
     public Coordinates coordinates;            
-    public Vector3 centerWorld;    
+    public Vector3 centerWorld;
+    public Renderer rend;
+    public bool canAttack = true;
+    public Color highlighColor;
     [Header("格子数值（棋子经过时加成）")]
     public int tileValue = 1;
     private void Awake()
@@ -13,6 +16,7 @@ public class HexTile : MonoBehaviour
         float a = Mathf.Max(mr.bounds.size.x, mr.bounds.size.z) * 0.5f + 0.1f;
         coordinates = HexMath.WorldToCoordinates(centerWorld, a);
         TileManager.Register(this, coordinates);
+        rend = GetComponent<Renderer>();
     }
 
     public int GetTileValue()
@@ -23,5 +27,20 @@ public class HexTile : MonoBehaviour
     public void SetTileValue(int newValue)
     {
         tileValue = newValue;
+    }
+    public void HighlightTile()
+    {
+        if(canAttack == true)
+        {
+            rend.material.color = highlighColor;
+        }
+        else
+        {
+            rend.material.color = Color.white;
+        }
+    }
+    public void ResetTile()
+    {
+        rend.material.color = Color.white;
     }
 }

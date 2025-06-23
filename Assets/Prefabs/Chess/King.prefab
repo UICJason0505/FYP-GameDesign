@@ -209,6 +209,7 @@ GameObject:
   - component: {fileID: 1721908009564022474}
   - component: {fileID: 4281923178117481248}
   - component: {fileID: 1413053074880644353}
+  - component: {fileID: 1258205159594100236}
   m_Layer: 6
   m_Name: King
   m_TagString: King
@@ -377,3 +378,15 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &1258205159594100236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5433386401727367742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e88a8c5f20d2dc42bd4cd890b0ab02b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
