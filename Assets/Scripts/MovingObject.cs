@@ -149,6 +149,7 @@ public class MovingObject : MonoBehaviour
                 Debug.Log($"当前行动点: " + player.actionPoints);
                 Debug.Log($"当前物体坐标: ({coordinates.x}, {coordinates.z})");
                 player.actionPoints--;  // 每次走一格消耗 1 点行动点
+                //想办法在这里调用CollectTileValue(tile)；
                 startCoordinates = coordinates;  // 更新起始坐标
             }
             UpdatePath(selectedObj.transform.position);

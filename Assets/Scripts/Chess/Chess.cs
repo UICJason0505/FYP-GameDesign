@@ -18,22 +18,22 @@ public class Chess : MonoBehaviour
     public void Init(string className, int id, Player owner)
     {
         gameManager = GetComponent<GameManager>();
-        this.className = className; 
-        this.id = id;          
+        this.className = className;
+        this.id = id;
         this.player = owner;
-        this.name = className + "_" + id; 
+        this.name = className + "_" + id;
         gameObject.name = this.name;
     }
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
     // Update is called once per frame
     void Update()
     {
         if (MovingObject.selectedObj == null) return;
-        if (Input.GetKeyDown(KeyCode.X)&& MovingObject.selectedObj == this && isInAttackMode == false)
+        if (Input.GetKeyDown(KeyCode.X) && MovingObject.selectedObj == this && isInAttackMode == false)
         {
             showAttackableTiles();
             isInAttackMode = true;
@@ -57,4 +57,11 @@ public class Chess : MonoBehaviour
             }
         }
     }
+    public void CollectTileValue(HexTile tile)
+    {
+        int value = tile.GetTileValue();
+        number += value;
+        Debug.Log($"{name} 经过 {tile.name}，获得 {value} 点，当前值为：{number}");
+    }
+
 }
