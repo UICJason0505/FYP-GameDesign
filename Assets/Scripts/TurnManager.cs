@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class TurnManager : MonoBehaviour
 {
     public List<Player> players = new();
-    private int turnCount = 0;
+    public int turnCount = 0;
     public int fullTurn = 1;
     public int playerNum = 2;
     public TMP_Text turnText;
@@ -16,7 +16,7 @@ public class TurnManager : MonoBehaviour
     public TMP_Text actionPointText;
     public TMP_Text currentPlayerText;
 
-    void Start()
+    void Awake()
     {
         if (players.Count == 0)
         {
@@ -28,6 +28,13 @@ public class TurnManager : MonoBehaviour
         players[0].canOperate = true;
         UpdateTurnText();
         nextTurnButton.onClick.AddListener(AdvanceTurn);
+    }
+    public void Update()
+    {
+        if (players[turnCount].actionPoints != 5)
+        {
+            UpdateTurnText();
+        }
     }
 
     void AdvanceTurn()
@@ -51,8 +58,9 @@ public class TurnManager : MonoBehaviour
         UpdateTurnText();
     }
 
-    void UpdateTurnText()
+    public void UpdateTurnText()
     {
+        Debug.Log("Updating turn text...");
         // ✅ 改名称显示为 Round 而不是 Turn
         turnText.text = "Round: " + fullTurn.ToString();
 

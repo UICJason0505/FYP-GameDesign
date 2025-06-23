@@ -2,18 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//private bool isSelected = false;
+
 public class King : MonoBehaviour
 {
     [Header("基础属性")]
     public string unitName = "King";
     public int blood = 5;
     public UnitInfoPanelController panel;
+    public TurnManager turnManager;
+
     void Update()
     {
         if (panel != null && Input.GetMouseButtonDown(1))
         {
             panel.Hide();
         }
+        /* 
         //if (!isSelected) return; 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -23,14 +28,13 @@ public class King : MonoBehaviour
         {
             GridBuildingSystem.Instance.SpawnChess2();
         }
-        /*
-
-        var player = TurnManager.Instance.players[TurnManager.Instance.CurrentPlayerIndex];
-
+        */
+        Player player = turnManager.players[turnManager.turnCount];
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             if (player.HasEnoughActionPoints(2))
             {
+                Debug.Log("召唤近战棋子");
                 GridBuildingSystem.Instance.SpawnChess1();
                 player.UseActionPoint(2);
             }
@@ -50,7 +54,7 @@ public class King : MonoBehaviour
             {
                 Debug.Log("行动点不足，不能召唤远程棋子");
             }
-        }*/
+        }
     }
     void OnMouseDown()
     {

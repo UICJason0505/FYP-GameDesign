@@ -34,9 +34,8 @@ public class Player
         if (actionPoints > 0)
             actionPoints--;
     }
-        public void UseActionPoint(int amount = 1)
+    public void UseActionPoint(int amount = 1)
     {
         actionPoints = Mathf.Max(actionPoints - amount, 0);
     }
-
 }

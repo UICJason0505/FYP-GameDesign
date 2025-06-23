@@ -12285,6 +12285,10 @@ PrefabInstance:
       propertyPath: unitName
       value: King
       objectReference: {fileID: 0}
+    - target: {fileID: 4281923178117481248, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
+      propertyPath: turnManager
+      value: 
+      objectReference: {fileID: 1764908831}
     - target: {fileID: 5433386401727367742, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
       propertyPath: m_Name
       value: King (2)
@@ -14745,6 +14749,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 361f96e4f371ff34eaaf8a61485910b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  players: []
+  turnCount: 0
   fullTurn: 1
   playerNum: 2
   turnText: {fileID: 1470640341}
@@ -15344,6 +15350,10 @@ PrefabInstance:
       propertyPath: unitName
       value: King
       objectReference: {fileID: 0}
+    - target: {fileID: 4281923178117481248, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
+      propertyPath: turnManager
+      value: 
+      objectReference: {fileID: 1764908831}
     - target: {fileID: 5433386401727367742, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
       propertyPath: m_Name
       value: King (1)
