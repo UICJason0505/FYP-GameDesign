@@ -318,6 +318,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e88a8c5f20d2dc42bd4cd890b0ab02b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridBuildingSystem: {fileID: 0}
+  chess: {fileID: 0}
 --- !u!54 &1721908009564022474
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -357,9 +359,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 503be2f5a76d95142aded0ffb184f82a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: "\u56FD\u738B"
-  blood: 1
+  unitName: King
+  blood: 5
   panel: {fileID: 0}
+  turnManager: {fileID: 0}
 --- !u!114 &1413053074880644353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -390,3 +393,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e88a8c5f20d2dc42bd4cd890b0ab02b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridBuildingSystem: {fileID: 0}
+  chess: {fileID: 0}

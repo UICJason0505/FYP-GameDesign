@@ -1174,8 +1174,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd5be0b034ad5349aef1b456b587ce9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Chess1: {fileID: 7667765957103678118, guid: afe33db52403d434a891bbce40888616, type: 3}
-  Chess2: {fileID: 7667765957103678118, guid: 64be851642524924387927ba830b74d1, type: 3}
+  Chess1: {fileID: 5433386401727367742, guid: a8c51243bd69b3d4eb7d6175761e01fa, type: 3}
+  Chess2: {fileID: 5433386401727367742, guid: 211cdcfc40ef84b43bcc6e59dcf6ac58, type: 3}
 --- !u!4 &193565889
 Transform:
   m_ObjectHideFlags: 0
