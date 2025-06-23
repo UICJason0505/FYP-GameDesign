@@ -1,11 +1,10 @@
 using UnityEngine;
 using static HexMath;
-using static Player;
 
 public class MovingObject : MonoBehaviour
 {
     public static GameObject selectedObj; // 当前选中的物体
-    private static Coordinates coordinates; //棋子的坐标
+    private static Coordinates coordinates; // 棋子的坐标(using HexMath)
     private Vector3 offset; // 物体与鼠标的偏移量
     private Vector3 originalPosition; // 存储物体的原始位置
     private bool isDragging = false; // 是否正在拖动物体
@@ -15,6 +14,9 @@ public class MovingObject : MonoBehaviour
     // LineRenderer 用来绘制路径
     private LineRenderer lineRenderer;
     private Vector3 startPosition;
+
+    // 记录玩家的起始坐标
+    private Coordinates startCoordinates;
 
     void Start()
     {
@@ -37,8 +39,7 @@ public class MovingObject : MonoBehaviour
             GameObject clickedObject = RayToGetObj();
             if (clickedObject == null) { return; }
 
-            //物体的坐标
-            coordinates = WorldToCoordinates(clickedObject.transform.position, 1);
+            // coordinates = WorldToCoordinates(clickedObject.transform.position, 1); // 物体的坐标
 
             // 检查是否有PlacebleObject脚本
             PlacebleObject placebleObject = clickedObject.GetComponent<PlacebleObject>();
@@ -120,33 +121,42 @@ public class MovingObject : MonoBehaviour
             }
         }
 
-        // 按下 Z 键开始拖动或返回原位置
+        // 按下 Z 键开始拖动
         if (isObjectSelected && Input.GetKeyDown(KeyCode.Z))
         {
-            if (player.HasActionPoints())  // 检查玩家是否有足够的行动点
+            if (player.actionPoints > 0)  // 检查玩家是否有足够的行动点
             {
                 isDragging = true;
-                //player.UseActionPoint();  // 每次移动消耗 1 点行动点
                 Debug.Log("开始拖动物体，剩余行动点: " + player.actionPoints);
             }
             else
             {
                 Debug.Log("没有足够的行动点！");
+
             }
         }
 
         // 如果正在拖动物体
-        if (isDragging && selectedObj != null)
+        if (isDragging && selectedObj != null && player.actionPoints >= 0)
         {
             // 获取鼠标位置并将物体拖动到该位置，同时使用 Snap 函数来对齐到网格
             Vector3 mousePosition = GridBuildingSystem.GetMousePos();
             selectedObj.transform.position = Snap(mousePosition); // 使用 Snap 函数对齐到网格
+            coordinates = WorldToCoordinates(selectedObj.transform.position, 1);
 
-            // 更新路径线
+            if (HasMovedOneStep(startCoordinates, coordinates))
+            {
+                Debug.Log($"当前行动点: " + player.actionPoints);
+                Debug.Log($"当前物体坐标: ({coordinates.x}, {coordinates.z})");
+                player.actionPoints--;  // 每次走一格消耗 1 点行动点
+                startCoordinates = coordinates;  // 更新起始坐标
+            }
             UpdatePath(selectedObj.transform.position);
         }
     }
 
+
+    // Method
     // 执行射线检测
     public GameObject RayToGetObj()
     {
@@ -159,6 +169,13 @@ public class MovingObject : MonoBehaviour
         }
 
         return null; // 如果没有击中物体，返回 null
+    }
+
+    // 判断是否走了一格（根据坐标差）
+    private bool HasMovedOneStep(Coordinates start, Coordinates current)
+    {
+        // 检查 x 或 z 坐标差值是否为 1（即移动了一格）
+        return Mathf.Abs(current.x - start.x) >= 1 || Mathf.Abs(current.z - start.z) >= 1;
     }
 
     // Snap 方法，通过调用 GridBuildingSystem 的 Snap 函数来实现对齐
