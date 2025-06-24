@@ -1,26 +1,24 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 using static HexMath;
 public class MovingObject : MonoBehaviour
 {
     public TurnManager turnManager;
-    public static GameObject selectedObj; // 当前选中的物体
-    private static Coordinates coordinates; // 棋子的坐标(using HexMath)
+    private static Coordinates coords; // 棋子的坐标(using HexMath)
+    public Coordinates CurrentCoords; // 指针坐标
     private Vector3 offset; // 物体与鼠标的偏移量
     private Vector3 originalPosition; // 存储物体的原始位置
     private bool isDragging = false; // 是否正在拖动物体
-    private bool isObjectSelected = false; // 标记物体是否已经选中
     private Player player;  // 当前玩家
 
     // LineRenderer 用来绘制路径
     private LineRenderer lineRenderer;
     private Vector3 startPosition;
 
-    // 记录玩家的起始坐标
-    private Coordinates startCoordinates;
-
     // 记录玩家的行动点
     private int currentAP;
-    
+
+
     void Start()
     {
         // 初始化 LineRenderer 组件
@@ -34,6 +32,7 @@ public class MovingObject : MonoBehaviour
 
     }
 
+
     void Update()
     {
         // 初始化 Player
@@ -46,7 +45,7 @@ public class MovingObject : MonoBehaviour
             GameObject clickedObject = RayToGetObj();
             if (clickedObject == null) { return; }
 
-            // coordinates = WorldToCoordinates(clickedObject.transform.position, 1); // 物体的坐标
+            Debug.Log($"物体坐标: ({coords.x}, {coords.z})");
 
             // 检查是否有PlacebleObject脚本
             PlacebleObject placebleObject = clickedObject.GetComponent<PlacebleObject>();
@@ -56,81 +55,30 @@ public class MovingObject : MonoBehaviour
                 return;
             }
 
-            // 如果当前有物体被选中，取消选中并取消高亮
-            if (isObjectSelected && selectedObj != clickedObject)
-            {
-                Unhighlight();
-                isObjectSelected = false;
-            }
+            SelectionManager.SelectObject(clickedObject);
 
-            // 如果之前没有选中物体，选中当前物体
-            if (!isObjectSelected)
-            {
-                selectedObj = clickedObject;
-                isObjectSelected = true;
+            // 计算选中物体与鼠标之间的偏移
+            offset = SelectionManager.selectedObj.transform.position - clickedObject.transform.position;
 
-                Highlight();
+            // 存储物体的原始位置
+            originalPosition = SelectionManager.selectedObj.transform.position;
 
-                // 计算选中物体与鼠标之间的偏移
-                offset = selectedObj.transform.position - clickedObject.transform.position;
+            // 记录起始位置
+            startPosition = SelectionManager.selectedObj.transform.position;
 
-                // 存储物体的原始位置
-                originalPosition = selectedObj.transform.position;
+            // 开始绘制路径
+            lineRenderer.positionCount = 1; // 从起始位置开始
+            lineRenderer.SetPosition(0, startPosition); // 设置第一个位置
 
-                // 记录起始位置
-                startPosition = selectedObj.transform.position;
-
-                // 开始绘制路径
-                lineRenderer.positionCount = 1; // 从起始位置开始
-                lineRenderer.SetPosition(0, startPosition); // 设置第一个位置
-                Debug.Log("物体已选中，按 Z 键开始拖动");
-            }
             // 如果物体已选中并且已经在拖动，点击时将物体放下
-            else if (isDragging)
+            if (isDragging)
             {
                 // 将物体停在当前的位置
                 isDragging = false;
-                isObjectSelected = false;
-                Unhighlight();
                 Debug.Log("物体已放下");
 
                 ClearPath();
             }
-        }
-
-        // 按下 Z 键开始拖动
-        if (isObjectSelected && Input.GetKeyDown(KeyCode.Z))
-        {
-            if (player.actionPoints > 0)  // 检查玩家是否有足够的行动点
-            {   
-                currentAP = player.actionPoints; // 记录当前行动点
-                isDragging = true;
-                Debug.Log("开始拖动物体，剩余行动点: " + currentAP);
-            }
-            else
-            {
-                Debug.Log("没有足够的行动点！");
-
-            }
-        }
-
-        // 如果正在拖动物体
-        if (isDragging && player.actionPoints > 0)
-        {
-            // 获取鼠标位置并将物体拖动到该位置，同时使用 Snap 函数来对齐到网格
-            Vector3 mousePosition = GridBuildingSystem.GetMousePos();
-            selectedObj.transform.position = Snap(mousePosition); // 使用 Snap 函数对齐到网格
-            coordinates = WorldToCoordinates(selectedObj.transform.position, 1);
-
-            if (HasMoved(startCoordinates, coordinates))
-            {
-                Debug.Log($"当前物体坐标: ({coordinates.x}, {coordinates.z})");
-                player.actionPoints--;  // 每次走一格消耗 1 点行动点
-                Debug.Log($"当前行动点: " + player.actionPoints);
-
-                startCoordinates = coordinates;  // 更新起始坐标
-            }
-            UpdatePath(selectedObj.transform.position);
         }
 
         // 右键点击取消高亮并取消选中物体
@@ -139,26 +87,69 @@ public class MovingObject : MonoBehaviour
             // 如果物体正在拖动，右键点击时返回原始位置并取消拖动
             if (isDragging)
             {
-                selectedObj.transform.position = originalPosition; // 将物体返回到原始位置
+                SelectionManager.selectedObj.transform.position = originalPosition; // 将物体返回到原始位置
                 player.actionPoints = currentAP; // 恢复行动点
-                
-                Unhighlight();
+
                 isDragging = false;
-                isObjectSelected = false;
-                Debug.Log("物体已返回原位置并取消拖动");
 
                 ClearPath();
             }
-            else if (isObjectSelected)
+            // 如果物体没有在拖动状态下右键点击，取消选中
+            else
             {
-                // 如果物体没有在拖动状态下右键点击，取消高亮
-                Unhighlight();
-                isObjectSelected = false;
-                selectedObj = null;
-                Debug.Log("物体已取消选中");
-
+                SelectionManager.DeselectObject();
                 ClearPath();
             }
+        }
+
+        // 模式切换时避免冲突
+        if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.C) || Input.GetKeyDown(KeyCode.V))
+        {
+            // 如果物体正在拖动，切换模式返回原始位置并取消拖动，但是保持选中
+            if (isDragging)
+            {
+                SelectionManager.selectedObj.transform.position = originalPosition; // 将物体返回到原始位置
+                player.actionPoints = currentAP; // 恢复行动点
+                isDragging = false; // 取消拖动状态
+                ClearPath();
+            }
+        }
+
+        // 按下 Z 键开始拖动
+        if (SelectionManager.isObjectSelected && Input.GetKeyDown(KeyCode.Z))
+        {
+            if (player.actionPoints > 0)  // 检查玩家是否有足够的行动点
+            {
+                currentAP = player.actionPoints; // 记录当前行动点
+                isDragging = true;
+                Debug.Log("开始拖动物体，剩余行动点: " + currentAP);
+            }
+            else
+            {
+                Debug.Log("没有足够的行动点！");
+            }
+        }
+
+        // 如果正在拖动物体
+        if (isDragging && player.actionPoints > 0)
+        {
+            // 获取鼠标位置并将物体拖动到该位置，同时使用 Snap 函数来对齐到网格
+            Vector3 mousePosition = GridBuildingSystem.GetMousePos();
+            SelectionManager.selectedObj.transform.position = Snap(mousePosition);
+            //拖拽前，获得当前物体的坐标
+
+            Debug.Log($"拖拽前物体坐标: ({coords.x}, {coords.z})");
+
+            if (HasMoved(CurrentCoords, coords))
+            {
+                player.actionPoints--;  // 每次走一格消耗 1 点行动点
+                Debug.Log($"当前行动点: " + player.actionPoints);
+
+                CurrentCoords = coords;  // 更新起始坐标
+            }
+            //拖拽后，获得当前物体的坐标
+            Debug.Log($"拖拽后物体坐标: ({coords.x}, {coords.z})");
+            UpdatePath(SelectionManager.selectedObj.transform.position);
         }
     }
 
@@ -206,30 +197,14 @@ public class MovingObject : MonoBehaviour
         lineRenderer.positionCount = 0; // 清空所有路径点
     }
 
-    // 高亮物体
-    private static void Highlight()
-    {
-        if (selectedObj != null)
-        {
-            Outline outline = selectedObj.GetComponent<Outline>();
-            if (outline != null)
-            {
-                outline.enabled = true; // 显示轮廓
-            }
-        }
-    }
+    // 棋子在格子上停留时更新其位置
+    void OnTriggerStay(Collider other) => UpdatePositionFromTile(other);
 
-    // 取消高亮物体
-    private static void Unhighlight()
+    // 根据格子更新棋子位置
+    private void UpdatePositionFromTile(Collider other)
     {
-        if (selectedObj != null)
-        {
-            Outline outline = selectedObj.GetComponent<Outline>();
-            if (outline != null)
-            {
-                outline.enabled = false; // 禁用轮廓
-            }
-            selectedObj = null; // 清空当前选中的物体
-        }
+        HexTile tile = other.GetComponent<HexTile>();  // 获取格子
+        if (tile == null) return;
+        coords = tile.coordinates;  // 更新棋子位置
     }
 }

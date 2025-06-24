@@ -42,7 +42,7 @@ public class Chess : MonoBehaviour
     void Update()
     {
         //选中逻辑
-        if (MovingObject.selectedObj == null) return;
+        if (SelectionManager.selectedObj == null) return;
         //UI关闭
         if (panel != null && Input.GetMouseButtonDown(1))
         {
@@ -64,7 +64,7 @@ public class Chess : MonoBehaviour
 
     void OnMouseDown()//UI显示
     {
-        MovingObject.selectedObj = gameObject;
+        SelectionManager.selectedObj = gameObject;
         if (panel != null)
         {
             panel.ShowUnit(gameObject.name, number);

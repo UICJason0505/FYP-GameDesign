@@ -17,7 +17,7 @@ public class King : MonoBehaviour
     private int attackArea = 1;
     void Update()
     {
-        if (MovingObject.selectedObj != this.gameObject) return;
+        if (SelectionManager.selectedObj != this.gameObject) return;
         if (Input.GetKeyDown(KeyCode.X) && isInAttackMode == false)
         {
             if(isSummonMode == true)
@@ -46,7 +46,7 @@ public class King : MonoBehaviour
         if (panel != null && Input.GetMouseButtonDown(1))
         {
             panel.Hide();
-            MovingObject.selectedObj = null;
+            SelectionManager.selectedObj = null;
             isSummonMode = false; // 退出召唤模式
         }
 
@@ -80,7 +80,7 @@ public class King : MonoBehaviour
             {
                 Debug.Log("行动点不足，不能召唤远程棋子");
             }
-            if (MovingObject.selectedObj == null) return;
+            if (SelectionManager.selectedObj == null) return;
         }
     }
     void OnMouseDown()
