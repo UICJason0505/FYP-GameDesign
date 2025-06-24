@@ -1,13 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-<<<<<<< HEAD
-=======
 using UnityEngine.UIElements;
 using static HexMath;
 //private bool isSelected = false;
->>>>>>> 181186a30f3ee211ce2761fdde5a102c50af201a
-
 public class King : MonoBehaviour
 {
     [Header("基础属性")]
@@ -15,14 +11,10 @@ public class King : MonoBehaviour
     public int blood = 5;
     public UnitInfoPanelController panel;
     public TurnManager turnManager;
-<<<<<<< HEAD
     private bool isSummonMode = false;
-
-=======
     public bool isInAttackMode = false;
     public Coordinates position;
     private int attackArea = 1;
->>>>>>> 181186a30f3ee211ce2761fdde5a102c50af201a
     void Update()
     {
         if (MovingObject.selectedObj != gameObject) return;
