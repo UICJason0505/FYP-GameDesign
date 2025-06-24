@@ -17,13 +17,29 @@ public class King : MonoBehaviour
     private int attackArea = 1;
     void Update()
     {
-        if (MovingObject.selectedObj != gameObject) return;
-
+        if (MovingObject.selectedObj != this.gameObject) return;
+        if (Input.GetKeyDown(KeyCode.X) && isInAttackMode == false)
+        {
+            if(isSummonMode == true)
+            {
+                isSummonMode = false;
+            }
+            showAttackableTiles();
+            isInAttackMode = true;
+            return;
+        }
+        else if (Input.GetKeyDown(KeyCode.X) && isInAttackMode == true)
+        {
+            ResetTiles();
+            isInAttackMode = false;
+        }
         // ✅ 按 C 启动/退出召唤模式
         if (Input.GetKeyDown(KeyCode.C))
         {
             isSummonMode = !isSummonMode;
             Debug.Log("召唤模式切换：" + (isSummonMode ? "开启" : "关闭"));
+            ResetTiles();
+            isInAttackMode = false;
         }
 
         // ✅ 按右键取消选择
@@ -65,17 +81,6 @@ public class King : MonoBehaviour
                 Debug.Log("行动点不足，不能召唤远程棋子");
             }
             if (MovingObject.selectedObj == null) return;
-        }
-        if (Input.GetKeyDown(KeyCode.X) && isInAttackMode == false)
-        {
-            showAttackableTiles();
-            isInAttackMode = true;
-            return;
-        }
-        if (Input.GetKeyDown(KeyCode.X) && isInAttackMode == true)
-        {
-            ResetTiles();
-            isInAttackMode = false;
         }
     }
     void OnMouseDown()
