@@ -18,6 +18,9 @@ public class MovingObject : MonoBehaviour
     // 记录玩家的起始坐标
     private Coordinates startCoordinates;
 
+    // 记录玩家的行动点
+    private int currentAP;
+    
     void Start()
     {
         // 初始化 LineRenderer 组件
@@ -95,17 +98,50 @@ public class MovingObject : MonoBehaviour
             }
         }
 
+        // 按下 Z 键开始拖动
+        if (isObjectSelected && Input.GetKeyDown(KeyCode.Z))
+        {
+            if (player.actionPoints > 0)  // 检查玩家是否有足够的行动点
+            {   
+                currentAP = player.actionPoints; // 记录当前行动点
+                isDragging = true;
+                Debug.Log("开始拖动物体，剩余行动点: " + currentAP);
+            }
+            else
+            {
+                Debug.Log("没有足够的行动点！");
+
+            }
+        }
+
+        // 如果正在拖动物体
+        if (isDragging && player.actionPoints > 0)
+        {
+            // 获取鼠标位置并将物体拖动到该位置，同时使用 Snap 函数来对齐到网格
+            Vector3 mousePosition = GridBuildingSystem.GetMousePos();
+            selectedObj.transform.position = Snap(mousePosition); // 使用 Snap 函数对齐到网格
+            coordinates = WorldToCoordinates(selectedObj.transform.position, 1);
+
+            if (HasMoved(startCoordinates, coordinates))
+            {
+                Debug.Log($"当前物体坐标: ({coordinates.x}, {coordinates.z})");
+                player.actionPoints--;  // 每次走一格消耗 1 点行动点
+                Debug.Log($"当前行动点: " + player.actionPoints);
+
+                startCoordinates = coordinates;  // 更新起始坐标
+            }
+            UpdatePath(selectedObj.transform.position);
+        }
+
         // 右键点击取消高亮并取消选中物体
         if (Input.GetMouseButtonDown(1))
         {
             // 如果物体正在拖动，右键点击时返回原始位置并取消拖动
             if (isDragging)
             {
-                // 将物体返回到原始位置
-                if (selectedObj != null)
-                {
-                    selectedObj.transform.position = originalPosition;
-                }
+                selectedObj.transform.position = originalPosition; // 将物体返回到原始位置
+                player.actionPoints = currentAP; // 恢复行动点
+                
                 Unhighlight();
                 isDragging = false;
                 isObjectSelected = false;
@@ -123,40 +159,6 @@ public class MovingObject : MonoBehaviour
 
                 ClearPath();
             }
-        }
-
-        // 按下 Z 键开始拖动
-        if (isObjectSelected && Input.GetKeyDown(KeyCode.Z))
-        {
-            if (player.actionPoints > 0)  // 检查玩家是否有足够的行动点
-            {
-                isDragging = true;
-                Debug.Log("开始拖动物体，剩余行动点: " + player.actionPoints);
-            }
-            else
-            {
-                Debug.Log("没有足够的行动点！");
-
-            }
-        }
-
-        // 如果正在拖动物体
-        if (isDragging && selectedObj != null && player.actionPoints > 0)
-        {
-            // 获取鼠标位置并将物体拖动到该位置，同时使用 Snap 函数来对齐到网格
-            Vector3 mousePosition = GridBuildingSystem.GetMousePos();
-            selectedObj.transform.position = Snap(mousePosition); // 使用 Snap 函数对齐到网格
-            coordinates = WorldToCoordinates(selectedObj.transform.position, 1);
-
-            if (HasMovedOneStep(startCoordinates, coordinates))
-            {
-                Debug.Log($"当前物体坐标: ({coordinates.x}, {coordinates.z})");
-                player.actionPoints--;  // 每次走一格消耗 1 点行动点
-                Debug.Log($"当前行动点: " + player.actionPoints);
-
-                startCoordinates = coordinates;  // 更新起始坐标
-            }
-            UpdatePath(selectedObj.transform.position);
         }
     }
 
@@ -176,11 +178,10 @@ public class MovingObject : MonoBehaviour
         return null; // 如果没有击中物体，返回 null
     }
 
-    // 判断是否走了一格（根据坐标差）
-    private bool HasMovedOneStep(Coordinates start, Coordinates current)
+    // 判断是否移动了（根据坐标差）
+    private bool HasMoved(Coordinates start, Coordinates current)
     {
-        // 检查 x 或 z 坐标差值是否为 1（即移动了一格）
-        return Mathf.Abs(current.x - start.x) == 1 || Mathf.Abs(current.z - start.z) == 1;
+        return Mathf.Abs(current.x - start.x) >= 1 || Mathf.Abs(current.z - start.z) >= 1;
     }
 
     // Snap 方法，通过调用 GridBuildingSystem 的 Snap 函数来实现对齐
