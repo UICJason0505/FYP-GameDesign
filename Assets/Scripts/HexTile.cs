@@ -32,17 +32,12 @@ public class HexTile : MonoBehaviour
     }
     public void HighlightTile()
     {
-        if(canAttack == true)
-        {
-            rend.material.color = highlighColor;
-        }
-        else
-        {
-            rend.material.color = baseColor;
-        }
+        rend.material.color = highlighColor;
+        canAttack = true;
     }
     public void ResetTile()
     {
         rend.material.color = baseColor;
+        canAttack = false;
     }
 }
