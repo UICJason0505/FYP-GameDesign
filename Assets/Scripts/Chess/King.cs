@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//private bool isSelected = false;
-
 public class King : MonoBehaviour
 {
     [Header("基础属性")]
@@ -11,25 +9,32 @@ public class King : MonoBehaviour
     public int blood = 5;
     public UnitInfoPanelController panel;
     public TurnManager turnManager;
+    private bool isSummonMode = false;
 
     void Update()
     {
+        if (MovingObject.selectedObj != gameObject) return;
+
+        // ✅ 按 C 启动/退出召唤模式
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            isSummonMode = !isSummonMode;
+            Debug.Log("召唤模式切换：" + (isSummonMode ? "开启" : "关闭"));
+        }
+
+        // ✅ 按右键取消选择
         if (panel != null && Input.GetMouseButtonDown(1))
         {
             panel.Hide();
+            MovingObject.selectedObj = null;
+            isSummonMode = false; // 退出召唤模式
         }
-        /* 
-        //if (!isSelected) return; 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            GridBuildingSystem.Instance.SpawnChess1();
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            GridBuildingSystem.Instance.SpawnChess2();
-        }
-        */
+
+        // ✅ 只有在召唤模式下才允许召唤
+        if (!isSummonMode) return;
+
         Player player = turnManager.players[turnManager.turnCount];
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             if (player.HasEnoughActionPoints(2))
@@ -47,6 +52,7 @@ public class King : MonoBehaviour
         {
             if (player.HasEnoughActionPoints(2))
             {
+                Debug.Log("召唤远程棋子");
                 GridBuildingSystem.Instance.SpawnChess2();
                 player.UseActionPoint(2);
             }
