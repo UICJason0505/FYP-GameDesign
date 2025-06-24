@@ -43,23 +43,41 @@ public class Chess : MonoBehaviour
     {
         //选中逻辑
         if (SelectionManager.selectedObj == null) return;
+        if (SelectionManager.selectedObj != gameObject) return;
         //UI关闭
-        if (panel != null && Input.GetMouseButtonDown(1))
+        if (panel != null && Input.GetMouseButtonDown(1)) panel.Hide();
+
+        if (Input.GetKeyDown(KeyCode.X))
         {
-            panel.Hide();
+            isInAttackMode = !isInAttackMode;
+            if (isInAttackMode)
+                showAttackableTiles();
+            else
+                ResetTiles();
         }
-        //攻击逻辑
-        if (Input.GetKeyDown(KeyCode.X) && isInAttackMode == false)
+
+        
+        if (isInAttackMode && Input.GetMouseButtonDown(0))
         {
-            showAttackableTiles();
-            isInAttackMode = true;
-            return;
+            Vector3 mouseWorldPos = GridBuildingSystem.GetMousePos(); // 获取鼠标点到地面上的世界坐标
+            Coordinates targetCoord = HexMath.WorldToCoordinates(mouseWorldPos, radius: 1f); // radius 是格子边长，和你地图生成用的保持一致
+
+            // 遍历场上所有棋子，找到目标棋子
+            foreach (Chess potentialTarget in FindObjectsOfType<Chess>())
+            {
+                if (potentialTarget == this) continue; // 不攻击自己
+                if (potentialTarget.player == this.player) continue; // 不攻击友军
+
+                if (potentialTarget.position.x == targetCoord.x && potentialTarget.position.z == targetCoord.z)
+                {
+                    ExecuteAttack(potentialTarget);
+                    ResetTiles();
+                    isInAttackMode = false;
+                    break;
+                }
+            }
         }
-        if (Input.GetKeyDown(KeyCode.X) && isInAttackMode == true)
-        {
-            ResetTiles();
-            isInAttackMode = false;
-        }
+        
     }
 
     void OnMouseDown()//UI显示
@@ -70,7 +88,7 @@ public class Chess : MonoBehaviour
             panel.ShowUnit(gameObject.name, number);
         }
     }
-    public void showAttackableTiles()
+    public void showAttackableTiles()//显示可攻击范围
     {
         for (int i = 0; i < GameManager.Instance.tiles.Length; i++)
         {
@@ -84,7 +102,7 @@ public class Chess : MonoBehaviour
             }
         }
     }
-    public void ResetTiles()
+    public void ResetTiles()//攻击范围颜色显示
     {
         for (int i = 0; i < GameManager.Instance.tiles.Length; i++)
         {
@@ -92,7 +110,35 @@ public class Chess : MonoBehaviour
             tile.ResetTile();
         }
     }
-    public void CollectTileValue(HexTile tile)
+
+    
+    void ExecuteAttack(Chess target)
+    {
+        int aBefore = this.number;
+        int bBefore = target.number;
+
+        this.number -= bBefore;
+        target.number -= aBefore;
+
+        Debug.Log($"{name} 攻击 {target.name}：我方减 {bBefore}，敌方减 {aBefore}");
+
+        if (panel != null) panel.ShowUnit(gameObject.name, number); // 更新自己面板
+
+        if (this.number <= 0)
+        {
+            Destroy(gameObject);
+            Debug.Log($"{name} 被击败！");
+        }
+
+        if (target.number <= 0)
+        {
+            Destroy(target.gameObject);
+            Debug.Log($"{target.name} 被击败！");
+        }
+    }
+    
+
+    public void CollectTileValue(HexTile tile)//收集格子值
     {
         int value = tile.GetTileValue();
         number += value;
