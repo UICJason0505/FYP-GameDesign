@@ -90,8 +90,6 @@ public class MovingObject : MonoBehaviour
             {
                 // 将物体停在当前的位置
                 isDragging = false;
-                isObjectSelected = false;
-                Unhighlight();
                 Debug.Log("物体已放下");
 
                 ClearPath();
@@ -177,7 +175,7 @@ public class MovingObject : MonoBehaviour
 
 
     // Method
-    // 执行射线检测
+    // 执行射线检测（删除）
     public GameObject RayToGetObj()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // 从鼠标位置发射射线
@@ -219,7 +217,7 @@ public class MovingObject : MonoBehaviour
         lineRenderer.positionCount = 0; // 清空所有路径点
     }
 
-    // 高亮物体
+    // 高亮物体（删除）
     private static void Highlight()
     {
         if (selectedObj != null)
@@ -232,7 +230,7 @@ public class MovingObject : MonoBehaviour
         }
     }
 
-    // 取消高亮物体
+    // 取消高亮物体（删除）
     private static void Unhighlight()
     {
         if (selectedObj != null)
