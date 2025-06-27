@@ -1,7 +1,8 @@
 using UnityEngine;
 using static HexMath;
 public class HexTile : MonoBehaviour
-{
+{   
+    public static float radius; // 半径
     public Coordinates coordinates;            
     public Vector3 centerWorld;
     public Renderer rend;
@@ -14,8 +15,8 @@ public class HexTile : MonoBehaviour
     {
         MeshRenderer mr = GetComponent<MeshRenderer>();
         centerWorld = mr.bounds.center;
-        float a = Mathf.Max(mr.bounds.size.x, mr.bounds.size.z) * 0.5f + 0.1f;
-        coordinates = HexMath.WorldToCoordinates(centerWorld, a);
+        radius = Mathf.Max(mr.bounds.size.x, mr.bounds.size.z) * 0.5f;
+        coordinates = HexMath.WorldToCoordinates(centerWorld, radius);
         TileManager.Register(this, coordinates);
         rend = GetComponent<Renderer>();
         baseColor = rend.material.color;

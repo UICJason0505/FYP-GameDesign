@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 1970036843583237597}
   m_Layer: 6
   m_Name: Range
-  m_TagString: King
+  m_TagString: Chess
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -396,6 +396,7 @@ MonoBehaviour:
   tiles: []
   gameManager: {fileID: 0}
   isInAttackMode: 0
+  panel: {fileID: 0}
 --- !u!1 &6421546353247933944
 GameObject:
   m_ObjectHideFlags: 0

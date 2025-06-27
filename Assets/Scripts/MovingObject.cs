@@ -1,13 +1,16 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using static HexMath;
+using static HexTile;
 public class MovingObject : MonoBehaviour
 {
     public TurnManager turnManager;
     public static GameObject selectedObj; // 当前选中的物体
     public Coordinates coords; // 棋子原坐标(using HexMath)
     private static Coordinates currentCoords; // 指针坐标
+    private Vector3 originPosition; // 棋子的原transform位置
     private Vector3 position; // 棋子的transform位置
+    private Vector3 currentPosition; // 指针的transform位置
     private bool isDragging = false; // 是否正在拖动物体
     private bool isObjectSelected = false; // 标记物体是否已经选中
     private Player player;  // 当前玩家
@@ -63,18 +66,13 @@ public class MovingObject : MonoBehaviour
 
                 Highlight();
 
-                // 设置初始位置
-                /*
-                MeshRenderer mr = GetComponent<MeshRenderer>();
-                centerWorld = mr.bounds.center;
-                */
-
-                position = selectedObj.transform.position;
-                coords = HexMath.WorldToCoordinates(position, 1);
+                originPosition = selectedObj.transform.position;
+                coords = HexMath.WorldToCoordinates(selectedObj.transform.position, HexTile.radius);
+                Debug.Log($"选中时物体坐标: ({coords.x}, {coords.z})");
 
                 // 开始绘制路径
                 lineRenderer.positionCount = 1; // 从起始位置开始
-                lineRenderer.SetPosition(0, position); // 设置第一个位置
+                lineRenderer.SetPosition(0, originPosition); // 设置第一个位置
             }
             // 如果物体已选中并且已经在拖动，点击时将物体放下
             else if (isDragging)
@@ -93,7 +91,7 @@ public class MovingObject : MonoBehaviour
             // 如果物体正在拖动，右键点击时返回原始位置并取消拖动
             if (isDragging)
             {
-                selectedObj.transform.position = position; // 将物体返回到原始位置
+                selectedObj.transform.position = originPosition; // 将物体返回到原始位置
                 player.actionPoints = currentAP; // 恢复行动点
 
                 Unhighlight();
@@ -119,7 +117,7 @@ public class MovingObject : MonoBehaviour
             // 如果物体正在拖动，切换模式返回原始位置并取消拖动，但是保持选中
             if (isDragging)
             {
-                selectedObj.transform.position = position; // 将物体返回到原始位置
+                selectedObj.transform.position = originPosition; // 将物体返回到原始位置
                 player.actionPoints = currentAP; // 恢复行动点
                 isDragging = false; // 取消拖动状态
                 ClearPath();
@@ -129,7 +127,7 @@ public class MovingObject : MonoBehaviour
         // 按下 Z 键开始拖动
         if (isObjectSelected && Input.GetKeyDown(KeyCode.Z))
         {
-            position = selectedObj.transform.position;
+            originPosition = selectedObj.transform.position;
             if (player.actionPoints > 0)  // 检查玩家是否有足够的行动点
             {
                 currentAP = player.actionPoints; // 记录当前行动点
@@ -152,16 +150,19 @@ public class MovingObject : MonoBehaviour
             //拖拽前，获得当前物体的坐标
 
             // 记录当前位置
-            currentCoords = HexMath.WorldToCoordinates(selectedObj.transform.position, 1);
+            currentCoords = HexMath.WorldToCoordinates(selectedObj.transform.position, HexTile.radius);
+            currentPosition = selectedObj.transform.position;
 
             Debug.Log($"拖拽前物体坐标: ({currentCoords.x}, {currentCoords.z})");
-
-            if (HasMoved(coords, currentCoords))
+            if (HasMovedALot(coords, currentCoords))
+            {
+                selectedObj.transform.position = position;
+            }
+            else if (HasMovedOneStep(coords, currentCoords))
             {
                 player.actionPoints--;  // 每次走一格消耗 1 点行动点
-                Debug.Log($"当前行动点: " + player.actionPoints);
-
                 coords = currentCoords;  // 更新起始坐标
+                position = currentPosition;
             }
             UpdatePath(selectedObj.transform.position);
         }
@@ -184,13 +185,16 @@ public class MovingObject : MonoBehaviour
     }
 
     // 判断是否移动了（根据坐标差）
-    private bool HasMoved(Coordinates start, Coordinates current)
+    private bool HasMovedOneStep(Coordinates start, Coordinates current)
     {
-        return
-            Mathf.Abs(current.x - start.x) == 1 ||
-            Mathf.Abs(current.z - start.z) == 1 ||
-            Mathf.Abs(current.x - start.x) == 2 ||
-            Mathf.Abs(current.z - start.z) == 2;
+        int distance = Mathf.Max(Mathf.Abs(current.x - start.x), Mathf.Abs(current.z - start.z), Mathf.Abs((current.x - start.x) + (current.z - start.z)));
+        return distance == 1;
+    }
+
+    private bool HasMovedALot(Coordinates start, Coordinates current)
+    {
+        int distance = Mathf.Max(Mathf.Abs(current.x - start.x), Mathf.Abs(current.z - start.z), Mathf.Abs((current.x - start.x) + (current.z - start.z)));
+        return distance > 1;
     }
 
     // Snap 方法，通过调用 GridBuildingSystem 的 Snap 函数来实现对齐
