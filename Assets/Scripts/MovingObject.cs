@@ -5,20 +5,19 @@ public class MovingObject : MonoBehaviour
 {
     public TurnManager turnManager;
     public static GameObject selectedObj; // 当前选中的物体
-    private static Coordinates coords; // 棋子的坐标(using HexMath)
-    public Coordinates CurrentCoords; // 指针坐标
-    private Vector3 offset; // 物体与鼠标的偏移量
-    private Vector3 originalPosition; // 存储物体的原始位置
+    public Coordinates coords; // 棋子原坐标(using HexMath)
+    private static Coordinates currentCoords; // 指针坐标
+    private Vector3 position; // 棋子的transform位置
     private bool isDragging = false; // 是否正在拖动物体
     private bool isObjectSelected = false; // 标记物体是否已经选中
     private Player player;  // 当前玩家
+    public Vector3 centerWorld; //Test
 
     // LineRenderer 用来绘制路径
     private LineRenderer lineRenderer;
-    private Vector3 startPosition;
 
     // 记录玩家的行动点
-    private int originalAP;
+    private int currentAP;
 
 
     void Start()
@@ -29,9 +28,7 @@ public class MovingObject : MonoBehaviour
         lineRenderer.startWidth = 0.1f;  // 设置路径线的宽度
         lineRenderer.endWidth = 0.1f;    // 设置路径线的宽度
         turnManager = FindObjectOfType<TurnManager>(); // 获取 TurnManager 实例
-        // 初始化 Player
-        // player = new Player(1, "name");
-
+        // player = new Player(1, "name"); // 测试用
     }
 
 
@@ -45,17 +42,11 @@ public class MovingObject : MonoBehaviour
         {
             // 执行射线检测，获取点击的物体
             GameObject clickedObject = RayToGetObj();
-            if (clickedObject == null) { return; }
-
-            Debug.Log($"物体坐标: ({coords.x}, {coords.z})");
+            if (clickedObject == null) return;
 
             // 检查是否有PlacebleObject脚本
             PlacebleObject placebleObject = clickedObject.GetComponent<PlacebleObject>();
-            if (placebleObject == null)
-            {
-                // 如果没有MovableObject脚本，忽略该物体
-                return;
-            }
+            if (placebleObject == null) return;
 
             // 如果当前有物体被选中，取消选中并取消高亮
             if (isObjectSelected && selectedObj != clickedObject)
@@ -72,23 +63,23 @@ public class MovingObject : MonoBehaviour
 
                 Highlight();
 
-                // 计算选中物体与鼠标之间的偏移
-                offset = selectedObj.transform.position - clickedObject.transform.position;
+                // 设置初始位置
+                /*
+                MeshRenderer mr = GetComponent<MeshRenderer>();
+                centerWorld = mr.bounds.center;
+                */
 
-                // 存储物体的原始位置
-                originalPosition = selectedObj.transform.position;
-
-                // 记录起始位置
-                startPosition = selectedObj.transform.position;
+                position = selectedObj.transform.position;
+                coords = HexMath.WorldToCoordinates(position, 1);
 
                 // 开始绘制路径
                 lineRenderer.positionCount = 1; // 从起始位置开始
-                lineRenderer.SetPosition(0, startPosition); // 设置第一个位置
+                lineRenderer.SetPosition(0, position); // 设置第一个位置
             }
             // 如果物体已选中并且已经在拖动，点击时将物体放下
             else if (isDragging)
             {
-                // 将物体停在当前的位置
+                // 将物体停在当前的位置，但保持物体选中状态
                 isDragging = false;
                 Debug.Log("物体已放下");
 
@@ -102,8 +93,8 @@ public class MovingObject : MonoBehaviour
             // 如果物体正在拖动，右键点击时返回原始位置并取消拖动
             if (isDragging)
             {
-                selectedObj.transform.position = originalPosition; // 将物体返回到原始位置
-                player.actionPoints = originalAP; // 恢复行动点
+                selectedObj.transform.position = position; // 将物体返回到原始位置
+                player.actionPoints = currentAP; // 恢复行动点
 
                 Unhighlight();
                 isDragging = false;
@@ -128,8 +119,8 @@ public class MovingObject : MonoBehaviour
             // 如果物体正在拖动，切换模式返回原始位置并取消拖动，但是保持选中
             if (isDragging)
             {
-                selectedObj.transform.position = originalPosition; // 将物体返回到原始位置
-                player.actionPoints = originalAP; // 恢复行动点
+                selectedObj.transform.position = position; // 将物体返回到原始位置
+                player.actionPoints = currentAP; // 恢复行动点
                 isDragging = false; // 取消拖动状态
                 ClearPath();
             }
@@ -138,11 +129,12 @@ public class MovingObject : MonoBehaviour
         // 按下 Z 键开始拖动
         if (isObjectSelected && Input.GetKeyDown(KeyCode.Z))
         {
+            position = selectedObj.transform.position;
             if (player.actionPoints > 0)  // 检查玩家是否有足够的行动点
             {
-                originalAP = player.actionPoints; // 记录当前行动点
+                currentAP = player.actionPoints; // 记录当前行动点
                 isDragging = true;
-                Debug.Log("开始拖动物体，剩余行动点: " + originalAP);
+                Debug.Log("开始拖动物体，剩余行动点: " + currentAP);
             }
             else
             {
@@ -156,26 +148,28 @@ public class MovingObject : MonoBehaviour
             // 获取鼠标位置并将物体拖动到该位置，同时使用 Snap 函数来对齐到网格
             Vector3 mousePosition = GridBuildingSystem.GetMousePos();
             selectedObj.transform.position = Snap(mousePosition);
+
             //拖拽前，获得当前物体的坐标
 
-            Debug.Log($"拖拽前物体坐标: ({coords.x}, {coords.z})");
+            // 记录当前位置
+            currentCoords = HexMath.WorldToCoordinates(selectedObj.transform.position, 1);
 
-            if (HasMoved(CurrentCoords, coords))
+            Debug.Log($"拖拽前物体坐标: ({currentCoords.x}, {currentCoords.z})");
+
+            if (HasMoved(coords, currentCoords))
             {
                 player.actionPoints--;  // 每次走一格消耗 1 点行动点
                 Debug.Log($"当前行动点: " + player.actionPoints);
 
-                CurrentCoords = coords;  // 更新起始坐标
+                coords = currentCoords;  // 更新起始坐标
             }
-            //拖拽后，获得当前物体的坐标
-            Debug.Log($"拖拽后物体坐标: ({coords.x}, {coords.z})");
             UpdatePath(selectedObj.transform.position);
         }
     }
 
 
     // Method
-    // 执行射线检测（删除）
+    // 执行射线检测
     public GameObject RayToGetObj()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // 从鼠标位置发射射线
@@ -192,7 +186,11 @@ public class MovingObject : MonoBehaviour
     // 判断是否移动了（根据坐标差）
     private bool HasMoved(Coordinates start, Coordinates current)
     {
-        return Mathf.Abs(current.x - start.x) >= 1 || Mathf.Abs(current.z - start.z) >= 1;
+        return
+            Mathf.Abs(current.x - start.x) == 1 ||
+            Mathf.Abs(current.z - start.z) == 1 ||
+            Mathf.Abs(current.x - start.x) == 2 ||
+            Mathf.Abs(current.z - start.z) == 2;
     }
 
     // Snap 方法，通过调用 GridBuildingSystem 的 Snap 函数来实现对齐
@@ -217,7 +215,7 @@ public class MovingObject : MonoBehaviour
         lineRenderer.positionCount = 0; // 清空所有路径点
     }
 
-    // 高亮物体（删除）
+    // 高亮物体
     private static void Highlight()
     {
         if (selectedObj != null)
@@ -230,7 +228,7 @@ public class MovingObject : MonoBehaviour
         }
     }
 
-    // 取消高亮物体（删除）
+    // 取消高亮物体
     private static void Unhighlight()
     {
         if (selectedObj != null)
@@ -242,16 +240,5 @@ public class MovingObject : MonoBehaviour
             }
             selectedObj = null; // 清空当前选中的物体
         }
-    }
-
-    // 棋子在格子上停留时更新其位置
-    void OnTriggerStay(Collider other) => UpdatePositionFromTile(other);
-
-    // 根据格子更新棋子位置
-    private void UpdatePositionFromTile(Collider other)
-    {
-        HexTile tile = other.GetComponent<HexTile>();  // 获取格子
-        if (tile == null) return;
-        coords = tile.coordinates;  // 更新棋子位置
     }
 }
