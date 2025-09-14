@@ -70,7 +70,7 @@ public class TurnManager : MonoBehaviour
         actionPointText.text = "AP: " + currentPlayer.actionPoints.ToString();
 
         // ✅ 显示当前玩家的名称
-        currentPlayerText.text = "Current Player: " + currentPlayer.playerName;
+        currentPlayerText.text = "Player: " + currentPlayer.playerName;
     }
 
 }
