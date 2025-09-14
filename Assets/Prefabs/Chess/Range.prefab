@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 5342811364400099259}
   m_Layer: 6
   m_Name: Range
-  m_TagString: Chess
+  m_TagString: King
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

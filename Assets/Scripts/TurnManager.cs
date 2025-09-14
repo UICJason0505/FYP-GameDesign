@@ -18,6 +18,8 @@ public class TurnManager : MonoBehaviour
 
     void Awake()
     {
+        playerNum = GameSettings.playerNum;
+        
         if (players.Count == 0)
         {
             for (int i = 0; i < playerNum; i++)

@@ -1,10 +1,16 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
+    public TMP_Dropdown playerNumDropdown;
     public void StartGame()
     {
+        int selectedIndex = playerNumDropdown.value; 
+        int playerNum = selectedIndex + 2;
+        GameSettings.playerNum = playerNum;
+
         SceneManager.LoadScene("Main");
     }
 
