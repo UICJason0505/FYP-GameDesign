@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HexMath : MonoBehaviour
 {
-    public static Vector3 originWorld = Vector3.zero;
+    public static Vector3 originWorld = Vector3.zero + Vector3.up * 0.8f;
 
     public struct Coordinates
     {

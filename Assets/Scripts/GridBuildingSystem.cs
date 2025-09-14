@@ -27,7 +27,7 @@ public class GridBuildingSystem : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out var hit))
             return hit.point + Vector3.up * offset;
-        return Vector3.zero;
+        return Vector3.zero + Vector3.up * 0.8f;
 
     }
     private bool TryGetHoveredTile(out HexTile tile)
