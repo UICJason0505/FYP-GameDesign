@@ -39,14 +39,16 @@ public class GridBuildingSystem : MonoBehaviour
             return false;
         }
         tile = hit.collider.GetComponent<HexTile>();
-        Debug.Log($"Hit tile  Coordinates = ({tile.coordinates.x}, {tile.coordinates.z})");
+        if(tile != null)Debug.Log($"Hit tile  Coordinates = ({tile.coordinates.x}, {tile.coordinates.z})");
         return tile != null;
     }
     public Vector3 Snap(Vector3 rootPos)
     {
         if (TryGetHoveredTile(out HexTile tile))
+        {
             position = tile.centerWorld + Vector3.up * 0.8f;
             return tile.centerWorld + Vector3.up * 0.8f;
+        }
         return position;
     }
     private void Update()
