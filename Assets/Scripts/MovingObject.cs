@@ -144,8 +144,7 @@ public class MovingObject : MonoBehaviour
         if (isDragging && player.actionPoints > 0)
         {
             // 获取鼠标位置并将物体拖动到该位置，同时使用 Snap 函数来对齐到网格
-            Vector3 mousePosition = GridBuildingSystem.GetMousePos();
-            selectedObj.transform.position = Snap(mousePosition);
+            selectedObj.transform.position = Snap(transform.position);
 
             //拖拽前，获得当前物体的坐标
 

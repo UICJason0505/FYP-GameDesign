@@ -44,12 +44,9 @@ public class GridBuildingSystem : MonoBehaviour
     }
     public Vector3 Snap(Vector3 rootPos)
     {
-        if (TryGetHoveredTile(out HexTile tile))
-        {
-            position = tile.centerWorld + Vector3.up * 0.8f;
-            return tile.centerWorld + Vector3.up * 0.8f;
-        }
-        return position;
+        if (!TryGetHoveredTile(out HexTile tile)) position = rootPos;
+        else position = tile.centerWorld + Vector3.up * 0.8f;
+        return tile.centerWorld + Vector3.up * 0.8f; 
     }
     private void Update()
     {
