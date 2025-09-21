@@ -13,50 +13,87 @@ public class UnitInfoPanelController : MonoBehaviour
 
     public SubPanelUI subPanelUI;
 
-    private Color normalColor = Color.grey; // 默认灰色
-    private Color activeColor = Color.white; // 70%亮度灰色
+    [Header("违规提示UI")]
+    public TextMeshProUGUI invalidActionText;
+    public float invalidMessageDuration = 2f;
+
+    private Color normalColor = Color.grey; 
+    private Color activeColor = Color.white; 
     
-    // 当前选中的技能键
     private KeyCode? selectedKey = null;
 
     void Awake()
     {
         gameObject.SetActive(false);
+        if (invalidActionText != null)
+        {
+            invalidActionText.gameObject.SetActive(false);
+        }
     }
 
     void Update()
     {
-        // 仅当面板可见时处理快捷键
         if (!gameObject.activeSelf) return;
 
-        CheckKeyPress(KeyCode.Z, zIndicator);
-        CheckKeyPress(KeyCode.X, xIndicator);
-        //CheckKeyPress(KeyCode.C, cIndicator);
-        CheckKeyPress(KeyCode.V, vIndicator);
-        // 手动处理 C 键逻辑（包含打开 SubPanel）
+        // 右键退出模式
+        if (Input.GetMouseButtonDown(1) && selectedKey != null)
+        {
+            ExitCurrentMode();
+            // ✅ 右键时刷新AP UI
+            FindObjectOfType<TurnManager>()?.UpdateTurnText();
+            return;
+        }
+
+        // 检查模式按键
+        CheckMode(KeyCode.Z, zIndicator);
+        CheckMode(KeyCode.X, xIndicator);
+        CheckMode(KeyCode.V, vIndicator);
+
+        // 单独处理C
         if (Input.GetKeyDown(KeyCode.C))
         {
-            ResetAllIndicators();
-            cIndicator.color = activeColor;
-            selectedKey = KeyCode.C;
+            HandleModeSwitch(KeyCode.C, cIndicator);
 
-            // ✅ 如果当前显示的是 King，打开子面板
-            if (nameText.text == "King" && subPanelUI != null)
+            if (selectedKey == KeyCode.C && nameText.text == "King" && subPanelUI != null)
             {
                 subPanelUI.ShowPanel();
             }
         }
-
     }
 
-    private void CheckKeyPress(KeyCode key, Image indicator)
+    private void CheckMode(KeyCode key, Image indicator)
     {
         if (Input.GetKeyDown(key))
         {
+            HandleModeSwitch(key, indicator);
+        }
+    }
+
+    private void HandleModeSwitch(KeyCode key, Image indicator)
+    {
+        if (selectedKey == null)
+        {
+            // 进入模式
             ResetAllIndicators();
             indicator.color = activeColor;
             selectedKey = key;
         }
+        else if (selectedKey == key)
+        {
+            // 再次点击 → 退出
+            ExitCurrentMode();
+        }
+        else
+        {
+            // 不允许直接切换 → 提示违规
+            ShowInvalidAction("请先退出当前模式再切换！");
+        }
+    }
+
+    private void ExitCurrentMode()
+    {
+        ResetAllIndicators();
+        selectedKey = null;
     }
 
     private void ResetAllIndicators()
@@ -65,18 +102,34 @@ public class UnitInfoPanelController : MonoBehaviour
         xIndicator.color = normalColor;
         cIndicator.color = normalColor;
         vIndicator.color = normalColor;
-        selectedKey = null;
     }
+
     public void ShowUnit(string unitName, int blood)
     {
-        //需要挂载在所有棋子中
         nameText.text = unitName;
         numberText.text = blood.ToString();
         gameObject.SetActive(true);
     }
+
     public void Hide()
     {
-        ResetAllIndicators(); // 每次关闭时重置按钮颜色
+        ExitCurrentMode();
         gameObject.SetActive(false);
+    }
+
+    // ✅ 显示违规提示
+    private void ShowInvalidAction(string message)
+    {
+        if (invalidActionText == null) return;
+        invalidActionText.text = message;
+        invalidActionText.gameObject.SetActive(true);
+        CancelInvoke(nameof(HideInvalidAction));
+        Invoke(nameof(HideInvalidAction), invalidMessageDuration);
+    }
+
+    private void HideInvalidAction()
+    {
+        if (invalidActionText != null)
+            invalidActionText.gameObject.SetActive(false);
     }
 }
