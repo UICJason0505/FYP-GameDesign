@@ -15,6 +15,11 @@ public class TurnManager : MonoBehaviour
     private String[] names = {"Red", "Blue", "Green", "Yellow" };
     public TMP_Text actionPointText;
     public TMP_Text currentPlayerText;
+    public Transform redSpawn;
+    public Transform blueSpawn;
+    public Transform greenSpawn;
+    public Transform yellowSpawn;
+
 
     void Awake()
     {
