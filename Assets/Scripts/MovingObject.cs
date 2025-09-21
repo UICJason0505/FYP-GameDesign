@@ -18,8 +18,8 @@ public class MovingObject : MonoBehaviour
     private LineRenderer lineRenderer; // 用来绘制路径
     private int currentAP; // 记录玩家的行动点
 
-    private enum ObjectState { None, Selected, Dragging }
-    private ObjectState currentState = ObjectState.None;
+    public enum ObjectState { None, Selected, Dragging }
+    public ObjectState currentState = ObjectState.None;
 
     void Start()
     {

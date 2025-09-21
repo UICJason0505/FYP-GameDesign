@@ -17,11 +17,12 @@ public class Chess : MonoBehaviour
     public bool isInAttackMode = false;
     [Header("UI属性面板")]
     public UnitInfoPanelController panel;
-
-
+    MovingObject move;
     public void Init(string className, int id, Player owner)
     {
         gameManager = GetComponent<GameManager>();
+        var go = GameObject.Find("GameManager");
+        if (go != null) move = go.GetComponent<MovingObject>();
         this.className = className;
         this.id = id;
         this.player = owner;
@@ -46,8 +47,7 @@ public class Chess : MonoBehaviour
         if (SelectionManager.selectedObj != gameObject) return;
         //UI关闭
         if (panel != null && Input.GetMouseButtonDown(1)) panel.Hide();
-
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X) && move.currentState == ObjectState.Selected)
         {
             isInAttackMode = !isInAttackMode;
             if (isInAttackMode)

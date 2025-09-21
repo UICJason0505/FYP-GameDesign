@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static HexMath;
+using static MovingObject;
 //private bool isSelected = false;
 public class King : MonoBehaviour
 {
@@ -15,10 +16,16 @@ public class King : MonoBehaviour
     public bool isInAttackMode = false;
     public Coordinates position;
     private int attackArea = 1;
+    MovingObject move;
+    public void Awake()
+    {
+        var go = GameObject.Find("GameManager");           
+        if (go != null) move = go.GetComponent<MovingObject>();
+    }
     void Update()
     {
-        if (SelectionManager.selectedObj != this.gameObject) return;
-        if (Input.GetKeyDown(KeyCode.X) && isInAttackMode == false)
+        if (SelectionManager.selectedObj == null || SelectionManager.selectedObj != this.gameObject) return;
+        if (Input.GetKeyDown(KeyCode.X) && isInAttackMode == false && move.currentState == ObjectState.Selected)
         {
             if(isSummonMode == true)
             {
