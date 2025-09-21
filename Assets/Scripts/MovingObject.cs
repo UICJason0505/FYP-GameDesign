@@ -128,7 +128,7 @@ public class MovingObject : MonoBehaviour
         Debug.Log($"拖拽前物体坐标: ({currentCoords.x}, {currentCoords.z})");
         if (HasMovedALot(coords, currentCoords))
         {
-            selectedObj.transform.position = position;
+            selectedObj.transform.position = originPosition;
         }
         else if (HasMovedOneStep(coords, currentCoords))
         {
