@@ -23794,6 +23794,7 @@ MonoBehaviour:
   blueSpawn: {fileID: 996557819}
   greenSpawn: {fileID: 1072907281}
   yellowSpawn: {fileID: 330551051}
+  kingPrefab: {fileID: 5433386401727367742, guid: 2d27e4fb487ce684ea13f4ce4a19a793, type: 3}
 --- !u!4 &1764908832
 Transform:
   m_ObjectHideFlags: 0

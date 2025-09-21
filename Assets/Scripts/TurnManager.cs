@@ -6,13 +6,14 @@ using UnityEngine.UI;
 
 public class TurnManager : MonoBehaviour
 {
+
     public List<Player> players = new();
     public int turnCount = 0;
     public int fullTurn = 1;
     public int playerNum = 2;
     public TMP_Text turnText;
     public Button nextTurnButton;
-    private String[] names = {"Red", "Blue", "Green", "Yellow" };
+    private String[] names = { "Red", "Blue", "Green", "Yellow" };
     public TMP_Text actionPointText;
     public TMP_Text currentPlayerText;
     public Transform redSpawn;
@@ -20,11 +21,12 @@ public class TurnManager : MonoBehaviour
     public Transform greenSpawn;
     public Transform yellowSpawn;
 
+    [Header("Prefabs")]
+    public GameObject kingPrefab;
 
     void Awake()
     {
-        playerNum = GameSettings.playerNum;
-        
+        playerNum = Mathf.Clamp(GameSettings.playerNum, 2, 4);
         if (players.Count == 0)
         {
             for (int i = 0; i < playerNum; i++)
@@ -32,6 +34,7 @@ public class TurnManager : MonoBehaviour
                 players.Add(new Player(i, names[i]));
             }
         }
+        SpawnKings();
         players[0].canOperate = true;
         UpdateTurnText();
         nextTurnButton.onClick.AddListener(AdvanceTurn);
@@ -78,6 +81,44 @@ public class TurnManager : MonoBehaviour
 
         // ✅ 显示当前玩家的名称
         currentPlayerText.text = "Player: " + currentPlayer.playerName;
+    }
+
+    void SpawnKings()
+    {
+        for (int i = 0; i < playerNum; i++)
+        {
+            Transform spawnPoint = null;
+            switch (i)
+            {
+                case 0: spawnPoint = redSpawn; break;
+                case 1: spawnPoint = blueSpawn; break;
+                case 2: spawnPoint = greenSpawn; break;
+                case 3: spawnPoint = yellowSpawn; break;
+            }
+
+            if (spawnPoint == null) 
+            {
+                Debug.LogError($"Spawn point for {names[i]} not assigned!");
+                continue;
+            }
+
+            // 实例化 King
+            GameObject kingObj = Instantiate(kingPrefab, spawnPoint.position, Quaternion.identity);
+
+            // 设置名字
+            kingObj.name = $"{names[i]}_King";
+
+            // 绑定 Player
+            Chess chess = kingObj.GetComponent<Chess>();
+            if (chess != null)
+            {
+                chess.Init("King", 0, players[i]); 
+            }
+            else
+            {
+                Debug.LogError("King prefab missing Chess component!");
+            }
+        }
     }
 
 }
