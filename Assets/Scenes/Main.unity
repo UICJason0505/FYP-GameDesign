@@ -2030,8 +2030,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd5be0b034ad5349aef1b456b587ce9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Chess1: {fileID: 5433386401727367742, guid: a8c51243bd69b3d4eb7d6175761e01fa, type: 3}
-  Chess2: {fileID: 5433386401727367742, guid: 211cdcfc40ef84b43bcc6e59dcf6ac58, type: 3}
+  Chess1: {fileID: 48875486828507756, guid: e7086ca730057504cb17fb89849a32c9, type: 3}
+  Chess2: {fileID: 48875486828507756, guid: 8d066fe86bbfd2249876b23004e47f88, type: 3}
 --- !u!4 &193565889
 Transform:
   m_ObjectHideFlags: 0
