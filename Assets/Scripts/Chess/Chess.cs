@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static HexMath;
 using static MovingObject;
@@ -35,7 +36,7 @@ public class Chess : MonoBehaviour
         // 自动获取场景中的 UI 面板
         if (panel == null)
         {
-            panel = FindObjectOfType<UnitInfoPanelController>();
+            panel = Resources.FindObjectsOfTypeAll<UnitInfoPanelController>().FirstOrDefault(); ;
         }
     }
 

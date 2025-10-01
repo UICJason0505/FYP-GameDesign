@@ -17,7 +17,6 @@ public class CameraController : MonoBehaviour
         HandleRotate();      // Handle rotation with Q/E keys
         HandleZoom();        // Handle zooming with mouse scroll
     }
-
     // Handle camera movement using WASD (global space)
     void HandleMovement()
     {

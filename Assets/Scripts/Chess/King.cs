@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static HexMath;
@@ -21,6 +22,8 @@ public class King : MonoBehaviour
     {
         var go = GameObject.Find("GameManager");           
         if (go != null) move = go.GetComponent<MovingObject>();
+        panel = Resources.FindObjectsOfTypeAll<UnitInfoPanelController>().FirstOrDefault();
+        turnManager = FindObjectOfType<TurnManager>();
     }
     void Update()
     {

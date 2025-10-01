@@ -96,7 +96,7 @@ public class TurnManager : MonoBehaviour
                 case 3: spawnPoint = yellowSpawn; break;
             }
 
-            if (spawnPoint == null) 
+            if (spawnPoint == null)
             {
                 Debug.LogError($"Spawn point for {names[i]} not assigned!");
                 continue;
@@ -112,7 +112,7 @@ public class TurnManager : MonoBehaviour
             Chess chess = kingObj.GetComponent<Chess>();
             if (chess != null)
             {
-                chess.Init("King", 0, players[i]); 
+                chess.Init("King", 0, players[i]);
             }
             else
             {
