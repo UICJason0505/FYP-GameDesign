@@ -107,17 +107,12 @@ public class TurnManager : MonoBehaviour
 
             // 设置名字
             kingObj.name = $"{names[i]}_King";
-
             // 绑定 Player
-            Chess chess = kingObj.GetComponent<Chess>();
-            if (chess != null)
-            {
-                chess.Init("King", 0, players[i]);
-            }
-            else
-            {
-                Debug.LogError("King prefab missing Chess component!");
-            }
+            kingObj.GetComponent<King>().player = players[i];
+            Debug.Log(kingObj.GetComponent<King>().player.playerName);
+            //阵营颜色
+            kingObj.GetComponent<Renderer>().material = spawnPoint.GetComponent<SpriteRenderer>().material;
+
         }
     }
 

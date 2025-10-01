@@ -10,6 +10,7 @@ public class King : MonoBehaviour
 {
     [Header("基础属性")]
     public string unitName = "King";
+    public Player player;
     public int blood = 5;
     public UnitInfoPanelController panel;
     public TurnManager turnManager;
@@ -70,7 +71,7 @@ public class King : MonoBehaviour
             if (player.HasEnoughActionPoints(2))
             {
                 Debug.Log("召唤近战棋子");
-                GridBuildingSystem.Instance.SpawnChess1();
+                GridBuildingSystem.Instance.SpawnChess1(player, GetComponent<Renderer>().material);
                 player.UseActionPoint(2);
             }
             else
@@ -83,7 +84,7 @@ public class King : MonoBehaviour
             if (player.HasEnoughActionPoints(2))
             {
                 Debug.Log("召唤远程棋子");
-                GridBuildingSystem.Instance.SpawnChess2();
+                GridBuildingSystem.Instance.SpawnChess2(player, GetComponent<Renderer>().material);
                 player.UseActionPoint(2);
             }
             else

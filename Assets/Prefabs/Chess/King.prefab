@@ -363,6 +363,7 @@ MonoBehaviour:
   blood: 5
   panel: {fileID: 0}
   turnManager: {fileID: 0}
+  isInAttackMode: 0
 --- !u!114 &1413053074880644353
 MonoBehaviour:
   m_ObjectHideFlags: 0

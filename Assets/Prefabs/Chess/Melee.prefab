@@ -195,6 +195,7 @@ MonoBehaviour:
   gameManager: {fileID: 0}
   isInAttackMode: 0
   panel: {fileID: 0}
+  rend: {fileID: 2743645010448348052}
 --- !u!1 &5723478312136251405
 GameObject:
   m_ObjectHideFlags: 0
@@ -472,5 +473,10 @@ PrefabInstance:
 --- !u!4 &1139611438175412147 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5979535019713862199, guid: a26aa0766b68ce44ba3c848785c721fe, type: 3}
+  m_PrefabInstance: {fileID: 6713501432955749764}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &2743645010448348052 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8878925153538192912, guid: a26aa0766b68ce44ba3c848785c721fe, type: 3}
   m_PrefabInstance: {fileID: 6713501432955749764}
   m_PrefabAsset: {fileID: 0}
