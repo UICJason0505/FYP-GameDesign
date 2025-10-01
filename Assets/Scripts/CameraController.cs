@@ -22,19 +22,22 @@ public class CameraController : MonoBehaviour
     {
         // Create movement vector (world-space directions)
         Vector3 moveDirection = Vector3.zero;
-
+        Vector3 fw = transform.forward;
+        fw.y = 0;
+        Vector3 rg = transform.right;
+        rg.y = 0;
         // Check for WASD input for movement
         if (Input.GetKey(KeyCode.W))
-            moveDirection += Vector3.forward; // Move forward along world-space Z-axis
+            moveDirection += fw; // Move forward along world-space Z-axis
 
         if (Input.GetKey(KeyCode.S))
-            moveDirection += Vector3.back;   // Move backward along world-space Z-axis
+            moveDirection -= fw;   // Move backward along world-space Z-axis
 
         if (Input.GetKey(KeyCode.A))
-            moveDirection += Vector3.left;   // Move left along world-space X-axis
+            moveDirection -= rg;   // Move left along world-space X-axis
 
         if (Input.GetKey(KeyCode.D))
-            moveDirection += Vector3.right;  // Move right along world-space X-axis
+            moveDirection += rg;  // Move right along world-space X-axis
 
         // Apply movement with panSpeed
         transform.position += moveDirection * panSpeed * Time.deltaTime;
