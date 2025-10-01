@@ -86,7 +86,7 @@ public class UnitInfoPanelController : MonoBehaviour
         else
         {
             // 不允许直接切换 → 提示违规
-            ShowInvalidAction("请先退出当前模式再切换！");
+            ShowInvalidAction("Invaild Action");
         }
     }
 
