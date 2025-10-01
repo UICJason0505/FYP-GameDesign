@@ -50,15 +50,12 @@ public class GridBuildingSystem : MonoBehaviour
     }
     private void Update()
     {
-        //测试
-        //if (Input.GetKeyDown(KeyCode.Keypad0)) StartPlacing(Chess1);
-        //if (Input.GetKeyDown(KeyCode.Keypad1)) StartPlacing(Chess2);
         if (current == null) return;
         if (Input.GetMouseButtonDown(0))
         {
             if (TryGetHoveredTile(out HexTile tile) && !occupied.Contains(tile.coordinates))
             {
-                current.FinalizePlacement(tile.coordinates, tile.centerWorld);
+                current.FinalizePlacement(tile.coordinates, Snap(GetMousePos()) - Vector3.up * 0.8f);
                 occupied.Add(tile.coordinates);
                 current = null;
             }
