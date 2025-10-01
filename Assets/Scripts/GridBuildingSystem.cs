@@ -69,17 +69,19 @@ public class GridBuildingSystem : MonoBehaviour
             current = null;
         }
     }
-    private void StartPlacing(GameObject prefab)
+    private void StartPlacing(GameObject prefab, Player player , Material material)
     {
         if (current) Destroy(current.gameObject);
         current = Instantiate(prefab,GetMousePos(), Quaternion.identity).GetComponent<PlacebleObject>();
         Chess chess = current.GetComponent<Chess>();
+        chess.player = player;
+        chess.rend.material = material;
         if (prefab == Chess1)
             chess.Init("Melee", ++MeeleCount, null);
         else
             chess.Init("Ranged", ++RangedCount, null);
     }
 
-    public void SpawnChess1() => StartPlacing(Chess1);
-    public void SpawnChess2() => StartPlacing(Chess2);
+    public void SpawnChess1(Player player , Material material) => StartPlacing(Chess1, player, material);
+    public void SpawnChess2(Player player, Material material) => StartPlacing(Chess2, player, material);
 }

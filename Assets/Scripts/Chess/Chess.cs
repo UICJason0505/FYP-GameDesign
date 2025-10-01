@@ -19,6 +19,7 @@ public class Chess : MonoBehaviour
     [Header("UI属性面板")]
     public UnitInfoPanelController panel;
     MovingObject move;
+    public Renderer rend;
     public void Init(string className, int id, Player owner)
     {
         gameManager = GetComponent<GameManager>();
