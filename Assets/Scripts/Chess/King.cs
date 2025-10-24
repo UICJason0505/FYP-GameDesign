@@ -17,7 +17,7 @@ public class King : MonoBehaviour
     private bool isSummonMode = false;
     public bool isInAttackMode = false;
     public Coordinates position;
-    private int attackArea = 1;
+    private int attackArea = 2;
     MovingObject move;
     public void Awake()
     {
@@ -36,15 +36,20 @@ public class King : MonoBehaviour
                 isSummonMode = false;
             }
             showAttackableTiles();
+            SelectionManager.isAttackMode = true;
+            Debug.Log("是否攻击：" + SelectionManager.isAttackMode);
             isInAttackMode = true;
             return;
         }
         else if (Input.GetKeyDown(KeyCode.X) && isInAttackMode == true)
         {
             ResetTiles();
+            SelectionManager.isAttackMode = false;
+            Debug.Log("是否攻击：" + SelectionManager.isAttackMode);
             isInAttackMode = false;
         }
-        // ✅ 按 C 启动/退出召唤模式
+
+        // 按 C 启动/退出召唤模式
         if (Input.GetKeyDown(KeyCode.C))
         {
             isSummonMode = !isSummonMode;
@@ -53,15 +58,21 @@ public class King : MonoBehaviour
             isInAttackMode = false;
         }
 
-        // ✅ 按右键取消选择
+        // 按右键取消选择
         if (panel != null && Input.GetMouseButtonDown(1))
-        {
-            panel.Hide();
-            SelectionManager.selectedObj = null;
-            isSummonMode = false; // 退出召唤模式
+        { 
+            if(isInAttackMode == true)
+            {
+                SelectionManager.isAttackMode = false;
+                ResetTiles();
+                panel.Hide();
+                SelectionManager.selectedObj = null;
+                isInAttackMode = false;
+            }
+            else panel.Hide();
         }
 
-        // ✅ 只有在召唤模式下才允许召唤
+        // 只有在召唤模式下才允许召唤
         if (!isSummonMode) return;
 
         Player player = turnManager.players[turnManager.turnCount];
@@ -93,6 +104,7 @@ public class King : MonoBehaviour
             }
             if (SelectionManager.selectedObj == null) return;
         }
+
     }
     void OnMouseDown()
     {
@@ -110,6 +122,7 @@ public class King : MonoBehaviour
     public void TakeDamage()
     {
         blood--;
+        Debug.Log("当前血量：" + blood);
         if (blood <= 0)
         {
             Die();

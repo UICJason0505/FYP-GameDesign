@@ -6,6 +6,7 @@ using static HexMath;
 using static MovingObject;
 public class Chess : MonoBehaviour
 {
+    [SerializeField]
     public int number = 1;
     public Player player;
     private string name;
@@ -144,6 +145,5 @@ public class Chess : MonoBehaviour
     {
         int value = tile.GetTileValue();
         number += value;
-        Debug.Log($"{name} ���� {tile.name}����� {value} �㣬��ǰֵΪ��{number}");
     }
 }

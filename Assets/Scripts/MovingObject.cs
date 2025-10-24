@@ -10,6 +10,7 @@ public class MovingObject : MonoBehaviour
     public Coordinates coords; // 棋子原坐标(using HexMath)
     private static Coordinates currentCoords; // 指针坐标
     private Vector3 originPosition; // 棋子的原transform位置
+    private int originalNumber; // 棋子的原数值
     private Vector3 position; // 棋子的transform位置
     private Vector3 currentPosition; // 指针的transform位置
     private Player player; // 当前玩家
@@ -109,6 +110,7 @@ public class MovingObject : MonoBehaviour
             currentAP = player.actionPoints;
             currentState = ObjectState.Dragging;
             Debug.Log("开始拖动物体，剩余行动点: " + currentAP);
+            originalNumber = selectedObj.GetComponent<Chess>().number;
         }
         else
         {
@@ -135,6 +137,17 @@ public class MovingObject : MonoBehaviour
             player.actionPoints--;
             coords = currentCoords;
             position = currentPosition;
+            //FYJ 加数值
+            var chess = selectedObj.GetComponent<Chess>();
+            for (int i = 0; i < GameManager.Instance.tiles.Length; i++)
+            {
+                if (GameManager.Instance.tiles[i].coordinates.x == coords.x && GameManager.Instance.tiles[i].coordinates.z == coords.z)
+                {
+                    HexTile HexTile = GameManager.Instance.tiles[i];
+                    chess.CollectTileValue(HexTile);
+                    break;
+                }
+            }
         }
 
         UpdatePath(selectedObj.transform.position);
@@ -143,6 +156,7 @@ public class MovingObject : MonoBehaviour
     // 返回到原始位置，并结束拖拽和选中
     private void ReturnToOriginalPosition()
     {
+        selectedObj.GetComponent<Chess>().number = originalNumber; // 恢复原始数值
         selectedObj.transform.position = originPosition; // 返回到原始位置
         player.actionPoints = currentAP; // 恢复行动点
         currentState = ObjectState.None; // 结束拖拽
@@ -153,6 +167,7 @@ public class MovingObject : MonoBehaviour
     // Reset position to origin
     private void ResetPosition()
     {
+        selectedObj.GetComponent<Chess>().number = originalNumber;
         selectedObj.transform.position = originPosition;
         player.actionPoints = currentAP;
         currentState = ObjectState.None;

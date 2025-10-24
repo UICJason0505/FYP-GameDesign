@@ -41,10 +41,7 @@ public class TurnManager : MonoBehaviour
     }
     public void Update()
     {
-        if (players[turnCount].actionPoints != 5)
-        {
-            UpdateTurnText();
-        }
+        UpdateTurnText();
     }
 
     void AdvanceTurn()
