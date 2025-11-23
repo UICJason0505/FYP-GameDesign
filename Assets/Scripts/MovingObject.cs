@@ -58,6 +58,22 @@ public class MovingObject : MonoBehaviour
         PlacebleObject placebleObject = clickedObject.GetComponent<PlacebleObject>();
         if (placebleObject == null) return;
 
+        // === FYJ：检测阵营是否允许操作 ===
+        King clickedChess = clickedObject.GetComponent<King>();
+        if (clickedChess != null)
+        {
+            Player clickedPlayer = clickedChess.player;
+            Player currentPlayer = turnManager.players[turnManager.turnCount];
+
+            if (clickedPlayer != currentPlayer)
+            {
+                Debug.Log($"当前回合属于 {currentPlayer.playerName}，无法操作 {clickedPlayer.playerName} 的棋子！");
+                if (UnitInfoPanelController.Instance != null)
+                    UnitInfoPanelController.Instance.ShowInvalidAction("Not your turn!");
+                return;
+            }
+        }
+
         if (currentState == ObjectState.Selected && selectedObj != clickedObject)
         {
             Unhighlight();

@@ -4,6 +4,8 @@ using UnityEngine.UI; // 添加UI命名空间用于Image
 
 public class UnitInfoPanelController : MonoBehaviour
 {
+    public static UnitInfoPanelController Instance { get; private set; }
+    
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI numberText;
     public Image zIndicator;
@@ -106,6 +108,28 @@ public class UnitInfoPanelController : MonoBehaviour
 
     public void ShowUnit(string unitName, int blood)
     {
+        // 检查是否为当前阵营
+        if (SelectionManager.selectedObj != null)
+        {
+            King king = SelectionManager.selectedObj.GetComponent<King>();
+            if (king != null)
+            {
+                TurnManager tm = FindObjectOfType<TurnManager>();
+                if (tm != null)
+                {
+                    Player currentPlayer = tm.players[tm.turnCount];
+                    Player kingPlayer = king.player;
+
+                    if (kingPlayer != currentPlayer)
+                    {
+                        Debug.Log($"当前回合属于 {currentPlayer.playerName}，无法查看 {kingPlayer.playerName} 的单位信息！");
+                        ShowInvalidAction("Not your turn!");
+                        return;
+                    }
+                }
+            }
+        }
+        //是当前阵营，显示UI
         nameText.text = unitName;
         numberText.text = blood.ToString();
         gameObject.SetActive(true);
@@ -118,7 +142,7 @@ public class UnitInfoPanelController : MonoBehaviour
     }
 
     // ✅ 显示违规提示
-    private void ShowInvalidAction(string message)
+    public void ShowInvalidAction(string message)
     {
         if (invalidActionText == null) return;
         invalidActionText.text = message;

@@ -20,12 +20,30 @@ public class SelectionManager : MonoBehaviour
             GameObject clickedObject = RayToGetObj();
             if (clickedObject == null) return;
 
-            Debug.Log("选中物体");
             // 检查是否有PlacebleObject脚本
             PlacebleObject placebleObject = clickedObject.GetComponent<PlacebleObject>();
             if (placebleObject == null) return;
 
+            // === 阵营检测逻辑 ===
+            King clickedKing = clickedObject.GetComponent<King>();
+            if (clickedKing != null)
+            {
+                // 获取当前回合玩家（来自 TurnManager）
+                TurnManager turnManager = FindObjectOfType<TurnManager>();
+                Player currentPlayer = turnManager.players[turnManager.turnCount];
+                Player clickedPlayer = clickedKing.player;
+
+                if (clickedPlayer != currentPlayer)
+                {
+                    Debug.Log($"当前回合属于 {currentPlayer.playerName}，无法选中 {clickedPlayer.playerName} 的棋子！");
+                    if (UnitInfoPanelController.Instance != null)
+                        UnitInfoPanelController.Instance.ShowInvalidAction("Not your turn!");
+                    return;
+                }
+            }
+
             SelectObject(clickedObject);
+            Debug.Log("选中物体");
         }
         // 如果鼠标左键按下，选中物体
         if (Input.GetMouseButtonDown(0) && isAttackMode == true)
