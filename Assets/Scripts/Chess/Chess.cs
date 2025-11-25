@@ -124,7 +124,6 @@ public class Chess : MonoBehaviour
                 attacker = null;
                 return;
             }
-            // 遍历场上所有棋子，找到目标棋子
             if (selectedChess == attacker)
             {
                 if (attacker == null) return;
