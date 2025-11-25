@@ -15,7 +15,6 @@ public class MovingObject : MonoBehaviour
     private Vector3 currentPosition; // 指针的transform位置
     private Player player; // 当前玩家
     public Vector3 centerWorld; //Test
-
     private LineRenderer lineRenderer; // 用来绘制路径
     private int currentAP; // 记录玩家的行动点
 
