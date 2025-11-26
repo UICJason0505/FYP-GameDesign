@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Knight : Chess, ITauntable
+public class Knight : Chess
 {
     [Header("Knight Skill Settings")]
     public int dashCD = 2;
@@ -105,12 +105,4 @@ public class Knight : Chess, ITauntable
         }
     }
 
-    // 嘲讽响应系统
-    Chess forcedTarget = null;
-
-    public void ReceiveTaunt(Chess taunter)
-    {
-        Debug.Log($"{name} 被 {taunter.name} 嘲讽！");
-        forcedTarget = taunter;
-    }
 }

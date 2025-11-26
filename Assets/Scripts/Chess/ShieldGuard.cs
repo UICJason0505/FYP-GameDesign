@@ -5,9 +5,9 @@ public class ShieldGuard : Chess
     [Header("ShieldGuard Skill Settings")]
     public int tauntCD = 2;
     private int tauntTimer = 0;
-    public int tauntRange = 1; 
+    public int tauntRange = 1;
 
-    void Start()
+    protected override void Start()
     {
         base.Start();
         number = 3;            // 初始数值：3
@@ -15,7 +15,7 @@ public class ShieldGuard : Chess
         apCost = 1;
     }
 
-    void Update()
+    protected override void Update()
     {
         base.Update();
         if (tauntTimer > 0) tauntTimer--;
