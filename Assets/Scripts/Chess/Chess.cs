@@ -242,7 +242,7 @@ public class Chess : MonoBehaviour
     {
         return 0;
     }
-    public virtual void defend(int demage, Chess attacker, Chess target)//结算伤害和血量（number）5个兵种
+    public virtual void defend(int demage, Chess attacker, Chess target)//结算伤害和血量（number）6个兵种
     {
         return;
     }
