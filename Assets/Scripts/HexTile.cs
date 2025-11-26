@@ -9,6 +9,7 @@ public class HexTile : MonoBehaviour
     public bool canAttack = true;
     public Color highlighColor = Color.gray;
     public Color baseColor;
+    public bool attackable = false;
     [Header("格子数值（棋子经过时加成）")]
     public int tileValue = 1;
     private void Awake()
@@ -33,12 +34,15 @@ public class HexTile : MonoBehaviour
     }
     public void HighlightTile()
     {
-        rend.material.color = highlighColor;
-        canAttack = true;
+        
+        attackable = true;
+        if(attackable && canAttack == true) attackable = true;
+        else attackable = false;
+        if(attackable == true)rend.material.color = highlighColor;
     }
     public void ResetTile()
     {
         rend.material.color = baseColor;
-        canAttack = false;
+        attackable = false;
     }
 }

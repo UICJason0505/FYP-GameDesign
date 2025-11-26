@@ -79,7 +79,7 @@ public class Saber : Chess
                 int bBefore = target.number;
                 target.number -= damage;
 
-                Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {aBefore} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
+                Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
 
                 if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
 
@@ -97,7 +97,7 @@ public class Saber : Chess
                 attacker.number -= bBefore;
                 target.number -= damage;
 
-                Debug.Log($"{attacker.name} 攻击 {target.name}：我方减 {bBefore}，敌方减 {aBefore} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
+                Debug.Log($"{attacker.name} 攻击 {target.name}：我方减 {bBefore}，敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
 
                 if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // 更新自己面板
                 if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
@@ -122,7 +122,7 @@ public class Saber : Chess
             attacker.number -= (int)(bBefore * 0.5);
             target.number -= damage;
 
-            Debug.Log($"{attacker.name} 攻击 {target.name}：我方减 {bBefore}，敌方减 {aBefore} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
+            Debug.Log($"{attacker.name} 攻击 {target.name}：我方减 {bBefore}，敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
 
             if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // 更新自己面板
             if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
@@ -146,7 +146,7 @@ public class Saber : Chess
             attacker.number -= bBefore;
             target.number -= damage;
 
-            Debug.Log($"{attacker.name} 攻击 {target.name}：我方减 {bBefore}，敌方减 {aBefore} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
+            Debug.Log($"{attacker.name} 攻击 {target.name}：我方减 {bBefore}，敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
 
             if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // 更新自己面板
             if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
@@ -168,7 +168,7 @@ public class Saber : Chess
             int bBefore = target.number;
             target.number -= damage;
 
-            Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {aBefore} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
+            Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
 
             if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
 
@@ -186,7 +186,7 @@ public class Saber : Chess
             attacker.number -= bBefore;
             target.number -= damage;
 
-            Debug.Log($"{attacker.name} 攻击 {target.name}：我方减 {bBefore}，敌方减 {aBefore} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
+            Debug.Log($"{attacker.name} 攻击 {target.name}：我方减 {bBefore}，敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
 
             if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // 更新自己面板
             if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);

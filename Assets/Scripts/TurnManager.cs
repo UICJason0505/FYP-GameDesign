@@ -67,7 +67,6 @@ public class TurnManager : MonoBehaviour
 
     public void UpdateTurnText()
     {
-        Debug.Log("Updating turn text...");
         // ✅ 改名称显示为 Round 而不是 Turn
         turnText.text = "Round: " + fullTurn.ToString();
 

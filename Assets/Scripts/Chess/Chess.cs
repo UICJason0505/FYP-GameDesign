@@ -190,7 +190,7 @@ public class Chess : MonoBehaviour
                 attacker = null;
                 return;
             }
-            if (attacker.player.HasEnoughActionPoints(attacker.apCost) && currentTile.canAttack == true)
+            if (attacker.player.HasEnoughActionPoints(attacker.apCost) && currentTile.attackable == true)
             {
                 damage = attacker.attack();//结算攻击
                 defend(damage, attacker, selectedChess);//结算伤害和血量
