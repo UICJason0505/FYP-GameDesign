@@ -31,11 +31,11 @@ public class Saber : Chess
         attackArea = attackDistance;
         if(this.gameObject.name == "Saber")
         {
-            player = turnManager.players[0];
+            player = turnManager.players[2];
         }
         else
         {
-            player = turnManager.players[1];
+            player = turnManager.players[3];
         }
     }
     public override int attack()
@@ -70,26 +70,10 @@ public class Saber : Chess
         }
         else if (attacker.gameObject.layer == LayerMask.NameToLayer("Archer"))
         {
-            int distX = Mathf.Abs(attacker.position.x - target.position.x);
-            int distZ = Mathf.Abs(attacker.position.z - target.position.z);
+            int distX = attacker.position.x - target.position.x;
+            int distZ = attacker.position.z - target.position.z;
             int dist = distX + distZ;
-            if (dist > 1)
-            {
-                int aBefore = attacker.number;
-                int bBefore = target.number;
-                target.number -= damage;
-
-                Debug.Log($"{attacker.name} ¹¥»÷ {target.name}£ºµĞ·½¼õ {damage} ÎÒ·½Ê£ÓàÑªÁ¿{attacker.number} µĞ·½Ê£ÓàÑªÁ¿{target.number}");
-
-                if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
-
-                if (target.number <= 0)
-                {
-                    Destroy(target.gameObject);
-                    Debug.Log($"{target.name} ±»»÷°Ü£¡");
-                }
-            }
-            else
+            if ((Mathf.Abs(distX) + Mathf.Abs(distZ) + Mathf.Abs(dist)) / 2 <= 1)
             {
                 int aBefore = attacker.number;
                 int bBefore = target.number;
@@ -106,6 +90,22 @@ public class Saber : Chess
                     Destroy(attacker.gameObject);
                     Debug.Log($"{name} ±»»÷°Ü£¡");
                 }
+
+                if (target.number <= 0)
+                {
+                    Destroy(target.gameObject);
+                    Debug.Log($"{target.name} ±»»÷°Ü£¡");
+                }
+            }
+            else if ((Mathf.Abs(distX) + Mathf.Abs(distZ) + Mathf.Abs(dist)) / 2 <= 2)
+            {
+                int aBefore = attacker.number;
+                int bBefore = target.number;
+                target.number -= damage;
+
+                Debug.Log($"{attacker.name} ¹¥»÷ {target.name}£ºµĞ·½¼õ {damage} ÎÒ·½Ê£ÓàÑªÁ¿{attacker.number} µĞ·½Ê£ÓàÑªÁ¿{target.number}");
+
+                if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
 
                 if (target.number <= 0)
                 {

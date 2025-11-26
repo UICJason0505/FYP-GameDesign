@@ -8,8 +8,8 @@ using static MovingObject;
 public class Archer : Chess
 {
     [Header("Archer属性")]
-    private int initialValue = 3;
-    private int attackDistance = 1;
+    private int initialValue = 2;
+    private int attackDistance = 2;
     TurnManager turnManager;
     // Awake 用于获取全局引用，避免 move 为 null
     private void Awake()
@@ -69,47 +69,18 @@ public class Archer : Chess
         }
         else if (attacker.gameObject.layer == LayerMask.NameToLayer("Archer"))
         {
-            int distX = Mathf.Abs(attacker.position.x - target.position.x);
-            int distZ = Mathf.Abs(attacker.position.z - target.position.z);
-            int dist = distX + distZ;
-            if (dist > 1)
+            int aBefore = attacker.number;
+            int bBefore = target.number;
+            target.number -= damage;
+
+            Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
+
+            if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
+
+            if (target.number <= 0)
             {
-                int aBefore = attacker.number;
-                int bBefore = target.number;
-                target.number -= damage;
-
-                Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
-
-                if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
-
-                if (target.number <= 0)
-                {
-                    Destroy(target.gameObject);
-                    Debug.Log($"{target.name} 被击败！");
-                }
-            }
-            else
-            {
-                int aBefore = attacker.number;
-                int bBefore = target.number;
-
-                target.number -= damage;
-
-                Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
-
-                if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // 更新自己面板
-                if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
-                if (attacker.number <= 0)
-                {
-                    Destroy(attacker.gameObject);
-                    Debug.Log($"{name} 被击败！");
-                }
-
-                if (target.number <= 0)
-                {
-                    Destroy(target.gameObject);
-                    Debug.Log($"{target.name} 被击败！");
-                }
+                Destroy(target.gameObject);
+                Debug.Log($"{target.name} 被击败！");
             }
         }
         else if (attacker.gameObject.layer == LayerMask.NameToLayer("ShieldGuard"))
