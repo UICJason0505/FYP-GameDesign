@@ -1,178 +1,98 @@
-﻿using System.Linq;
-using UnityEngine;
-using static HexMath;
-using static MovingObject;
+﻿using UnityEngine;
 
-public class ShieldGuard : MonoBehaviour
+public class ShieldGuard : Chess
 {
-    [Header("基础属性")]
-    public int number = 3;
-    public Coordinates position;
-    public int attackArea = 1;
-    public bool isInAttackMode = false;
-    public bool isTauntActive = false;
-
-    [Header("系统引用")]
-    public UnitInfoPanelController panel;
-    public Renderer rend;
-
-    [Header("技能参数")]
-    private int tauntCooldown = 0;
-    private const int tauntCDMax = 3; // 冷却3秒（用于手动测试）
+    [Header("ShieldGuard Skill Settings")]
+    public int tauntCD = 2;
+    private int tauntTimer = 0;
+    public int tauntRange = 1; 
 
     void Start()
     {
-        if (panel == null)
-            panel = Resources.FindObjectsOfTypeAll<UnitInfoPanelController>().FirstOrDefault();
+        base.Start();
+        number = 3;            // 初始数值：3
+        attackArea = 1;        // 攻击距离：1
+        apCost = 1;
     }
 
     void Update()
     {
-        // 棋子被选中时才响应
-        if (SelectionManager.selectedObj != gameObject) return;
+        base.Update();
+        if (tauntTimer > 0) tauntTimer--;
 
-        // 右键关闭UI
-        if (panel != null && Input.GetMouseButtonDown(1))
-            panel.Hide();
-
-        // 攻击模式切换
-        if (Input.GetKeyDown(KeyCode.X))
+        // 释放嘲讽
+        if (Input.GetKeyDown(KeyCode.C) && SelectionManager.selectedObj == gameObject)
         {
-            isInAttackMode = !isInAttackMode;
-            if (isInAttackMode) ShowAttackableTiles();
-            else ResetTiles();
+            TryTaunt();
         }
-
-        // 攻击逻辑
-        if (isInAttackMode && Input.GetMouseButtonDown(0))
-        {
-            TryAttack();
-        }
-
-        // 技能：嘲讽
-        if (Input.GetKeyDown(KeyCode.C) && tauntCooldown == 0)
-        {
-            ActivateTaunt();
-        }
-
-        // 冷却倒计时
-        if (tauntCooldown > 0)
-            tauntCooldown--;
     }
 
-    void OnMouseDown()
+    // 嘲讽技能
+    void TryTaunt()
     {
-        SelectionManager.selectedObj = gameObject;
-        if (panel != null)
-            panel.ShowUnit("ShieldGuard", number);
+        if (tauntTimer > 0)
+        {
+            Debug.Log("嘲讽技能冷却中");
+            return;
+        }
+
+        Debug.Log($"{name} 释放嘲讽！");
+        tauntTimer = tauntCD;
+
+        BroadcastTaunt();
     }
 
-    // 攻击检测
-    void TryAttack()
+    void BroadcastTaunt()
     {
-        Vector3 mouseWorldPos = GridBuildingSystem.GetMousePos();
-        Coordinates targetCoord = HexMath.WorldToCoordinates(mouseWorldPos, 1f);
-
-        var allTargets = FindObjectsOfType<MonoBehaviour>()
-            .Where(x => x is ShieldGuard || x is Knight)
-            .Select(x => x.gameObject)
-            .ToList();
-
-        foreach (var go in allTargets)
+        foreach (Chess c in FindObjectsOfType<Chess>())
         {
-            if (go == gameObject) continue;
-            var targetPos = go.GetComponent<ShieldGuard>()?.position ?? go.GetComponent<Knight>()?.position;
-            if (targetPos.Equals(targetCoord))
+            if (c == this) continue;
+            if (c.player == this.player) continue;
+
+            int dist = HexMath.HexDistance(c.position, this.position);
+            if (dist <= tauntRange)
             {
-                ExecuteAttack(go);
-                ResetTiles();
-                isInAttackMode = false;
-                break;
+                c.GetComponent<ITauntable>()?.ReceiveTaunt(this);
             }
         }
     }
 
-    void ExecuteAttack(GameObject target)
+    // 重写攻击受伤
+
+    // 盾卫造成伤害减半
+    public override int attack()
     {
-        int dmgToTarget = Mathf.CeilToInt(number * 0.5f);  // 笨重：输出减半
-        int dmgToSelf = Mathf.CeilToInt((GetNumber(target)) * 0.5f);  // 减伤：受伤减半
-
-        number -= dmgToSelf;
-        SetNumber(target, GetNumber(target) - dmgToTarget);
-
-        Debug.Log($"[盾卫攻击] {name} 对 {target.name} 造成 {dmgToTarget} 伤害（自身-{dmgToSelf}）");
-
-        // 若目标存活，触发反击
-        if (GetNumber(target) > 0)
-            TryRetaliate(target);
-
-        // 检查死亡
-        if (number <= 0) Destroy(gameObject);
-        if (GetNumber(target) <= 0) Destroy(target);
+        int dmg = Mathf.Max(1, number / 2);
+        Debug.Log($"{name} 发动攻击（伤害减半）：{dmg}");
+        return dmg;
     }
 
-    void TryRetaliate(GameObject target)
+    public override void defend(int damage, Chess attacker, Chess target)
     {
-        var shield = target.GetComponent<ShieldGuard>();
-        var knight = target.GetComponent<Knight>();
-        if (shield != null)
+        // 1. 盾卫受到的伤害减半
+        int actualDamage = Mathf.Max(1, damage / 2);
+        number -= actualDamage;
+
+        Debug.Log($"{name} 承受伤害（减半）：{actualDamage} 剩余 {number}");
+
+
+        // 2. 死亡检查
+        if (number <= 0)
         {
-            shield.Retaliate(this.gameObject);
+            Destroy(gameObject);
+            return;
         }
-        else if (knight != null)
+
+        // 3. 反击
+        if (HexMath.HexDistance(attacker.position, this.position) == 1)
         {
-            knight.Retaliate(this.gameObject);
+            int retaliateDamage = Mathf.Max(1, number / 2);
+            attacker.number -= retaliateDamage;
+
+            Debug.Log($"{name} 对 {attacker.name} 触发反击！造成 {retaliateDamage}");
+
+            if (attacker.number <= 0)
+                Destroy(attacker.gameObject);
         }
     }
-
-    // 反击逻辑
-    public void Retaliate(GameObject attacker)
-    {
-        int retaliateDamage = Mathf.CeilToInt(number * 0.5f);
-        int atkNum = GetNumber(attacker);
-        SetNumber(attacker, atkNum - retaliateDamage);
-        Debug.Log($"[盾卫反击] {name} 对 {attacker.name} 造成反击 {retaliateDamage}");
-
-        if (GetNumber(attacker) <= 0)
-            Destroy(attacker);
-    }
-
-    // 嘲讽技能
-    void ActivateTaunt()
-    {
-        isTauntActive = true;
-        tauntCooldown = tauntCDMax;
-        Invoke(nameof(EndTaunt), 5f); // 持续5秒
-        Debug.Log($"🛡️ {name} 发动【嘲讽】，强制敌人攻击自己！");
-    }
-
-    void EndTaunt()
-    {
-        isTauntActive = false;
-        Debug.Log($"{name} 的【嘲讽】效果结束。");
-    }
-
-    // 显示攻击范围（仅测试）
-    void ShowAttackableTiles() { /* 可留空或高亮测试 */ }
-    void ResetTiles() { }
-
-    // 数据辅助函数
-    int GetNumber(GameObject obj)
-    {
-        var s = obj.GetComponent<ShieldGuard>();
-        if (s != null) return s.number;
-        var k = obj.GetComponent<Knight>();
-        if (k != null) return k.number;
-        return 0;
-    }
-
-    void SetNumber(GameObject obj, int value)
-    {
-        var s = obj.GetComponent<ShieldGuard>();
-        if (s != null) s.number = value;
-        var k = obj.GetComponent<Knight>();
-        if (k != null) k.number = value;
-    }
-
-    public void CollectTileValue(int value) => number += value;
 }

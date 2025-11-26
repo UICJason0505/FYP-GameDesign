@@ -45,4 +45,14 @@ public class HexMath : MonoBehaviour
         float wz = radius * 1.5f * c.x;
         return originWorld + new Vector3(wx, y, wz);
     }
+
+    // 计算两个六边形坐标之间的格子距离（立方/三轴坐标距离）
+    public static int HexDistance(Coordinates a, Coordinates b)
+    {
+        int dx = a.x - b.x;
+        int dz = a.z - b.z;
+        int dy = a.y - b.y; // 由属性自动计算
+
+        return (Mathf.Abs(dx) + Mathf.Abs(dy) + Mathf.Abs(dz)) / 2;
+    }
 }

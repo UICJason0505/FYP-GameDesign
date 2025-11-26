@@ -25,6 +25,12 @@ public class Chess : MonoBehaviour
     Chess selectedChess;
     Chess attacker;
     int damage;
+    
+    // ========= 嘲讽系统（所有棋子共享） ===========
+    [HideInInspector] public Chess tauntTarget = null;
+    [HideInInspector] public int tauntRemainTurns = 0;
+
+
     public void Init(string className, int id, Player owner)
     {
         var go = GameObject.Find("GameManager");
@@ -37,7 +43,8 @@ public class Chess : MonoBehaviour
         gameObject.name = this.name;
     }
     // Start is called before the first frame update
-    void Start()
+    //为实现继承修改为 protected virtual
+    protected virtual void Start()
     {
         var go = GameObject.Find("GameManager");
         gameManager = go.GetComponent<GameManager>();
@@ -56,7 +63,8 @@ public class Chess : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    //为实现继承修改为 protected virtual
+    protected virtual void Update()
     {
         if (gameManager == null)
         {
@@ -96,6 +104,41 @@ public class Chess : MonoBehaviour
             }
         }
         if(attacker == null || attacker.player == null) return;
+
+        //     嘲讽强制攻击系统       //
+        if (attacker.tauntTarget != null)
+        {
+            // 检查嘲讽目标是否仍存活
+            if (attacker.tauntTarget == null || attacker.tauntTarget.player == null)
+            {
+                attacker.tauntTarget = null;
+                attacker.tauntRemainTurns = 0;
+            }
+            else
+            {
+                // 检查是否在攻击范围内
+                int dist = HexMath.HexDistance(attacker.position, attacker.tauntTarget.position);
+
+                if (dist <= attacker.attackArea)
+                {
+                    Debug.Log($"{attacker.name} 因嘲讽被迫攻击 {attacker.tauntTarget.name}");
+
+                    int dmg = attacker.attack();
+                    attacker.tauntTarget.defend(dmg, attacker, attacker.tauntTarget);
+
+                    attacker.player.actionPoints -= attacker.apCost;
+
+                    attacker.ResetTiles();
+                    attacker.isInAttackMode = false;
+
+                    attacker.tauntRemainTurns--;
+                    if (attacker.tauntRemainTurns <= 0)
+                        attacker.tauntTarget = null;
+
+                    return; // 阻止手动选择攻击
+                }
+            }
+        }
 
         if (attacker.isInAttackMode && Input.GetMouseButtonDown(0))
         {
@@ -241,6 +284,13 @@ public class Chess : MonoBehaviour
         currentTile = other.GetComponent<HexTile>();
         if (currentTile == null) return;
         position = currentTile.coordinates;
+    }
+
+    // 接收到嘲讽时由嘲讽者或 GM 调用
+    public void ReceiveTaunt(Chess taunter, int duration = 1)
+    {
+        tauntTarget = taunter;
+        tauntRemainTurns = duration;
     }
 
 }
