@@ -18,6 +18,7 @@ public class Chess : MonoBehaviour
     public GameManager gameManager;
     public bool isInAttackMode = false;
     [Header("UI属性面板")]
+    public string PlayerName;
     public UnitInfoPanelController panel;
     public MovingObject move;
     public Renderer rend;
@@ -66,6 +67,7 @@ public class Chess : MonoBehaviour
     //为实现继承修改为 protected virtual
     protected virtual void Update()
     {
+        PlayerName = player.playerName;
         if (gameManager == null)
         {
             var go = GameObject.Find("GameManager");

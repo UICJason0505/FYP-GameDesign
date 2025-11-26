@@ -1,0 +1,488 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3146944664780917419
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3146944664780917412}
+  m_Layer: 0
+  m_Name: Snow Clump Cluster 01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &3146944664780917412
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3146944664780917419}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1743997341496987357}
+  - {fileID: 569386269525508252}
+  - {fileID: 5045151120245736735}
+  - {fileID: 4358771094964711094}
+  - {fileID: 6305604712692446785}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1144664308370105367
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3146944664780917412}
+    m_Modifications:
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.86085737
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.9238318
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.86085737
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.86665916
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.000000018941446
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.49890074
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.000000010903831
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 59.855
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4094912824480567323, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_Name
+      value: Snow Clump 01 (3)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 58a84b2f99c49df4793d2a2716ee97b7, type: 3}
+--- !u!4 &4358771094964711094 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1144664308370105367}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3146944664222565500
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3146944664780917412}
+    m_Modifications:
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5038
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5038
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5038
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.000000021855694
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4094912824480567323, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_Name
+      value: Snow Clump 01
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 58a84b2f99c49df4793d2a2716ee97b7, type: 3}
+--- !u!4 &1743997341496987357 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+    type: 3}
+  m_PrefabInstance: {fileID: 3146944664222565500}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3781054339878406717
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3146944664780917412}
+    m_Modifications:
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.1050375
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.784746
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.1050375
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9756075
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.000000021322592
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.21952228
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.0000000047978173
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 25.362
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4094912824480567323, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_Name
+      value: Snow Clump 01 (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 58a84b2f99c49df4793d2a2716ee97b7, type: 3}
+--- !u!4 &569386269525508252 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+    type: 3}
+  m_PrefabInstance: {fileID: 3781054339878406717}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7214167626269113568
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3146944664780917412}
+    m_Modifications:
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.6782437
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.7278594
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.6782437
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.3149481
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.000000006883406
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.9491089
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.00000002074345
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 143.285
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4094912824480567323, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_Name
+      value: Snow Clump 01 (4)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 58a84b2f99c49df4793d2a2716ee97b7, type: 3}
+--- !u!4 &6305604712692446785 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+    type: 3}
+  m_PrefabInstance: {fileID: 7214167626269113568}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8474691611081707454
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3146944664780917412}
+    m_Modifications:
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.1050375
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.4248179
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.1050375
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7214213
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.000000015767167
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.6924964
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.000000015134995
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -87.656
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4094912824480567323, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+        type: 3}
+      propertyPath: m_Name
+      value: Snow Clump 01 (2)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 58a84b2f99c49df4793d2a2716ee97b7, type: 3}
+--- !u!4 &5045151120245736735 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3719934982105025185, guid: 58a84b2f99c49df4793d2a2716ee97b7,
+    type: 3}
+  m_PrefabInstance: {fileID: 8474691611081707454}
+  m_PrefabAsset: {fileID: 0}
