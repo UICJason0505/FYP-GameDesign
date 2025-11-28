@@ -30,7 +30,7 @@ public class Chess : MonoBehaviour
     // ========= 嘲讽系统（所有棋子共享） ===========
     [HideInInspector] public Chess tauntTarget = null;
     [HideInInspector] public int tauntRemainTurns = 0;
-
+    public Transform modelRoot;
 
     public void Init(string className, int id, Player owner)
     {
@@ -67,7 +67,6 @@ public class Chess : MonoBehaviour
     //为实现继承修改为 protected virtual
     protected virtual void Update()
     {
-        PlayerName = player.playerName;
         if (gameManager == null)
         {
             var go = GameObject.Find("GameManager");
@@ -204,6 +203,19 @@ public class Chess : MonoBehaviour
             attacker = null;
 
         }
+
+        // 自动朝向摄像机（常态）
+        if (modelRoot != null && !isInAttackMode)
+        {
+            var cam = Camera.main;
+            if (cam != null)
+            {
+                Vector3 targetPos = cam.transform.position;
+                targetPos.y = modelRoot.position.y; // 保持水平，不仰视不低头
+                modelRoot.LookAt(targetPos);
+            }
+        }
+
         return;
     }
     void OnMouseDown()//UI显示
