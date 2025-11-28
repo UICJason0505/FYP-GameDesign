@@ -68,15 +68,15 @@ public class TurnManager : MonoBehaviour
     public void UpdateTurnText()
     {
         // ✅ 改名称显示为 Round 而不是 Turn
-        turnText.text = "Round: " + fullTurn.ToString();
+        turnText.text = fullTurn.ToString();
 
         var currentPlayer = players[turnCount];
 
         // ✅ 更新行动点数
-        actionPointText.text = "AP: " + currentPlayer.actionPoints.ToString();
+        actionPointText.text = currentPlayer.actionPoints.ToString();
 
         // ✅ 显示当前玩家的名称
-        currentPlayerText.text = "Player: " + currentPlayer.playerName;
+        currentPlayerText.text = currentPlayer.playerName;
     }
 
     void SpawnKings()
