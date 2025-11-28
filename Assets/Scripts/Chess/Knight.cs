@@ -5,13 +5,20 @@ public class Knight : Chess
     [Header("Knight Skill Settings")]
     public int dashCD = 2;
     private int dashTimer = 0;
+    TurnManager turnManager;
 
     protected override void Start()
     {
         base.Start();
+        var temp = FindObjectOfType<TurnManager>();
+        turnManager = temp.GetComponent<TurnManager>();
         number = 1;
         attackArea = 1;
         apCost = 1;
+        if (this.gameObject.name == "Knight")
+        {
+            player = turnManager.players[0];
+        }
     }
 
     protected override void Update()
@@ -43,7 +50,7 @@ public class Knight : Chess
         }
 
         Vector3 dir = (target.transform.position - transform.position).normalized;
-        Vector3 pushPos = target.transform.position + dir * 1.1f;
+        Vector3 pushPos = target.transform.position + dir * 2f;
 
         // 检查 push 位置是否为空
         if (!IsTileEmpty(pushPos))

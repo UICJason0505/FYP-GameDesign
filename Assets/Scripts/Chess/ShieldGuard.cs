@@ -6,13 +6,21 @@ public class ShieldGuard : Chess
     public int tauntCD = 2;
     private int tauntTimer = 0;
     public int tauntRange = 1;
+    TurnManager turnManager;
+
 
     protected override void Start()
     {
         base.Start();
+        var temp = FindObjectOfType<TurnManager>();
+        turnManager = temp.GetComponent<TurnManager>();
         number = 3;            // 初始数值：3
         attackArea = 1;        // 攻击距离：1
         apCost = 1;
+        if (this.gameObject.name == "ShieldGuard")
+        {
+            player = turnManager.players[1];
+        }
     }
 
     protected override void Update()
