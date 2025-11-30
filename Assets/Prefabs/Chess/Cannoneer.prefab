@@ -809,7 +809,7 @@ GameObject:
   - component: {fileID: 3243936326639533574}
   - component: {fileID: 4507059309812369290}
   - component: {fileID: 2144558145373743221}
-  - component: {fileID: 803946178753819058}
+  - component: {fileID: 7923331604055800235}
   - component: {fileID: 5108085537092827026}
   - component: {fileID: 4242029314776558375}
   - component: {fileID: 1743136688811880422}
@@ -910,7 +910,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!114 &803946178753819058
+--- !u!114 &7923331604055800235
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -919,12 +919,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8547091952782202534}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42727556d4fefa044a4b8156a3d738b5, type: 3}
+  m_Script: {fileID: 11500000, guid: 19720f3c03b7d8f40b1b42ccb027869a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  number: 2
+  number: 1
   apCost: 1
-  attackArea: 2
+  attackArea: 1
   tiles: []
   gameManager: {fileID: 0}
   isInAttackMode: 0
@@ -935,7 +935,8 @@ MonoBehaviour:
   currentTile: {fileID: 0}
   tauntTarget: {fileID: 0}
   tauntRemainTurns: 0
-  modelRoot: {fileID: 3552405970792307316}
+  modelRoot: {fileID: 0}
+  hexRadius: 1
 --- !u!54 &5108085537092827026
 Rigidbody:
   m_ObjectHideFlags: 0
