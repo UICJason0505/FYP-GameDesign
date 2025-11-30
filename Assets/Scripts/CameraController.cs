@@ -2,69 +2,76 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public float panSpeed = 10f;      // Increased speed for camera movement (WASD)
-    public float rotateSpeed = 70f;  // Increased speed for camera rotation (Q/E)
-    public float zoomSpeed = 500f;   // Increased speed for zooming with the mouse scroll
+    public float panSpeed = 10f;
+    public float rotateSpeed = 70f;
+    public float zoomSpeed = 0.5f;    // 鼠标滚轮灵敏度（可按需调）
+    public float smoothTime = 0.12f;  // 平滑时间（越小越快）
 
-    public float minY = 10f;
-    public float maxY = 60f;
+    public float minY = 3;
+    public float maxY = 20;
 
-    private Vector3 lastMousePosition;
+    private float targetY;
+    private float zoomVelocity = 0f;
+
+    void Start()
+    {
+        // 初始化目标高度为当前高度，避免跳变
+        targetY = transform.position.y;
+    }
 
     void Update()
     {
-        HandleMovement();    // Handle WASD movement
-        HandleRotate();      // Handle rotation with Q/E keys
-        HandleZoom();        // Handle zooming with mouse scroll
+        HandleMovement();
+        HandleRotate();
+        HandleZoomSmooth();
     }
-    // Handle camera movement using WASD (global space)
+
     void HandleMovement()
     {
-        // Create movement vector (world-space directions)
         Vector3 moveDirection = Vector3.zero;
+
         Vector3 fw = transform.forward;
         fw.y = 0;
+        fw.Normalize();
+
         Vector3 rg = transform.right;
         rg.y = 0;
-        // Check for WASD input for movement
-        if (Input.GetKey(KeyCode.W))
-            moveDirection += fw; // Move forward along world-space Z-axis
+        rg.Normalize();
 
-        if (Input.GetKey(KeyCode.S))
-            moveDirection -= fw;   // Move backward along world-space Z-axis
-
-        if (Input.GetKey(KeyCode.A))
-            moveDirection -= rg;   // Move left along world-space X-axis
-
-        if (Input.GetKey(KeyCode.D))
-            moveDirection += rg;  // Move right along world-space X-axis
-
-        // Apply movement with panSpeed
+        if (Input.GetKey(KeyCode.W)) moveDirection += fw;
+        if (Input.GetKey(KeyCode.S)) moveDirection -= fw;
+        if (Input.GetKey(KeyCode.A)) moveDirection -= rg;
+        if (Input.GetKey(KeyCode.D)) moveDirection += rg;
+        // 按住 Shift 时移动速度 *2
+        float finalSpeed = panSpeed;
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+            finalSpeed *= 2f;
         transform.position += moveDirection * panSpeed * Time.deltaTime;
     }
 
-    // Handle camera rotation using Q/E keys
     void HandleRotate()
     {
-        // Rotate left (Q) and right (E) around the Y-axis
         if (Input.GetKey(KeyCode.Q))
             transform.RotateAround(transform.position, Vector3.up, -rotateSpeed * Time.deltaTime);
-
         if (Input.GetKey(KeyCode.E))
             transform.RotateAround(transform.position, Vector3.up, rotateSpeed * Time.deltaTime);
     }
 
-    // Handle zoom using the mouse scroll wheel
-    void HandleZoom()
+    // 平滑升降（只改变 Y）
+    void HandleZoomSmooth()
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        Vector3 direction = transform.forward;
+        if (Mathf.Abs(scroll) > 0.0001f)
+        {
+            // 滚轮向前/向上通常返回正值 —— 根据你想要的方向调整符号
+            // 这里用减号：滚轮向前（zoom in）会降低摄像机高度（靠近地面）
+            targetY -= scroll * zoomSpeed;
+            targetY = Mathf.Clamp(targetY, minY, maxY);
+        }
 
-        // Only move in the forward direction (zooming in/out)
-        Vector3 newPosition = transform.position + direction * scroll * Time.deltaTime * zoomSpeed;
+        // 平滑过渡到目标高度
+        float newY = Mathf.SmoothDamp(transform.position.y, targetY, ref zoomVelocity, smoothTime);
 
-        // Limit Y position to stay within minY and maxY
-        if (newPosition.y > minY && newPosition.y < maxY)
-            transform.position = newPosition;
+        transform.position = new Vector3(transform.position.x, newY, transform.position.z);
     }
 }
