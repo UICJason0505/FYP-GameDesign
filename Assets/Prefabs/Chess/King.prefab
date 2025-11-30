@@ -12697,6 +12697,7 @@ GameObject:
   - component: {fileID: 4281923178117481248}
   - component: {fileID: 1413053074880644353}
   - component: {fileID: 1258205159594100236}
+  - component: {fileID: 2750989351498647149}
   m_Layer: 6
   m_Name: King
   m_TagString: King
@@ -12883,6 +12884,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridBuildingSystem: {fileID: 0}
   chess: {fileID: 0}
+--- !u!95 &2750989351498647149
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5433386401727367742}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: 9238fea243098de47a94d37e44fa7d47, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5459099773661975913
 GameObject:
   m_ObjectHideFlags: 0

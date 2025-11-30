@@ -18008,6 +18008,7 @@ GameObject:
   - component: {fileID: 4242029314776558375}
   - component: {fileID: 1743136688811880422}
   - component: {fileID: 4303631193794357240}
+  - component: {fileID: 660207081172938922}
   m_Layer: 8
   m_Name: Archer
   m_TagString: King
@@ -18203,6 +18204,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualRoot: {fileID: 4770482970586010034}
   yOffset: 180
+--- !u!95 &660207081172938922
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8547091952782202534}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: 2af8c70d721a7344394e5a9e955479db, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8574861279766476989
 GameObject:
   m_ObjectHideFlags: 0
