@@ -1,25 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-using UnityEngine;
-
-public class Billboard : MonoBehaviour
+public class BillboardToCamera : MonoBehaviour
 {
-    private Camera mainCamera;
+    public Transform visualRoot;
+    public float yOffset = 180; // 新增偏移角度
+
+    private Camera cam;
 
     void Start()
     {
-        mainCamera = Camera.main;
+        cam = Camera.main;
     }
 
-    void LateUpdate()
+    void Update()
     {
-        if (mainCamera != null)
-        {
+        if (visualRoot == null || cam == null) return;
 
-            transform.forward = mainCamera.transform.forward;
-        }
+        Vector3 dir = cam.transform.position - visualRoot.position;
+        dir.y = 0;
+        visualRoot.forward = -dir;
+
+        // 应用偏移角度
+        visualRoot.Rotate(0, yOffset, 0);
     }
 }
-
