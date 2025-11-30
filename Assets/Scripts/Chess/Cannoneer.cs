@@ -5,19 +5,25 @@ using UnityEngine;
 using UnityEngine.ProBuilder.MeshOperations;
 using static MovingObject;
 
-public class Cannoneer : Chess
+public class Cannoneer: Chess
 {
-    [Header("Cannoneer Attribute")]
-    private int initialValue = 1; // 初始数值
-    private int attackDistance = 3; // 攻击距离 2~3
-    TurnManager turnManager; // Awake 用于获取全局引用，避免 move 为 null
-
-    // 格子半径：根据地图实际 tile 半径设置（默认为 1）
-    [SerializeField] private float hexRadius = 1f;
+    [Header("Archer属性")]
+    private int initialValue = 1;
+    private int attackDistance = 3; // 2~3
+    TurnManager turnManager;
+    // Awake 用于获取全局引用，避免 move 为 null
+    private static readonly HexMath.Coordinates[] hexDirections =
+    {
+        new HexMath.Coordinates(+1, 0),
+        new HexMath.Coordinates(+1, -1),
+        new HexMath.Coordinates(0, -1),
+        new HexMath.Coordinates(-1, 0),
+        new HexMath.Coordinates(-1, +1),
+        new HexMath.Coordinates(0, +1),
+    };
 
     private void Awake()
     {
-        // 初始化游戏管理器引用
         var go = GameObject.Find("GameManager");
         if (go != null) move = go.GetComponent<MovingObject>();
         if (panel == null)
@@ -25,108 +31,195 @@ public class Cannoneer : Chess
             panel = Resources.FindObjectsOfTypeAll<UnitInfoPanelController>().FirstOrDefault();
         }
         var temp = FindObjectOfType<TurnManager>();
-        turnManager = temp.GetComponent<TurnManager>(); //添加 TurnManager 初始化
+        turnManager = temp.GetComponent<TurnManager>();
+        //添加 TurnManager 初始化
     }
 
     protected override void Start()
     {
-        // 设置单位基础属性
         number = initialValue;
         attackArea = attackDistance;
-
-        // 根据游戏对象名称分配玩家阵营
-        if (this.gameObject.name == "Archer")
+        if (this.gameObject.name == "Cannoneer")
         {
-            player = turnManager.players[0]; // 玩家1
+            player = turnManager.players[0];
         }
         else
         {
-            player = turnManager.players[1]; // 玩家2
+            player = turnManager.players[1];
         }
     }
-
-    // 攻击方法：如果在范围内，对所有敌方单位造成伤害（群体伤害）
     public override int attack()
     {
-        int damage = this.number;
+        return this.number;
+    }
 
-        // 当前单位的六边形坐标（通过世界坐标转换）
-        var myCoord = HexMath.WorldToCoordinates(this.transform.position, hexRadius);
+    private void SplashDamage(Chess mainTarget, int splashDamage)
+    {
+        float radius = HexTile.radius; // Hex 半径
 
-        // 遍历场上所有单位，命中在范围内的敌方
-        var allChesses = FindObjectsOfType<Chess>();
-        foreach (var other in allChesses)
+        // 取得主目标的六边形坐标
+        HexMath.Coordinates center = HexMath.WorldToCoordinates(mainTarget.transform.position, radius);
+
+        // 遍历六向邻居
+        foreach (var dir in hexDirections)
         {
-            if (other == this) continue;
-            if (other.player == this.player) continue; // 只攻击敌方
+            HexMath.Coordinates neighbor = new HexMath.Coordinates(center.x + dir.x, center.z + dir.z);
 
-            var otherCoord = HexMath.WorldToCoordinates(other.transform.position, hexRadius);
-            int dist = HexMath.HexDistance(myCoord, otherCoord);
-            if (dist <= attackArea)
+            // 转世界坐标
+            Vector3 pos = HexMath.CoordinatesToWorld(neighbor, radius);
+
+            // 找格子内的单位
+            Collider[] hits = Physics.OverlapSphere(pos, 0.3f);
+
+            foreach (var h in hits)
             {
-                other.defend(damage, this, other);
+                Chess other = h.GetComponent<Chess>();
+
+                // 排除主目标，不分敌我都能被溅射（如果你要排除队友可以告诉我）
+                if (other != null && other != mainTarget)
+                {
+                    other.number -= splashDamage;
+
+                    Debug.Log($"Cannoneer 溅射命中 {other.name}，伤害 {splashDamage} 剩余 {other.number}");
+
+                    if (panel != null) panel.ShowUnit(other.name, other.number);
+
+                    if (other.number <= 0)
+                    {
+                        Destroy(other.gameObject);
+                        Debug.Log($"{other.name} 被溅射击败！");
+                    }
+                }
             }
         }
-
-        return damage;
     }
 
     public override void defend(int damage, Chess attacker, Chess target)
     {
-        int attackerLayer = attacker.gameObject.layer;
-
-        switch (attackerLayer)
+        if (attacker.gameObject.layer == LayerMask.NameToLayer("Saber"))
         {
-            // 反击派（近战）：Saber、ShieldGuard、Knight、Peasant
-            case int layer when layer == LayerMask.NameToLayer("Saber"):
-            case int layer2 when layer2 == LayerMask.NameToLayer("ShieldGuard"):
-            case int layer3 when layer3 == LayerMask.NameToLayer("Knight"):
-            case int layer4 when layer4 == LayerMask.NameToLayer("Peasant"):
-                {
-                    int aBefore = attacker.number;
-                    int bBefore = target.number;
-                    attacker.number -= bBefore;
-                    target.number -= aBefore;
+            int aBefore = attacker.number;
+            int bBefore = target.number;
 
-                    Debug.Log($"{attacker.name} 攻击 {target.name}：我方减 {bBefore}，敌方减 {aBefore} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
+            target.number -= damage;
 
-                    if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number);
-                    if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
+            Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
 
-                    if (attacker.number <= 0)
-                    {
-                        Destroy(attacker.gameObject);
-                        Debug.Log($"{attacker.name} 被击败！");
-                    }
-                    if (target.number <= 0)
-                    {
-                        Destroy(target.gameObject);
-                        Debug.Log($"{target.name} 被击败！");
-                    }
-                    break;
-                }
+            if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // 更新自己面板
+            if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
+            if (attacker.number <= 0)
+            {
+                Destroy(attacker.gameObject);
+                Debug.Log($"{name} 被击败！");
+            }
 
-            // 不反击派（远程）：Archer、Cannoneer
-            case int layer5 when layer5 == LayerMask.NameToLayer("Archer"):
-            case int layer6 when layer6 == LayerMask.NameToLayer("Cannoneer"):
-                {
-                    target.number -= damage;
-                    Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage}");
+            if (target.number <= 0)
+            {
+                Destroy(target.gameObject);
+                Debug.Log($"{target.name} 被击败！");
+            }
+        }
+        else if (attacker.gameObject.layer == LayerMask.NameToLayer("Archer"))
+        {
+            int aBefore = attacker.number;
+            int bBefore = target.number;
+            target.number -= damage;
 
-                    if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
+            Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
 
-                    if (target.number <= 0)
-                    {
-                        Destroy(target.gameObject);
-                        Debug.Log($"{target.name} 被击败！");
-                    }
-                    break;
-                }
+            if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
 
-            default:
-                Debug.LogWarning("未知攻击单位 Layer：" + attackerLayer);
-                break;
+            if (target.number <= 0)
+            {
+                Destroy(target.gameObject);
+                Debug.Log($"{target.name} 被击败！");
+            }
+        }
+        else if (attacker.gameObject.layer == LayerMask.NameToLayer("ShieldGuard"))
+        {
+            int aBefore = attacker.number;
+            int bBefore = target.number;
+
+            target.number -= damage;
+
+            Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
+
+            if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // 更新自己面板
+            if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
+            if (attacker.number <= 0)
+            {
+                Destroy(attacker.gameObject);
+                Debug.Log($"{name} 被击败！");
+            }
+
+            if (target.number <= 0)
+            {
+                Destroy(target.gameObject);
+                Debug.Log($"{target.name} 被击败！");
+            }
+        }
+        else if (attacker.gameObject.layer == LayerMask.NameToLayer("Knight"))
+        {
+            int aBefore = attacker.number;
+            int bBefore = target.number;
+
+            target.number -= damage;
+
+            Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
+
+            if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // 更新自己面板
+            if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
+            if (attacker.number <= 0)
+            {
+                Destroy(attacker.gameObject);
+                Debug.Log($"{name} 被击败！");
+            }
+
+            if (target.number <= 0)
+            {
+                Destroy(target.gameObject);
+                Debug.Log($"{target.name} 被击败！");
+            }
+        }
+        else if (attacker.gameObject.layer == LayerMask.NameToLayer("Cannoneer"))
+        {
+            int aBefore = attacker.number;
+            int bBefore = target.number;
+            target.number -= damage;
+
+            Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
+
+            if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
+
+            if (target.number <= 0)
+            {
+                Destroy(target.gameObject);
+                Debug.Log($"{target.name} 被击败！");
+            }
+        }
+        else if (attacker.gameObject.layer == LayerMask.NameToLayer("Peasant"))
+        {
+            int aBefore = attacker.number;
+            int bBefore = target.number;
+
+
+            target.number -= damage;
+
+            Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
+
+            if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // 更新自己面板
+            if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
+            if (attacker.number <= 0)
+            {
+                Destroy(attacker.gameObject);
+                Debug.Log($"{name} 被击败！");
+            }
+
+            if (target.number <= 0)
+            {
+                Destroy(target.gameObject);
+                Debug.Log($"{target.name} 被击败！");
+            }
         }
     }
-
 }
