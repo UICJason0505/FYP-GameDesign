@@ -7,9 +7,9 @@ using static MovingObject;
 
 public class Peansant : Chess
 {
-    [Header("Saber属性")]
+    [Header("Peansant属性")]
     private int initialValue = 3; // 初始数值
-    private int attackDistance = 1; // 攻击距离 2~3
+    private int attackDistance = 1;
     TurnManager turnManager; // Awake 用于获取全局引用，避免 move 为 null
 
     private void Awake()
@@ -32,13 +32,13 @@ public class Peansant : Chess
         attackArea = attackDistance;
 
         // 根据游戏对象名称分配玩家阵营
-        if (this.gameObject.name == "Saber")
+        if (this.gameObject.name == "Peansant")
         {
-            player = turnManager.players[2]; // 玩家1
+            player = turnManager.players[2]; // Red, Blue, |Green|, Yellow 
         }
         else
         {
-            player = turnManager.players[3]; // 玩家2
+            player = turnManager.players[3]; // Red, Blue, Green, |Yellow| 
         }
     }
 
@@ -183,7 +183,7 @@ public class Peansant : Chess
                 Debug.Log($"{target.name} 被击败！");
             }
         }
-        else if (attacker.gameObject.layer == LayerMask.NameToLayer("Farmer"))
+        else if (attacker.gameObject.layer == LayerMask.NameToLayer("Peansant"))
         {
             int aBefore = attacker.number;
             int bBefore = target.number;

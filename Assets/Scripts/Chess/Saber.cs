@@ -162,7 +162,7 @@ public class Saber : Chess
                 Debug.Log($"{target.name} ±»»÷°Ü£¡");
             }
         }
-        else if (attacker.gameObject.layer == LayerMask.NameToLayer("Gunner"))
+        else if (attacker.gameObject.layer == LayerMask.NameToLayer("Cannoneer"))
         {
             int aBefore = attacker.number;
             int bBefore = target.number;
@@ -178,7 +178,7 @@ public class Saber : Chess
                 Debug.Log($"{target.name} ±»»÷°Ü£¡");
             }
         }
-        else if (attacker.gameObject.layer == LayerMask.NameToLayer("Farmer"))
+        else if (attacker.gameObject.layer == LayerMask.NameToLayer("Peansant"))
         {
             int aBefore = attacker.number;
             int bBefore = target.number;

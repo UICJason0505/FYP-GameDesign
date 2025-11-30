@@ -7,7 +7,7 @@ using static MovingObject;
 
 public class Cannoneer: Chess
 {
-    [Header("Archer属性")]
+    [Header("Cannoneer属性")]
     private int initialValue = 1;
     private int attackDistance = 3; // 2~3
     TurnManager turnManager;
@@ -41,17 +41,33 @@ public class Cannoneer: Chess
         attackArea = attackDistance;
         if (this.gameObject.name == "Cannoneer")
         {
-            player = turnManager.players[0];
+            player = turnManager.players[0]; // |Red|, Blue, Green, Yellow
         }
         else
         {
-            player = turnManager.players[1];
+            player = turnManager.players[1]; // Red, |Blue|, Green, Yellow
         }
     }
     public override int attack()
     {
         return this.number;
     }
+
+    /*
+    protected override void showAttackableTiles()
+    {
+        foreach (HexTile tile in GameManager.Instance.tiles)
+        {
+            int dist = HexMath.HexDistance(position, tile.coordinates);
+
+            // 限制在 2～3 格
+            if (dist >= 2 && dist <= 3)
+            {
+                tile.HighlightTile();
+            }
+        }
+    }
+    */
 
     private void SplashDamage(Chess mainTarget, int splashDamage)
     {
