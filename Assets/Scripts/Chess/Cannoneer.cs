@@ -12,6 +12,9 @@ public class Cannoneer : Chess
     private int attackDistance = 3; // 攻击距离 2~3
     TurnManager turnManager; // Awake 用于获取全局引用，避免 move 为 null
 
+    // 格子半径：根据地图实际 tile 半径设置（默认为 1）
+    [SerializeField] private float hexRadius = 1f;
+
     private void Awake()
     {
         // 初始化游戏管理器引用
@@ -42,10 +45,30 @@ public class Cannoneer : Chess
         }
     }
 
-    // 攻击方法：返回当前生命值作为攻击力
+    // 攻击方法：如果在范围内，对所有敌方单位造成伤害（群体伤害）
     public override int attack()
     {
-        return this.number;
+        int damage = this.number;
+
+        // 当前单位的六边形坐标（通过世界坐标转换）
+        var myCoord = HexMath.WorldToCoordinates(this.transform.position, hexRadius);
+
+        // 遍历场上所有单位，命中在范围内的敌方
+        var allChesses = FindObjectsOfType<Chess>();
+        foreach (var other in allChesses)
+        {
+            if (other == this) continue;
+            if (other.player == this.player) continue; // 只攻击敌方
+
+            var otherCoord = HexMath.WorldToCoordinates(other.transform.position, hexRadius);
+            int dist = HexMath.HexDistance(myCoord, otherCoord);
+            if (dist <= attackArea)
+            {
+                other.defend(damage, this, other);
+            }
+        }
+
+        return damage;
     }
 
     public override void defend(int damage, Chess attacker, Chess target)
@@ -54,14 +77,18 @@ public class Cannoneer : Chess
 
         switch (attackerLayer)
         {
-            // Saber（剑士）
+            // 反击派（近战）：Saber、ShieldGuard、Knight、Peasant
             case int layer when layer == LayerMask.NameToLayer("Saber"):
+            case int layer2 when layer2 == LayerMask.NameToLayer("ShieldGuard"):
+            case int layer3 when layer3 == LayerMask.NameToLayer("Knight"):
+            case int layer4 when layer4 == LayerMask.NameToLayer("Peasant"):
                 {
-                    // int aBefore = attacker.number;
-                    // int bBefore = target.number;
-                    target.number -= damage;
+                    int aBefore = attacker.number;
+                    int bBefore = target.number;
+                    attacker.number -= bBefore;
+                    target.number -= aBefore;
 
-                    Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
+                    Debug.Log($"{attacker.name} 攻击 {target.name}：我方减 {bBefore}，敌方减 {aBefore} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
 
                     if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number);
                     if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
@@ -69,7 +96,7 @@ public class Cannoneer : Chess
                     if (attacker.number <= 0)
                     {
                         Destroy(attacker.gameObject);
-                        Debug.Log($"{name} 被击败！");
+                        Debug.Log($"{attacker.name} 被击败！");
                     }
                     if (target.number <= 0)
                     {
@@ -79,55 +106,11 @@ public class Cannoneer : Chess
                     break;
                 }
 
-            // Archer（弓箭手 - 远程，不受反击）
-            case int layer when layer == LayerMask.NameToLayer("Archer"):
+            // 不反击派（远程）：Archer、Cannoneer
+            case int layer5 when layer5 == LayerMask.NameToLayer("Archer"):
+            case int layer6 when layer6 == LayerMask.NameToLayer("Cannoneer"):
                 {
                     target.number -= damage;
-                    Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage}");
-
-                    if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
-
-                    if (target.number <= 0)
-                    {
-                        Destroy(target.gameObject);
-                        Debug.Log($"{target.name} 被击败！");
-                    }
-                    break;
-                }
-
-            // ShieldGuard（盾卫）
-            case int layer when layer == LayerMask.NameToLayer("ShieldGuard"):
-            // Knight（骑士）
-            case int layer2 when layer2 == LayerMask.NameToLayer("Knight"):
-            // Peasant（农民）
-            case int layer3 when layer3 == LayerMask.NameToLayer("Peasant"):
-                {
-                    target.number -= damage;
-
-                    Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage}");
-
-                    if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number);
-                    if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
-
-                    if (attacker.number <= 0)
-                    {
-                        Destroy(attacker.gameObject);
-                        Debug.Log($"{name} 被击败！");
-                    }
-
-                    if (target.number <= 0)
-                    {
-                        Destroy(target.gameObject);
-                        Debug.Log($"{target.name} 被击败！");
-                    }
-                    break;
-                }
-
-            // Cannoneer（炮手 - 远程，不受反击）
-            case int layer when layer == LayerMask.NameToLayer("Cannoneer"):
-                {
-                    target.number -= damage;
-
                     Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage}");
 
                     if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
