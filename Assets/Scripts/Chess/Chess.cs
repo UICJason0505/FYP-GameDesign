@@ -104,42 +104,50 @@ public class Chess : MonoBehaviour
                 gameManager.attacker = null;
             }
         }
-        if(attacker == null || attacker.player == null) return;
-
-        //     嘲讽强制攻击系统       //
-        if (attacker.tauntTarget != null)
+        if(attacker != null && (attacker.gameObject.layer == LayerMask.NameToLayer("King") || this.gameObject.layer == LayerMask.NameToLayer("King")))
         {
-            // 检查嘲讽目标是否仍存活
-            if (attacker.tauntTarget == null || attacker.tauntTarget.player == null)
-            {
-                attacker.tauntTarget = null;
-                attacker.tauntRemainTurns = 0;
-            }
-            else
-            {
-                // 检查是否在攻击范围内
-                int dist = HexMath.HexDistance(attacker.position, attacker.tauntTarget.position);
+            
+        }
+        else 
+        { 
+            if (attacker == null || attacker.player == null) return;
 
-                if (dist <= attacker.attackArea)
+            //     嘲讽强制攻击系统       //
+            if (attacker.tauntTarget != null)
+            {
+                // 检查嘲讽目标是否仍存活
+                if (attacker.tauntTarget == null || attacker.tauntTarget.player == null)
                 {
-                    Debug.Log($"{attacker.name} 因嘲讽被迫攻击 {attacker.tauntTarget.name}");
+                    attacker.tauntTarget = null;
+                    attacker.tauntRemainTurns = 0;
+                }
+                else
+                {
+                // 检查是否在攻击范围内
+                    int dist = HexMath.HexDistance(attacker.position, attacker.tauntTarget.position);
 
-                    int dmg = attacker.attack();
-                    attacker.tauntTarget.defend(dmg, attacker, attacker.tauntTarget);
+                    if (dist <= attacker.attackArea)
+                    {
+                        Debug.Log($"{attacker.name} 因嘲讽被迫攻击 {attacker.tauntTarget.name}");
 
-                    attacker.player.actionPoints -= attacker.apCost;
+                        int dmg = attacker.attack();
+                        attacker.tauntTarget.defend(dmg, attacker, attacker.tauntTarget);
 
-                    attacker.ResetTiles();
-                    attacker.isInAttackMode = false;
+                        attacker.player.actionPoints -= attacker.apCost;
 
-                    attacker.tauntRemainTurns--;
-                    if (attacker.tauntRemainTurns <= 0)
+                        attacker.ResetTiles();
+                        attacker.isInAttackMode = false;
+
+                        attacker.tauntRemainTurns--;
+                        if (attacker.tauntRemainTurns <= 0)
                         attacker.tauntTarget = null;
 
-                    return; // 阻止手动选择攻击
+                        return; // 阻止手动选择攻击
+                    }
                 }
             }
         }
+        
 
         if (attacker.isInAttackMode && Input.GetMouseButtonDown(0))
         {
@@ -191,11 +199,32 @@ public class Chess : MonoBehaviour
                 attacker = null;
                 return;
             }
+            if (attacker.gameObject.layer == LayerMask.NameToLayer("King") && attacker.player.HasEnoughActionPoints(attacker.apCost) && currentTile.attackable == true)
+            {
+                attacker.player.actionPoints -= apCost;
+                attacker.KingAttack(attacker, selectedChess);
+                if (attacker == null) return;
+                attacker.ResetTiles();
+                attacker.isInAttackMode = false;
+                attacker = null;
+                return;
+            }
+            if (selectedChess.gameObject.layer == LayerMask.NameToLayer("King") && attacker.player.HasEnoughActionPoints(attacker.apCost) && currentTile.attackable == true)
+            {
+                Debug.Log("King");
+                attacker.player.actionPoints -= apCost;
+                selectedChess.KingDefend(attacker, selectedChess);
+                if (attacker == null) return;
+                attacker.ResetTiles();
+                attacker.isInAttackMode = false;
+                attacker = null;
+                return;
+            }
             if (attacker.player.HasEnoughActionPoints(attacker.apCost) && currentTile.attackable == true)
             {
                 damage = attacker.attack();//结算攻击
                 defend(damage, attacker, selectedChess);//结算伤害和血量
-                player.actionPoints -= apCost;
+                attacker.player.actionPoints -= apCost;
             }
             if(attacker == null) return;
             attacker.ResetTiles();
@@ -217,6 +246,21 @@ public class Chess : MonoBehaviour
         }
 
         return;
+    }
+    public virtual void KingAttack(Chess attacker, Chess target)
+    {
+
+    }
+    public virtual void KingDefend(Chess attacker, Chess target)
+    {
+
+    }
+    public virtual void CheckDeath(Chess unit)
+    {
+
+    }
+    public virtual void KingDeathCheck()
+    {
     }
     void OnMouseDown()//UI显示
     {

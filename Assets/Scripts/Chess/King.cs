@@ -1,140 +1,166 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static HexMath;
 using static MovingObject;
+using static UnityEditor.FilePathAttribute;
 //private bool isSelected = false;
-public class King : MonoBehaviour
+public class King : Chess
 {
     [Header("基础属性")]
-    public string unitName = "King";
-    public Player player;
-    public int blood = 5;
-    public UnitInfoPanelController panel;
     public TurnManager turnManager;
     private bool isSummonMode = false;
-    public bool isInAttackMode = false;
-    public Coordinates position;
-    private int attackArea = 2;
-    MovingObject move;
+    int attackPower;
     public void Awake()
     {
         var go = GameObject.Find("GameManager");           
         if (go != null) move = go.GetComponent<MovingObject>();
+        if (panel == null)
+        {
+            panel = Resources.FindObjectsOfTypeAll<UnitInfoPanelController>().FirstOrDefault(); ;
+        }
+
+        // 尝试稳健地获取 MovingObject，避免 move 为 null 导致按键无效或 NRE
+        if (move == null)
+        {
+            move = FindObjectOfType<MovingObject>();
+        }
         panel = Resources.FindObjectsOfTypeAll<UnitInfoPanelController>().FirstOrDefault();
         turnManager = FindObjectOfType<TurnManager>();
+        attackPower = int.MaxValue;
     }
-    void Update()
+    public void Start()
     {
-        if (SelectionManager.selectedObj == null || SelectionManager.selectedObj != this.gameObject) return;
-        if (Input.GetKeyDown(KeyCode.X) && isInAttackMode == false && move.currentState == ObjectState.Selected)
-        {
-            if(isSummonMode == true)
-            {
-                isSummonMode = false;
-            }
-            showAttackableTiles();
-            SelectionManager.isAttackMode = true;
-            Debug.Log("是否攻击：" + SelectionManager.isAttackMode);
-            isInAttackMode = true;
-            return;
-        }
-        else if (Input.GetKeyDown(KeyCode.X) && isInAttackMode == true)
-        {
-            ResetTiles();
-            SelectionManager.isAttackMode = false;
-            Debug.Log("是否攻击：" + SelectionManager.isAttackMode);
-            isInAttackMode = false;
-        }
-
-        // 按 C 启动/退出召唤模式
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            isSummonMode = !isSummonMode;
-            Debug.Log("召唤模式切换：" + (isSummonMode ? "开启" : "关闭"));
-            ResetTiles();
-            isInAttackMode = false;
-        }
-
-        // 按右键取消选择
-        if (panel != null && Input.GetMouseButtonDown(1))
-        { 
-            if(isInAttackMode == true)
-            {
-                SelectionManager.isAttackMode = false;
-                ResetTiles();
-                panel.Hide();
-                SelectionManager.selectedObj = null;
-                isInAttackMode = false;
-            }
-            else panel.Hide();
-        }
-
-        // 只有在召唤模式下才允许召唤
-        if (!isSummonMode) return;
-
-        Player player = turnManager.players[turnManager.turnCount];
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            if (player.HasEnoughActionPoints(2))
-            {
-                Debug.Log("召唤近战棋子");
-                GridBuildingSystem.Instance.SpawnChess1(player, GetComponent<Renderer>().material);
-                player.UseActionPoint(2);
-            }
-            else
-            {
-                Debug.Log("行动点不足，不能召唤近战棋子");
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            if (player.HasEnoughActionPoints(2))
-            {
-                Debug.Log("召唤远程棋子");
-                GridBuildingSystem.Instance.SpawnChess2(player, GetComponent<Renderer>().material);
-                player.UseActionPoint(2);
-            }
-            else
-            {
-                Debug.Log("行动点不足，不能召唤远程棋子");
-            }
-            if (SelectionManager.selectedObj == null) return;
-        }
-
+        number = 5;
     }
     void OnMouseDown()
     {
         if (panel != null)
         {
-            panel.ShowUnit(unitName, blood);
+            panel.ShowUnit(player.playerName, number);
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    public override void KingAttack(Chess attacker, Chess target)
     {
-        if (other.CompareTag("Chess")) TakeDamage();
-    }
-
-    public void TakeDamage()
-    {
-        blood--;
-        Debug.Log("当前血量：" + blood);
-        if (blood <= 0)
+        int layer = target.gameObject.layer;
+        int saberLayer = LayerMask.NameToLayer("Saber");
+        int knightLayer = LayerMask.NameToLayer("Knight");
+        int peasantLayer = LayerMask.NameToLayer("Peasant");
+        int archerLayer = LayerMask.NameToLayer("Archer");
+        int shielderLayer = LayerMask.NameToLayer("ShieldGuard");
+        int cannoneerLayer = LayerMask.NameToLayer("Cannoneer");
+        int kingLayer = LayerMask.NameToLayer("King");
+        switch (layer)
         {
-            Die();
+            // 近战普攻：Saber / Knight / Peasant / Shielder—— 完全相同逻辑，合并
+            case int _ when layer == saberLayer || layer == knightLayer || layer == peasantLayer|| layer == shielderLayer:
+                {
+                    int aBefore = attacker.number;
+                    int bBefore = target.number;
+                    attacker.number --;
+                    target.number -= attackPower;
+                    // 更新面板
+                    if (panel != null)
+                    {
+                        panel.ShowUnit(attacker.gameObject.name, attacker.number);
+                        panel.ShowUnit(target.gameObject.name, target.number);
+                    }
+
+                    // 判定死亡
+                    KingDeathCheck();
+                    CheckDeath(target);
+                    break;
+                }
+
+            case int _ when layer == cannoneerLayer || layer == archerLayer:
+                {
+                    int aBefore = attacker.number;
+                    int bBefore = target.number;
+
+                    target.number -= attackPower;
+
+                    if (panel != null)
+                    {
+                        panel.ShowUnit(target.gameObject.name, target.number);
+                    }
+
+                    CheckDeath(target);
+                    break;
+                }
+            case int _ when layer == kingLayer:
+                {
+                    int aBefore = attacker.number;
+                    int bBefore = target.number;
+                    attacker.number--;
+                    target.number --;
+                    // 更新面板
+                    if (panel != null)
+                    {
+                        panel.ShowUnit(attacker.gameObject.name, attacker.number);
+                        panel.ShowUnit(target.gameObject.name, target.number);
+                    }
+
+                    // 判定死亡
+                    KingDeathCheck();
+                    target.KingDeathCheck();
+                    break;
+                }
         }
     }
 
-    private void Die()
+    // 统一处理死亡
+    public override void  CheckDeath(Chess unit)
     {
-        GameManager.Instance.GameOver("King is dead! Game Over.");
-        Destroy(gameObject);
+        if (unit.number <= 0)
+        {
+            Destroy(unit.gameObject);
+        }
     }
-    public void showAttackableTiles()
+    public override void KingDeathCheck()
+    {
+        if (this.number <= 0)
+        {
+            Destroy(this.gameObject);
+            for(int i = 0; i < turnManager.players.Count; i++)
+            {
+                if(turnManager.players[i] == this.player)
+                {
+                    turnManager.players.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+    }
+    public override void KingDefend(Chess attacker, Chess target)
+    {
+        print("King Defend called");
+        int aBefore = attacker.number;
+        int bBefore = target.number;
+
+       attacker.number -= attackPower;
+       target.number --;
+
+        // 更新面板
+        if (panel != null)
+        {
+            panel.ShowUnit(attacker.gameObject.name, attacker.number);
+            panel.ShowUnit(target.gameObject.name, target.number);
+        }
+
+        // 判定死亡
+        target.KingDeathCheck();
+        CheckDeath(attacker);
+           
+    }
+    public void Summon()
+    {
+
+    }
+    public void ShowSummonArea()
     {
         for (int i = 0; i < GameManager.Instance.tiles.Length; i++)
         {
@@ -144,17 +170,21 @@ public class King : MonoBehaviour
             int dist = distX + distZ;
             if ((Mathf.Abs(distX) + Mathf.Abs(distZ) + Mathf.Abs(dist)) / 2 <= attackArea)
             {
-                tile.HighlightTile();
+                bool occupied = false;
+                for (int j = 0; j < gameManager.occupiedCoord.Count; j++)
+                {
+                    if(tile.coordinates.x == gameManager.occupiedCoord[j].x && tile.coordinates.y == gameManager.occupiedCoord[j].y)
+                    {
+                        occupied = true;
+                        break;
+                    }
+                }
+                if(occupied == false) tile.HighlightTile();
             }
         }
     }
-    public void ResetTiles()
+    private void Die()
     {
-        for (int i = 0; i < GameManager.Instance.tiles.Length; i++)
-        {
-            HexTile tile = GameManager.Instance.tiles[i];
-            tile.ResetTile();
-        }
     }
     void OnTriggerStay(Collider other) => UpdatePositionFromTile(other);
 

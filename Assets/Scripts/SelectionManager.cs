@@ -172,7 +172,7 @@ public class SelectionManager : MonoBehaviour
         }
         if(Is_CanAttack==true&&Enemy!=null)
         {
-            Enemy.GetComponent<King>().TakeDamage();
+            //Enemy.GetComponent<King>().TakeDamage();
         }
     }
 }

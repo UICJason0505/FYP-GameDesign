@@ -1,6 +1,7 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-
+using static HexMath;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -8,6 +9,8 @@ public class GameManager : MonoBehaviour
     public TMP_Text gameOverText;
     public HexTile[] tiles;
     public GameObject attacker = null;
+    public List<GameObject> prefabs = new List<GameObject>();
+    public List<Coordinates> occupiedCoord = new List<Coordinates>();
     private void Awake()
     {
         Instance = this;
