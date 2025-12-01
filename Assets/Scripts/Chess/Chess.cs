@@ -32,6 +32,10 @@ public class Chess : MonoBehaviour
     [HideInInspector] public int tauntRemainTurns = 0;
     public Transform modelRoot;
 
+    // ========== 动画相关 ==========
+    public Animator animator;
+
+
     public void Init(string className, int id, Player owner)
     {
         var go = GameObject.Find("GameManager");
@@ -47,6 +51,9 @@ public class Chess : MonoBehaviour
     //为实现继承修改为 protected virtual
     protected virtual void Start()
     {
+        // 动画组件获取
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
         var go = GameObject.Find("GameManager");
         gameManager = go.GetComponent<GameManager>();
         if (go != null) move = go.GetComponent<MovingObject>();
@@ -296,10 +303,15 @@ public class Chess : MonoBehaviour
 
     public virtual int attack()//结算攻击
     {
+        //攻击动画播放
+        PlayAttack();
         return 0;
     }
     public virtual void defend(int demage, Chess attacker, Chess target)//结算伤害和血量（number）6个兵种
     {
+        //等待攻击动画播放后进行受伤动画
+        WaitForSeconds wait = new WaitForSeconds(0.5f);
+        PlayDamage();
         return;
     }
     //public void ExecuteAttack(Chess attacker, Chess target)
@@ -351,4 +363,32 @@ public class Chess : MonoBehaviour
         tauntRemainTurns = duration;
     }
 
+    // ========== 动画播放函数 ==========
+    public void PlayIdle()
+    {
+        animator.SetBool("Moving", false);
+    }
+
+    public void PlayMoving()
+    {
+        animator.SetBool("Moving", true);
+    }
+
+    public void PlayAttack()
+    {
+        animator.SetTrigger("Attack");
+    }
+
+    public void PlayDamage()
+    {
+        animator.SetTrigger("Damage");
+    }
+    public void PlayDie()
+    {
+        animator.SetTrigger("Die");
+    }
+    public void PlaySkill()
+    {
+        animator.SetTrigger("Skill");
+    }
 }
