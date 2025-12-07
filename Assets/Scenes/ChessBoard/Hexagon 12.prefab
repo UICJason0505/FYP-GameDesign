@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 8969001294904854346}
   - component: {fileID: 6601358280877044608}
   - component: {fileID: 5719118739200840569}
+  - component: {fileID: -6413785636614496072}
   m_Layer: 0
-  m_Name: Hexagon 17
+  m_Name: Hexagon 12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4655666559512859221}
-  m_Mesh: {fileID: -4123982588933833444, guid: c093f9f0fe586654dae78083e5606798, type: 3}
+  m_Mesh: {fileID: 3230677725007936227, guid: 2e0e0df9579a1514f8f5a55078e5455e, type: 3}
 --- !u!23 &6601358280877044608
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -105,4 +106,23 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: -4123982588933833444, guid: c093f9f0fe586654dae78083e5606798, type: 3}
+  m_Mesh: {fileID: 3230677725007936227, guid: 2e0e0df9579a1514f8f5a55078e5455e, type: 3}
+--- !u!114 &-6413785636614496072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4655666559512859221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04b1a3f4b0865c94881555ae3580080a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  centerWorld: {x: 0, y: 0, z: 0}
+  rend: {fileID: 0}
+  canAttack: 1
+  highlighColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  baseColor: {r: 0, g: 0, b: 0, a: 0}
+  attackable: 0
+  tileValue: 1

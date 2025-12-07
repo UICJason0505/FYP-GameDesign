@@ -10,9 +10,7 @@ public class MainMenu : MonoBehaviour
     // 顺序就是轮换顺序
     private static readonly string[] MapList = new string[]
     {
-        "Map1",
-        "Main"
-        
+        "Main","Map1","Map2","Map3"
     };
 
     private const string LastMapKey = "LastMapIndex";
