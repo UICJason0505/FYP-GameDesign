@@ -869,7 +869,7 @@ GameObject:
   - component: {fileID: 1362908874550375824}
   - component: {fileID: 6884410956207598658}
   - component: {fileID: 6779114273531420452}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ordi-Plot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1726,4 +1726,6 @@ MonoBehaviour:
   rend: {fileID: 0}
   canAttack: 1
   highlighColor: {r: 0, g: 0, b: 0, a: 0}
+  baseColor: {r: 0, g: 0, b: 0, a: 0}
+  attackable: 0
   tileValue: 1

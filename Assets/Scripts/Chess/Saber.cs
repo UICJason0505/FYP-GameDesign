@@ -29,14 +29,6 @@ public class Saber : Chess
     {
         number = initialValue;
         attackArea = attackDistance;
-        if(this.gameObject.name == "Saber")
-        {
-            player = turnManager.players[2];
-        }
-        else
-        {
-            player = turnManager.players[3];
-        }
     }
     public override int attack()
     {

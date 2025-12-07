@@ -29,14 +29,6 @@ public class Archer : Chess
     {
         number = initialValue;
         attackArea = attackDistance;
-        if(this.gameObject.name == "Archer")
-        {
-            player = turnManager.players[0];
-        }
-        else
-        {
-            player = turnManager.players[1];
-        }
     }
     public override int attack()
     {

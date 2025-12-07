@@ -10,13 +10,13 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Tile
   - Water
   - UI
   - Chess
   - Saber
   - Archer
-  - '  b  b  b '
+  - 
   - Cannoneer
   - Peasant
   - King
