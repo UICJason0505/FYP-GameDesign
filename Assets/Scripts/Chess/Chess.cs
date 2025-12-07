@@ -34,8 +34,14 @@ public class Chess : MonoBehaviour
 
     // ========== 动画相关 ==========
     public Animator animator;
-
-
+    public enum Anime
+    {
+        Idle = 0,
+        Attack = 1,
+        Death = 2,
+        Walk = 3,
+        Skill = 4
+    };
     public void Init(string className, int id, Player owner)
     {
         var go = GameObject.Find("GameManager");
@@ -304,40 +310,14 @@ public class Chess : MonoBehaviour
     public virtual int attack()//结算攻击
     {
         //攻击动画播放
-        PlayAttack();
         return 0;
     }
     public virtual void defend(int demage, Chess attacker, Chess target)//结算伤害和血量（number）6个兵种
     {
         //等待攻击动画播放后进行受伤动画
         WaitForSeconds wait = new WaitForSeconds(0.5f);
-        PlayDamage();
         return;
     }
-    //public void ExecuteAttack(Chess attacker, Chess target)
-    //{
-    //    int aBefore = attacker.number;
-    //    int bBefore = target.number;
-
-    //    attacker.number -= bBefore;
-    //    target.number -= aBefore;
-
-    //    Debug.Log($"{name} 攻击 {target.name}：我方减 {bBefore}，敌方减 {aBefore} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
-
-    //    if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // 更新自己面板
-    //    if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
-    //    if (attacker.number <= 0)
-    //    {
-    //        Destroy(attacker.gameObject);
-    //        Debug.Log($"{name} 被击败！");
-    //    }
-
-    //    if (target.number <= 0)
-    //    {
-    //        Destroy(target.gameObject);
-    //        Debug.Log($"{target.name} 被击败！");
-    //    }
-    //}
 
     public void CollectTileValue(HexTile tile)//收集格子值
     {
@@ -363,32 +343,4 @@ public class Chess : MonoBehaviour
         tauntRemainTurns = duration;
     }
 
-    // ========== 动画播放函数 ==========
-    public void PlayIdle()
-    {
-        animator.SetBool("Moving", false);
-    }
-
-    public void PlayMoving()
-    {
-        animator.SetBool("Moving", true);
-    }
-
-    public void PlayAttack()
-    {
-        animator.SetTrigger("Attack");
-    }
-
-    public void PlayDamage()
-    {
-        animator.SetTrigger("Damage");
-    }
-    public void PlayDie()
-    {
-        animator.SetTrigger("Die");
-    }
-    public void PlaySkill()
-    {
-        animator.SetTrigger("Skill");
-    }
 }

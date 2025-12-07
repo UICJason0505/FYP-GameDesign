@@ -236,6 +236,7 @@ public class King : Chess
                     GameObject prefab = gameManager.prefabs[number - 1];
                     var chess = Instantiate(prefab, tile.centerWorld + Vector3.up * 0.7f, Quaternion.identity);
                     chess.GetComponent<Chess>().player = this.player;
+                    chess.GetComponent<Renderer>().material.color = ColorFromName(this.player.playerName);
                 }
             }
 
@@ -275,5 +276,18 @@ public class King : Chess
         HexTile tile = other.GetComponent<HexTile>();
         if (tile == null) return;            
         position = tile.coordinates;         
+    }
+    Color ColorFromName(string name)
+    {
+        switch (name)
+        {
+            case "Red": return Color.red;
+            case "Green": return Color.green;
+            case "Blue": return Color.blue;
+            case "Yellow": return Color.yellow;
+            default:
+                Debug.LogWarning("未知颜色名: " + name + "，默认用白色");
+                return Color.white;
+        }
     }
 }

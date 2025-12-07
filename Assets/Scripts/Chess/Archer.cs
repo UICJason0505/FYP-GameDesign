@@ -36,130 +36,25 @@ public class Archer : Chess
     }
     public override void defend(int damage, Chess attacker, Chess target)
     {
-        if (attacker.gameObject.layer == LayerMask.NameToLayer("Saber"))
+        int aBefore = attacker.number;
+        int bBefore = target.number;
+
+        target.number -= damage;
+
+        Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
+
+        if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // 更新自己面板
+        if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
+        if (attacker.number <= 0)
         {
-            int aBefore = attacker.number;
-            int bBefore = target.number;
-
-            target.number -= damage;
-
-            Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
-
-            if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // 更新自己面板
-            if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
-            if (attacker.number <= 0)
-            {
-                Destroy(attacker.gameObject);
-                Debug.Log($"{name} 被击败！");
-            }
-
-            if (target.number <= 0)
-            {
-                Destroy(target.gameObject);
-                Debug.Log($"{target.name} 被击败！");
-            }
+            Destroy(attacker.gameObject);
+            Debug.Log($"{name} 被击败！");
         }
-        else if (attacker.gameObject.layer == LayerMask.NameToLayer("Archer"))
+
+        if (target.number <= 0)
         {
-            int aBefore = attacker.number;
-            int bBefore = target.number;
-            target.number -= damage;
-
-            Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
-
-            if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
-
-            if (target.number <= 0)
-            {
-                Destroy(target.gameObject);
-                Debug.Log($"{target.name} 被击败！");
-            }
-        }
-        else if (attacker.gameObject.layer == LayerMask.NameToLayer("ShieldGuard"))
-        {
-            int aBefore = attacker.number;
-            int bBefore = target.number;
-
-            target.number -= damage;
-
-            Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
-
-            if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // 更新自己面板
-            if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
-            if (attacker.number <= 0)
-            {
-                Destroy(attacker.gameObject);
-                Debug.Log($"{name} 被击败！");
-            }
-
-            if (target.number <= 0)
-            {
-                Destroy(target.gameObject);
-                Debug.Log($"{target.name} 被击败！");
-            }
-        }
-        else if (attacker.gameObject.layer == LayerMask.NameToLayer("Knight"))
-        {
-            int aBefore = attacker.number;
-            int bBefore = target.number;
-
-            target.number -= damage;
-
-            Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
-
-            if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // 更新自己面板
-            if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
-            if (attacker.number <= 0)
-            {
-                Destroy(attacker.gameObject);
-                Debug.Log($"{name} 被击败！");
-            }
-
-            if (target.number <= 0)
-            {
-                Destroy(target.gameObject);
-                Debug.Log($"{target.name} 被击败！");
-            }
-        }
-        else if (attacker.gameObject.layer == LayerMask.NameToLayer("Cannoneer"))
-        {
-            int aBefore = attacker.number;
-            int bBefore = target.number;
-            target.number -= damage;
-
-            Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
-
-            if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
-
-            if (target.number <= 0)
-            {
-                Destroy(target.gameObject);
-                Debug.Log($"{target.name} 被击败！");
-            }
-        }
-        else if (attacker.gameObject.layer == LayerMask.NameToLayer("Peansant"))
-        {
-            int aBefore = attacker.number;
-            int bBefore = target.number;
-
- 
-            target.number -= damage;
-
-            Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {damage} 我方剩余血量{attacker.number} 敌方剩余血量{target.number}");
-
-            if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // 更新自己面板
-            if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
-            if (attacker.number <= 0)
-            {
-                Destroy(attacker.gameObject);
-                Debug.Log($"{name} 被击败！");
-            }
-
-            if (target.number <= 0)
-            {
-                Destroy(target.gameObject);
-                Debug.Log($"{target.name} 被击败！");
-            }
+            Destroy(target.gameObject);
+            Debug.Log($"{target.name} 被击败！");
         }
     }
 }
