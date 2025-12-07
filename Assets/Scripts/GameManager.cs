@@ -9,11 +9,15 @@ public class GameManager : MonoBehaviour
     public TMP_Text gameOverText;
     public HexTile[] tiles;
     public GameObject attacker = null;
-    public List<GameObject> prefabs = new List<GameObject>();
-    public List<Coordinates> occupiedCoord = new List<Coordinates>();
+    [SerializeField] public List<GameObject> prefabs = new List<GameObject>();
     private void Awake()
     {
         Instance = this;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         DontDestroyOnLoad(gameObject);
         tiles = FindObjectsOfType<HexTile>();
     }

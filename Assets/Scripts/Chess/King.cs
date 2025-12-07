@@ -125,7 +125,6 @@ public class King : Chess
     {
         if (this.number <= 0)
         {
-            Destroy(this.gameObject);
             for(int i = 0; i < turnManager.players.Count; i++)
             {
                 if(turnManager.players[i] == this.player)
@@ -134,6 +133,7 @@ public class King : Chess
                     break;
                 }
             }
+            Destroy(this.gameObject);
         }
     }
     public override void KingDefend(Chess attacker, Chess target)
@@ -142,9 +142,9 @@ public class King : Chess
         int aBefore = attacker.number;
         int bBefore = target.number;
 
-       attacker.number -= attackPower;
-       target.number --;
-
+        attacker.number -= attackPower;
+        target.number --;
+        Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {1} 敌方剩余血量{target.number}");
         // 更新面板
         if (panel != null)
         {
@@ -155,7 +155,6 @@ public class King : Chess
         // 判定死亡
         target.KingDeathCheck();
         CheckDeath(attacker);
-           
     }
     protected override void Update()
     {
@@ -234,7 +233,7 @@ public class King : Chess
                 {
                     // 注意 prefab 下标是 0 开始，所以要 -1
                     GameObject prefab = gameManager.prefabs[number - 1];
-                    var chess = Instantiate(prefab, tile.centerWorld + Vector3.up * 0.7f, Quaternion.identity);
+                    var chess = Instantiate(prefab, tile.centerWorld + Vector3.up * 0.6f, Quaternion.identity);
                     chess.GetComponent<Chess>().player = this.player;
                     chess.GetComponent<Renderer>().material.color = ColorFromName(this.player.playerName);
                 }
@@ -253,29 +252,12 @@ public class King : Chess
             int dist = distX + distZ;
             if ((Mathf.Abs(distX) + Mathf.Abs(distZ) + Mathf.Abs(dist)) / 2 <= attackArea)
             {
-                bool occupied = false;
-                for (int j = 0; j < gameManager.occupiedCoord.Count; j++)
-                {
-                    if(tile.coordinates.x == gameManager.occupiedCoord[j].x && tile.coordinates.y == gameManager.occupiedCoord[j].y)
-                    {
-                        occupied = true;
-                        break;
-                    }
-                }
-                if(occupied == false) tile.HighlightTile();
+                tile.HighlightTile();
             }
         }
     }
     private void Die()
     {
-    }
-    void OnTriggerStay(Collider other) => UpdatePositionFromTile(other);
-
-    private void UpdatePositionFromTile(Collider other)
-    {
-        HexTile tile = other.GetComponent<HexTile>();
-        if (tile == null) return;            
-        position = tile.coordinates;         
     }
     Color ColorFromName(string name)
     {

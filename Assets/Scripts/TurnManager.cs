@@ -105,6 +105,7 @@ public class TurnManager : MonoBehaviour
             kingObj.name = $"{names[i]}_King";
             // 绑定 Player
             kingObj.GetComponent<King>().player = players[i];
+            kingObj.GetComponent<King>().number = 5;
             Debug.Log(kingObj.GetComponent<King>().player.playerName);
             //阵营颜色
             kingObj.GetComponent<Renderer>().material = spawnPoint.GetComponent<SpriteRenderer>().material;

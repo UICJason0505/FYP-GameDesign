@@ -3,7 +3,7 @@ using UnityEngine;
 public class HexMath : MonoBehaviour
 {
     public static Vector3 originWorld = Vector3.zero + Vector3.up * 0.8f;
-
+    [System.Serializable]
     public struct Coordinates
     {
         public int x;
