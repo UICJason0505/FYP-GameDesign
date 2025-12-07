@@ -12698,6 +12698,7 @@ GameObject:
   - component: {fileID: 1413053074880644353}
   - component: {fileID: 1258205159594100236}
   - component: {fileID: 2750989351498647149}
+  - component: {fileID: 8265547262257855571}
   m_Layer: 12
   m_Name: King
   m_TagString: King
@@ -12847,11 +12848,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 503be2f5a76d95142aded0ffb184f82a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: King
-  blood: 5
-  panel: {fileID: 0}
-  turnManager: {fileID: 0}
+  number: 1
+  apCost: 1
+  attackArea: 1
+  tiles: []
+  gameManager: {fileID: 0}
   isInAttackMode: 0
+  PlayerName: 
+  panel: {fileID: 0}
+  move: {fileID: 0}
+  rend: {fileID: 0}
+  currentTile: {fileID: 0}
+  tauntTarget: {fileID: 0}
+  tauntRemainTurns: 0
+  modelRoot: {fileID: 0}
+  animator: {fileID: 0}
+  turnManager: {fileID: 0}
 --- !u!114 &1413053074880644353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12905,6 +12917,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8265547262257855571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5433386401727367742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afdfb9abe4729be4c83c27bc0efa3827, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visualRoot: {fileID: 8181662586236548535}
+  yOffset: 180
 --- !u!1 &5459099773661975913
 GameObject:
   m_ObjectHideFlags: 0

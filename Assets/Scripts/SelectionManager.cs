@@ -24,23 +24,25 @@ public class SelectionManager : MonoBehaviour
             PlacebleObject placebleObject = clickedObject.GetComponent<PlacebleObject>();
             if (placebleObject == null) return;
 
-            // === 阵营检测逻辑 ===
-            King clickedKing = clickedObject.GetComponent<King>();
-            if (clickedKing != null)
+            // === 阵营检测逻辑（新版，使用 Chess.player） ===
+            Chess clickedChess = clickedObject.GetComponent<Chess>();
+            if (clickedChess != null)
             {
-                // 获取当前回合玩家（来自 TurnManager）
                 TurnManager turnManager = FindObjectOfType<TurnManager>();
                 Player currentPlayer = turnManager.players[turnManager.turnCount];
-                Player clickedPlayer = clickedKing.player;
+                Player clickedPlayer = clickedChess.player;
 
                 if (clickedPlayer != currentPlayer)
                 {
-                    Debug.Log($"当前回合属于 {currentPlayer.playerName}，无法选中 {clickedPlayer.playerName} 的棋子！");
+                    Debug.Log($"当前回合属于 {currentPlayer.playerName}，无法操作 {clickedPlayer.playerName} 的棋子！");
+
                     if (UnitInfoPanelController.Instance != null)
-                        UnitInfoPanelController.Instance.ShowInvalidAction("Not your turn!");
+                        UnitInfoPanelController.Instance.ShowInvalidAction("这不是你的棋子，你不能操作它");
+
                     return;
                 }
             }
+
 
             SelectObject(clickedObject);
             Debug.Log("选中物体");
