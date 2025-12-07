@@ -17,10 +17,6 @@ public class ShieldGuard : Chess
         number = 3;            // 初始数值：3
         attackArea = 1;        // 攻击距离：1
         apCost = 1;
-        if (this.gameObject.name == "ShieldGuard")
-        {
-            player = turnManager.players[1];
-        }
     }
 
     protected override void Update()

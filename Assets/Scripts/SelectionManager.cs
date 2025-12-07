@@ -74,6 +74,11 @@ public class SelectionManager : MonoBehaviour
         isObjectSelected = true;
 
         Highlight();
+
+        // === 让摄像机对准选中的棋子 ===
+        CameraController cam = FindObjectOfType<CameraController>();
+        if (cam != null)
+            cam.followTarget = obj.transform;
     }
 
     // 取消选中物体
@@ -84,6 +89,9 @@ public class SelectionManager : MonoBehaviour
             Unhighlight();
             isObjectSelected = false;
             selectedObj = null;
+            CameraController cam = FindObjectOfType<CameraController>();
+            if (cam != null) cam.followTarget = null;
+
         }
     }
 

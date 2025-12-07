@@ -4,14 +4,19 @@ public class CameraController : MonoBehaviour
 {
     public float panSpeed = 10f;
     public float rotateSpeed = 70f;
-    public float zoomSpeed = 0.5f;    // 鼠标滚轮灵敏度（可按需调）
-    public float smoothTime = 0.12f;  // 平滑时间（越小越快）
+    public float zoomSpeed = 5f;    // 鼠标滚轮灵敏度（可按需调）
+    public float smoothTime = 0.05f;  // 平滑时间（越小越快）
 
     public float minY = 3;
     public float maxY = 20;
 
     private float targetY;
     private float zoomVelocity = 0f;
+
+    public Transform followTarget;   // 当前需要对准的棋子
+    public float followSmooth = 0.2f; // 平滑跟随速度
+    [Header("Center Offset")]
+    public float centerOffset = 3f;  // 让棋子真正处于屏幕中央的偏移量
 
     void Start()
     {
@@ -24,6 +29,7 @@ public class CameraController : MonoBehaviour
         HandleMovement();
         HandleRotate();
         HandleZoomSmooth();
+        HandleFollowTarget();
     }
 
     void HandleMovement()
@@ -74,4 +80,33 @@ public class CameraController : MonoBehaviour
 
         transform.position = new Vector3(transform.position.x, newY, transform.position.z);
     }
+    void HandleFollowTarget()
+    {
+        if (followTarget == null) return;
+
+        // 只保留摄像机 forward 的水平分量（因为我们不动摄像机的 y）
+        Vector3 forwardFlat = transform.forward;
+        forwardFlat.y = 0;
+        forwardFlat.Normalize();
+
+        // 偏移方向为摄像机朝向的反方向
+        Vector3 offset = -forwardFlat * centerOffset;
+
+        Vector3 currentPos = transform.position;
+
+        // 目标位置（保持相同 Y）
+        Vector3 targetPos = new Vector3(
+            followTarget.position.x + offset.x,
+            currentPos.y,
+            followTarget.position.z + offset.z
+        );
+
+        transform.position = Vector3.Lerp(
+            currentPos,
+            targetPos,
+            Time.deltaTime / followSmooth
+        );
+    }
+
+
 }

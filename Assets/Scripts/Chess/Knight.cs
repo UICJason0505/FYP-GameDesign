@@ -15,10 +15,6 @@ public class Knight : Chess
         number = 1;
         attackArea = 1;
         apCost = 1;
-        if (this.gameObject.name == "Knight")
-        {
-            player = turnManager.players[0];
-        }
     }
 
     protected override void Update()
