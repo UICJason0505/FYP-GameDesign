@@ -236,10 +236,19 @@ public class Chess : MonoBehaviour
             if (attacker.player.HasEnoughActionPoints(attacker.apCost) && currentTile.attackable == true)
             {
                 damage = attacker.attack();//结算攻击
-                defend(damage, attacker, selectedChess);//结算伤害和血量
+                if (attacker is Cannoneer cannoneer)
+                {
+                    // 如果是 Cannoneer，用范围攻击
+                    cannoneer.AreaAttack(damage, attacker, selectedChess);
+                }
+                else
+                {
+                    // 普通单体攻击
+                    defend(damage, attacker, selectedChess);
+                }
                 attacker.player.actionPoints -= apCost;
             }
-            if(attacker == null) return;
+            if (attacker == null) return;
             attacker.ResetTiles();
             attacker.isInAttackMode = false;
             attacker = null;

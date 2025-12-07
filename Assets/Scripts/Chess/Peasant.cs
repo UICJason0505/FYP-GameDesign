@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.ProBuilder.MeshOperations;
 using static MovingObject;
 
 public class Peansant : Chess
@@ -11,6 +8,7 @@ public class Peansant : Chess
     private int initialValue = 3; // 初始数值
     private int attackDistance = 1;
     TurnManager turnManager; // Awake 用于获取全局引用，避免 move 为 null
+    private bool skillSelecting = false;
 
     private void Awake()
     {
@@ -40,6 +38,42 @@ public class Peansant : Chess
         {
             player = turnManager.players[3]; // Red, Blue, Green, |Yellow| 
         }
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        // 按下 C 进入技能选择状态
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            skillSelecting = true;
+            showAttackableTiles();
+            Debug.Log("Peansant 准备使用技能：选择格子");
+        }
+
+        // 鼠标点击格子时
+        if (skillSelecting && Input.GetMouseButtonDown(0))
+        {
+            TrySelectTile();
+        }
+    }
+
+    private void TrySelectTile()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (!Physics.Raycast(ray, out RaycastHit hit)) return;
+
+        HexTile tile = hit.collider.GetComponent<HexTile>();
+        if (tile == null) return;
+
+        // ★ 技能效果：tileValue + 1
+        tile.tileValue += 1;
+        Debug.Log($"Peansant 技能：格子({tile.coordinates.x},{tile.coordinates.z}) tileValue 现在 = {tile.tileValue}");
+
+        // 技能使用完毕
+        ResetTiles();
+        skillSelecting = false;
     }
 
     public override int attack()

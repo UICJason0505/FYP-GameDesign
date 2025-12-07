@@ -10,6 +10,7 @@ public class HexTile : MonoBehaviour
     public Color highlighColor = Color.gray;
     public Color baseColor;
     public bool attackable = false;
+    public static Chess[] allChess;
     [Header("格子数值（棋子经过时加成）")]
     public int tileValue = 1;
     private void Awake()
@@ -21,6 +22,14 @@ public class HexTile : MonoBehaviour
         TileManager.Register(this, coordinates);
         rend = GetComponent<Renderer>();
         baseColor = rend.material.color;
+    }
+    private void Start()
+    {
+        HexTile.RefreshAllChess();
+    }
+    public static void RefreshAllChess()
+    {
+        allChess = FindObjectsOfType<Chess>();
     }
 
     public int GetTileValue()
@@ -44,5 +53,17 @@ public class HexTile : MonoBehaviour
     {
         rend.material.color = baseColor;
         attackable = false;
+    }
+
+    public static Chess GetChessAt(HexMath.Coordinates c)
+    {
+        foreach (var unit in allChess)
+        {
+            if (unit == null) continue;
+
+            if (unit.position.x == c.x && unit.position.z == c.z)
+                return unit;
+        }
+        return null;
     }
 }
