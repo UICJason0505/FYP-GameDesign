@@ -26,7 +26,8 @@ public class Chess : MonoBehaviour
     Chess selectedChess;
     Chess attacker;
     int damage;
-    
+    bool isAttacking;
+    public int blood = 5;
     // ========= 嘲讽系统（所有棋子共享） ===========
     [HideInInspector] public Chess tauntTarget = null;
     [HideInInspector] public int tauntRemainTurns = 0;
@@ -80,6 +81,11 @@ public class Chess : MonoBehaviour
     //为实现继承修改为 protected virtual
     protected virtual void Update()
     {
+        if (Input.GetMouseButtonDown(1))
+        {
+            ResetTiles();
+            isInAttackMode = false;
+        }
         if (gameManager == null)
         {
             var go = GameObject.Find("GameManager");
@@ -175,6 +181,7 @@ public class Chess : MonoBehaviour
                     attacker.ResetTiles();
                     attacker.isInAttackMode = false;
                     attacker = null;
+                    gameManager.attacker = null;
                     return;
                 }
                 selectedChess = hit.collider.GetComponent<Chess>();
@@ -187,6 +194,7 @@ public class Chess : MonoBehaviour
                 attacker.ResetTiles();
                 attacker.isInAttackMode = false;
                 attacker = null;
+                gameManager.attacker = null;
                 return;
             }
             if (selectedChess == attacker)
@@ -195,6 +203,7 @@ public class Chess : MonoBehaviour
                 attacker.ResetTiles();
                 attacker.isInAttackMode = false;
                 attacker = null;
+                gameManager.attacker = null;
                 return;
             } // 不攻击自己
             if (attacker.player == selectedChess.player)
@@ -203,6 +212,7 @@ public class Chess : MonoBehaviour
                 attacker.ResetTiles();
                 attacker.isInAttackMode = false;
                 attacker = null;
+                gameManager.attacker = null;
                 return;
             } // 不攻击友军
             if(currentTile == null)
@@ -210,6 +220,7 @@ public class Chess : MonoBehaviour
                 attacker.ResetTiles();
                 attacker.isInAttackMode = false;
                 attacker = null;
+                gameManager.attacker = null;
                 return;
             }
             if (attacker.gameObject.layer == LayerMask.NameToLayer("King") && attacker.player.HasEnoughActionPoints(attacker.apCost) && currentTile.attackable == true)
@@ -220,6 +231,7 @@ public class Chess : MonoBehaviour
                 attacker.ResetTiles();
                 attacker.isInAttackMode = false;
                 attacker = null;
+                gameManager.attacker = null;
                 return;
             }
             if (selectedChess.gameObject.layer == LayerMask.NameToLayer("King") && attacker.player.HasEnoughActionPoints(attacker.apCost) && currentTile.attackable == true)
@@ -231,6 +243,7 @@ public class Chess : MonoBehaviour
                 attacker.ResetTiles();
                 attacker.isInAttackMode = false;
                 attacker = null;
+                gameManager.attacker = null;
                 return;
             }
             if (attacker.player.HasEnoughActionPoints(attacker.apCost) && currentTile.attackable == true)
@@ -247,12 +260,11 @@ public class Chess : MonoBehaviour
                     defend(damage, attacker, selectedChess);
                 }
                 attacker.player.actionPoints -= apCost;
+                attacker.ResetTiles();
+                attacker.isInAttackMode = false;
+                attacker = null;
+                gameManager.attacker = null;
             }
-            if (attacker == null) return;
-            attacker.ResetTiles();
-            attacker.isInAttackMode = false;
-            attacker = null;
-
         }
 
         // 自动朝向摄像机（常态）
@@ -351,5 +363,58 @@ public class Chess : MonoBehaviour
         tauntTarget = taunter;
         tauntRemainTurns = duration;
     }
-
+    public IEnumerator AttackRoutine(Chess unit)
+    {
+        Animator anim = unit.animator;
+        isAttacking = true;
+        anim.SetInteger("State", (int)Anime.Attack);
+        yield return null;
+        while (true)
+        {
+            AnimatorStateInfo info = anim.GetCurrentAnimatorStateInfo(0);
+            if (info.IsName("Attack") && info.normalizedTime >= 1f)
+                break;
+            yield return null;
+        }
+        anim.SetInteger("State", (int)Anime.Idle);
+        isAttacking = false;
+    }
+    public IEnumerator DieRoutine(Chess unit)
+    {
+        // 切到死亡状态
+        while (true)
+        {
+            if(isAttacking == true) yield return null;
+            else break;
+        }
+        Animator anim = unit.animator;
+        AnimatorStateInfo info = anim.GetCurrentAnimatorStateInfo(0);
+        anim.SetInteger("State", (int)Anime.Death);
+        while (!info.IsName("Death"))
+        {
+            yield return null;
+            info = anim.GetCurrentAnimatorStateInfo(0);
+        }
+        while (info.normalizedTime < 1f)
+        {
+            yield return null;
+            info = anim.GetCurrentAnimatorStateInfo(0);
+        }
+        // 播完再销毁
+        Destroy(unit.gameObject);
+    }
+    public IEnumerator SkillRoutine(Chess unit)
+    {
+        Animator anim = unit.animator;
+        anim.SetInteger("State", (int)Anime.Skill);
+        yield return null;
+        while (true)
+        {
+            AnimatorStateInfo info = anim.GetCurrentAnimatorStateInfo(0);
+            if (info.IsName("Attack") && info.normalizedTime >= 1f)
+                break;
+            yield return null;
+        }
+        anim.SetInteger("State", (int)Anime.Idle);
+    }
 }

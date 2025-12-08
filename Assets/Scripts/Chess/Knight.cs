@@ -57,7 +57,7 @@ public class Knight : Chess
 
         // 击退
         target.transform.position = pushPos;
-
+        StartCoroutine(SkillRoutine(this));
         dashTimer = dashCD;
         Debug.Log($"{name} 冲刺并击退 {target.name}！");
     }
@@ -85,6 +85,7 @@ public class Knight : Chess
     // 重写攻击/反伤
     public override int attack()
     {
+        StartCoroutine(AttackRoutine(this));
         return number;
     }
 
@@ -92,20 +93,14 @@ public class Knight : Chess
     {
         number -= damage;
         Debug.Log($"{name} 受到伤害：{damage} 剩余 {number}");
-
-        if (number <= 0)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
         if (HexMath.HexDistance(attacker.position, this.position) == 1)
         {
             attacker.number -= number;
             Debug.Log($"{name} 反击 {attacker.name}，造成 {number} 伤害");
-            if (attacker.number <= 0)
-                Destroy(attacker.gameObject);
+            StartCoroutine(AttackRoutine(target));
         }
+        if (number <= 0) StartCoroutine(DieRoutine(target));
+        if (attacker.number <= 0) StartCoroutine(DieRoutine(attacker));
     }
 
 }

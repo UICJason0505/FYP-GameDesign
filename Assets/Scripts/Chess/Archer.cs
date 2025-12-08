@@ -32,6 +32,7 @@ public class Archer : Chess
     }
     public override int attack()
     {
+        StartCoroutine(AttackRoutine(this));
         return this.number;
     }
     public override void defend(int damage, Chess attacker, Chess target)
@@ -47,13 +48,13 @@ public class Archer : Chess
         if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
         if (attacker.number <= 0)
         {
-            Destroy(attacker.gameObject);
+            StartCoroutine(DieRoutine(attacker));
             Debug.Log($"{name} ±»»÷°Ü£¡");
         }
 
         if (target.number <= 0)
         {
-            Destroy(target.gameObject);
+            StartCoroutine(DieRoutine(target)); 
             Debug.Log($"{target.name} ±»»÷°Ü£¡");
         }
     }

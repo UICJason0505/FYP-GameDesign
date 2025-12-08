@@ -46,15 +46,18 @@ public class TurnManager : MonoBehaviour
 
     void AdvanceTurn()
     {
+        if (players.Count == 0) return;
+        if (turnCount >= players.Count)
+        {
+            turnCount = 0;
+        }
+
         players[turnCount].canOperate = false;
         turnCount++;
-
-        if (turnCount >= playerNum)
+        if (turnCount >= players.Count)
         {
             turnCount = 0;
             fullTurn++;
-
-            // Reset action points for all players at the end of a full turn
             foreach (var player in players)
             {
                 player.ResetActionPoints();
@@ -64,18 +67,22 @@ public class TurnManager : MonoBehaviour
         players[turnCount].canOperate = true;
         UpdateTurnText();
     }
-
     public void UpdateTurnText()
     {
-        // ✅ 改名称显示为 Round 而不是 Turn
+        if (players.Count == 0)
+        {
+            turnText.text = fullTurn.ToString();
+            actionPointText.text = "-";
+            currentPlayerText.text = "No Player";
+            return;
+        }
+        if (turnCount >= players.Count)
+        {
+            turnCount = 0;
+        }
         turnText.text = fullTurn.ToString();
-
         var currentPlayer = players[turnCount];
-
-        // ✅ 更新行动点数
         actionPointText.text = currentPlayer.actionPoints.ToString();
-
-        // ✅ 显示当前玩家的名称
         currentPlayerText.text = currentPlayer.playerName;
     }
 

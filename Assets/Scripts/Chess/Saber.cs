@@ -1,17 +1,19 @@
+ï»¿using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.ProBuilder.MeshOperations;
+using static Chess;
 using static MovingObject;
 
 public class Saber : Chess
 {
-    [Header("SaberÊôĞÔ")]
+    [Header("Saberå±æ€§")]
     private int initialValue = 3;
     private int attackDistance = 1;
     TurnManager turnManager;
-    // Awake ÓÃÓÚ»ñÈ¡È«¾ÖÒıÓÃ£¬±ÜÃâ move Îª null
+    // Awake ç”¨äºè·å–å…¨å±€å¼•ç”¨ï¼Œé¿å… move ä¸º null
     private void Awake()
     {
         var go = GameObject.Find("GameManager");
@@ -22,16 +24,19 @@ public class Saber : Chess
         }
         var temp = FindObjectOfType<TurnManager>();
         turnManager = temp.GetComponent<TurnManager>();
-        //Ìí¼Ó TurnManager ³õÊ¼»¯
+        //æ·»åŠ  TurnManager åˆå§‹åŒ–
     }
 
     private void Start()
     {
         number = initialValue;
         attackArea = attackDistance;
+        animator.SetInteger("State", (int)Anime.Idle);
+        Debug.Log(animator.GetInteger("State"));
     }
     public override int attack()
     {
+        StartCoroutine(AttackRoutine(this));
         return this.number;
     }
     public override void defend(int damage, Chess attacker, Chess target)
@@ -45,30 +50,31 @@ public class Saber : Chess
         int cannoneerLayer = LayerMask.NameToLayer("Cannoneer");
         switch (layer)
         {
-            // ½üÕ½ÆÕ¹¥£ºSaber / Knight / Peasant / Shielder¡ª¡ª ÍêÈ«ÏàÍ¬Âß¼­£¬ºÏ²¢
+            // è¿‘æˆ˜æ™®æ”»ï¼šSaber / Knight / Peasant / Shielderâ€”â€” å®Œå…¨ç›¸åŒé€»è¾‘ï¼Œåˆå¹¶
             case int _ when layer == saberLayer || layer == knightLayer || layer == peasantLayer:
                 {
                     int aBefore = attacker.number;
                     int bBefore = target.number;
                     attacker.number -= number;
                     target.number -= damage;
-                    // ¸üĞÂÃæ°å
+                    StartCoroutine(AttackRoutine(target));
+                    // æ›´æ–°é¢æ¿
                     if (panel != null)
                     {
                         panel.ShowUnit(attacker.gameObject.name, attacker.number);
                         panel.ShowUnit(target.gameObject.name, target.number);
                     }
 
-                    // ÅĞ¶¨ËÀÍö
+                    // åˆ¤å®šæ­»äº¡
                     if (attacker.number <= 0)
                     {
-                        Destroy(attacker.gameObject);
-                        Debug.Log($"{attacker.name} ±»»÷°Ü£¡");
+                        StartCoroutine(DieRoutine(attacker));
+                        Debug.Log($"{attacker.name} è¢«å‡»è´¥ï¼");
                     }
                     if (target.number <= 0)
                     {
-                        Destroy(target.gameObject);
-                        Debug.Log($"{target.name} ±»»÷°Ü£¡");
+                        StartCoroutine(DieRoutine(target));
+                        Debug.Log($"{target.name} è¢«å‡»è´¥ï¼");
                     }
                     break;
                 }
@@ -86,8 +92,8 @@ public class Saber : Chess
 
                     if (target.number <= 0)
                     {
-                        Destroy(target.gameObject);
-                        Debug.Log($"{target.name} ±»»÷°Ü£¡");
+                        StartCoroutine(DieRoutine(target));
+                        Debug.Log($"{target.name} è¢«å‡»è´¥ï¼");
                     }
                     break;
                 }
@@ -100,24 +106,23 @@ public class Saber : Chess
                     {
                         int aBefore = attacker.number;
                         int bBefore = target.number;
-
+                        StartCoroutine(AttackRoutine(target));
                         attacker.number -= bBefore;
                         target.number -= damage;
 
-                        Debug.Log($"{attacker.name} ¹¥»÷ {target.name}£ºÎÒ·½¼õ {bBefore}£¬µĞ·½¼õ {damage} ÎÒ·½Ê£ÓàÑªÁ¿{attacker.number} µĞ·½Ê£ÓàÑªÁ¿{target.number}");
+                        Debug.Log($"{attacker.name} æ”»å‡» {target.name}ï¼šæˆ‘æ–¹å‡ {bBefore}ï¼Œæ•Œæ–¹å‡ {damage} æˆ‘æ–¹å‰©ä½™è¡€é‡{attacker.number} æ•Œæ–¹å‰©ä½™è¡€é‡{target.number}");
 
-                        if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // ¸üĞÂ×Ô¼ºÃæ°å
+                        if (panel != null) panel.ShowUnit(attacker.gameObject.name, attacker.number); // æ›´æ–°è‡ªå·±é¢æ¿
                         if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
                         if (attacker.number <= 0)
                         {
-                            Destroy(attacker.gameObject);
-                            Debug.Log($"{name} ±»»÷°Ü£¡");
+                            StartCoroutine(DieRoutine(attacker));
+                            Debug.Log($"{attacker.name} è¢«å‡»è´¥ï¼");
                         }
-
                         if (target.number <= 0)
                         {
-                            Destroy(target.gameObject);
-                            Debug.Log($"{target.name} ±»»÷°Ü£¡");
+                            StartCoroutine(DieRoutine(target));
+                            Debug.Log($"{target.name} è¢«å‡»è´¥ï¼");
                         }
                     }
                     else if ((Mathf.Abs(distX) + Mathf.Abs(distZ) + Mathf.Abs(dist)) / 2 <= 2)
@@ -126,14 +131,14 @@ public class Saber : Chess
                         int bBefore = target.number;
                         target.number -= damage;
 
-                        Debug.Log($"{attacker.name} ¹¥»÷ {target.name}£ºµĞ·½¼õ {damage} ÎÒ·½Ê£ÓàÑªÁ¿{attacker.number} µĞ·½Ê£ÓàÑªÁ¿{target.number}");
+                        Debug.Log($"{attacker.name} æ”»å‡» {target.name}ï¼šæ•Œæ–¹å‡ {damage} æˆ‘æ–¹å‰©ä½™è¡€é‡{attacker.number} æ•Œæ–¹å‰©ä½™è¡€é‡{target.number}");
 
                         if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
 
                         if (target.number <= 0)
                         {
-                            Destroy(target.gameObject);
-                            Debug.Log($"{target.name} ±»»÷°Ü£¡");
+                            StartCoroutine(DieRoutine(target));
+                            Debug.Log($"{target.name} è¢«å‡»è´¥ï¼");
                         }
                     }
                     break;
@@ -144,27 +149,27 @@ public class Saber : Chess
                     int bBefore = target.number;
                     attacker.number -= (int)(number * 0.5);
                     target.number -= damage;
-                    // ¸üĞÂÃæ°å
+                    StartCoroutine(AttackRoutine(target));
+                    // æ›´æ–°é¢æ¿
                     if (panel != null)
                     {
                         panel.ShowUnit(attacker.gameObject.name, attacker.number);
                         panel.ShowUnit(target.gameObject.name, target.number);
                     }
 
-                    // ÅĞ¶¨ËÀÍö
+                    // åˆ¤å®šæ­»äº¡
                     if (attacker.number <= 0)
                     {
-                        Destroy(attacker.gameObject);
-                        Debug.Log($"{attacker.name} ±»»÷°Ü£¡");
+                        StartCoroutine(DieRoutine(attacker));
+                        Debug.Log($"{attacker.name} è¢«å‡»è´¥ï¼");
                     }
                     if (target.number <= 0)
                     {
-                        Destroy(target.gameObject);
-                        Debug.Log($"{target.name} ±»»÷°Ü£¡");
+                        StartCoroutine(DieRoutine(target));
+                        Debug.Log($"{target.name} è¢«å‡»è´¥ï¼");
                     }
                     break;
                 }
         }
     }
-            
 }

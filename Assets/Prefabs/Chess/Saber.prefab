@@ -2578,10 +2578,10 @@ Animator:
   m_GameObject: {fileID: 1327246867685732720}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 02ded044b8e0963439276550f50be6f9, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 1
+  m_Controller: {fileID: 22100000, guid: 0725a83d040708a40a6b2e64fd194070, type: 2}
+  m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -8437,7 +8437,6 @@ GameObject:
   - component: {fileID: 5759067098020626744}
   - component: {fileID: 3010996659319289867}
   - component: {fileID: 5379272480068283164}
-  - component: {fileID: 8524512815871192267}
   m_Layer: 7
   m_Name: Saber
   m_TagString: King
@@ -8549,6 +8548,9 @@ MonoBehaviour:
   number: 1
   apCost: 1
   attackArea: 1
+  position:
+    x: 0
+    z: 0
   tiles: []
   gameManager: {fileID: 0}
   isInAttackMode: 0
@@ -8560,6 +8562,7 @@ MonoBehaviour:
   tauntTarget: {fileID: 0}
   tauntRemainTurns: 0
   modelRoot: {fileID: 4511704656496388996}
+  animator: {fileID: 7912042138946303839}
 --- !u!54 &8832284188166891375
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8633,27 +8636,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualRoot: {fileID: 4511704656496388996}
   yOffset: 180
---- !u!95 &8524512815871192267
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3985292888810316221}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 92aaa42e5d682e34e970ff9c0f2cb7ec, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4020649781638032605
 GameObject:
   m_ObjectHideFlags: 0

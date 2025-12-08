@@ -14,7 +14,7 @@ public class King : Chess
     public TurnManager turnManager;
     private bool isInSummonMode = false;
     int attackPower;
-    int number = -1; // -1 表示未选择任何兵种
+    int choose = -1;
     public void Awake()
     {
         var go = GameObject.Find("GameManager");           
@@ -35,7 +35,7 @@ public class King : Chess
     }
     public void Start()
     {
-        number = 5;
+        blood = 5;
     }
     void OnMouseDown()
     {
@@ -62,8 +62,10 @@ public class King : Chess
                 {
                     int aBefore = attacker.number;
                     int bBefore = target.number;
-                    attacker.number --;
+                    attacker.blood --;
                     target.number -= attackPower;
+                    StartCoroutine(AttackRoutine(attacker));
+                    StartCoroutine(AttackRoutine(target));
                     // 更新面板
                     if (panel != null)
                     {
@@ -83,7 +85,7 @@ public class King : Chess
                     int bBefore = target.number;
 
                     target.number -= attackPower;
-
+                    StartCoroutine(AttackRoutine(attacker));
                     if (panel != null)
                     {
                         panel.ShowUnit(target.gameObject.name, target.number);
@@ -96,8 +98,10 @@ public class King : Chess
                 {
                     int aBefore = attacker.number;
                     int bBefore = target.number;
-                    attacker.number--;
-                    target.number --;
+                    attacker.blood--;
+                    target.blood --;
+                    StartCoroutine(AttackRoutine(attacker));
+                    StartCoroutine(AttackRoutine(target));
                     // 更新面板
                     if (panel != null)
                     {
@@ -118,12 +122,12 @@ public class King : Chess
     {
         if (unit.number <= 0)
         {
-            Destroy(unit.gameObject);
+            StartCoroutine(DieRoutine(unit));
         }
     }
     public override void KingDeathCheck()
     {
-        if (this.number <= 0)
+        if (this.blood <= 0)
         {
             for(int i = 0; i < turnManager.players.Count; i++)
             {
@@ -133,7 +137,15 @@ public class King : Chess
                     break;
                 }
             }
-            Destroy(this.gameObject);
+            Chess[] chess = FindObjectsOfType<Chess>();
+            for (int i = 0; i < chess.Length; i++)
+            {
+                if(chess[i] != this && chess[i].player == this.player)
+                {
+                    StartCoroutine(DieRoutine(chess[i]));
+                }
+            }
+            StartCoroutine(DieRoutine(this));
         }
     }
     public override void KingDefend(Chess attacker, Chess target)
@@ -143,7 +155,9 @@ public class King : Chess
         int bBefore = target.number;
 
         attacker.number -= attackPower;
-        target.number --;
+        target.blood --;
+        StartCoroutine(AttackRoutine(attacker));
+        StartCoroutine(AttackRoutine(target));
         Debug.Log($"{attacker.name} 攻击 {target.name}：敌方减 {1} 敌方剩余血量{target.number}");
         // 更新面板
         if (panel != null)
@@ -185,7 +199,7 @@ public class King : Chess
     void EnterSummonMode()
     {
         isInSummonMode = true;
-        number = -1;
+        choose = -1;
         ShowSummonArea();   // 高亮可召唤区域
     }
 
@@ -204,18 +218,18 @@ public class King : Chess
         }
 
         // 选择兵种（这里示例 1~6）
-        if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) number = 1;
-        else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) number = 2;
-        else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) number = 3;
-        else if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4)) number = 4;
-        else if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5)) number = 5;
-        else if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6)) number = 6;
+        if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) choose = 1;
+        else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) choose = 2;
+        else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) choose = 3;
+        else if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4)) choose = 4;
+        else if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5)) choose = 5;
+        else if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6)) choose = 6;
 
         // 鼠标左键：尝试在点击的格子上召唤
         if (Input.GetMouseButtonDown(0))
         {
             // 没有选择兵种，直接退出
-            if (number == -1)
+            if (choose == -1)
             {
                 ExitSummonMode();
                 return;
@@ -233,7 +247,7 @@ public class King : Chess
                 if (tile != null && tile.attackable)   // 或者你自己的条件，比如 tile.canSummon
                 {
                     // 注意 prefab 下标是 0 开始，所以要 -1
-                    GameObject prefab = gameManager.prefabs[number - 1];
+                    GameObject prefab = gameManager.prefabs[choose - 1];
                     var chess = Instantiate(prefab, tile.centerWorld + Vector3.up * 0.6f, Quaternion.identity);
                     chess.GetComponent<Chess>().player = this.player;
                     chess.GetComponent<Renderer>().material.color = ColorFromName(this.player.playerName);

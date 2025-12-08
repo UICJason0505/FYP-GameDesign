@@ -42,7 +42,7 @@ public class ShieldGuard : Chess
 
         Debug.Log($"{name} 释放嘲讽！");
         tauntTimer = tauntCD;
-
+        StartCoroutine(SkillRoutine(this));
         BroadcastTaunt();
     }
 
@@ -66,6 +66,7 @@ public class ShieldGuard : Chess
     // 盾卫造成伤害减半
     public override int attack()
     {
+        StartCoroutine(AttackRoutine(this));    
         int dmg = Mathf.Max(1, number / 2);
         Debug.Log($"{name} 发动攻击（伤害减半）：{dmg}");
         return dmg;
@@ -79,24 +80,16 @@ public class ShieldGuard : Chess
 
         Debug.Log($"{name} 承受伤害（减半）：{actualDamage} 剩余 {number}");
 
-
-        // 2. 死亡检查
-        if (number <= 0)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        // 3. 反击
+        // 2. 反击
         if (HexMath.HexDistance(attacker.position, this.position) == 1)
         {
             int retaliateDamage = Mathf.Max(1, number / 2);
             attacker.number -= retaliateDamage;
-
+            StartCoroutine(AttackRoutine(target));
             Debug.Log($"{name} 对 {attacker.name} 触发反击！造成 {retaliateDamage}");
 
-            if (attacker.number <= 0)
-                Destroy(attacker.gameObject);
         }
+        if (number <= 0) StartCoroutine(DieRoutine(target));
+        if (attacker.number <= 0) StartCoroutine(DieRoutine(attacker));
     }
 }

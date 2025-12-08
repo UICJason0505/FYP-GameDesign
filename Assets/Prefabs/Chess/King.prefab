@@ -5991,7 +5991,7 @@ Animator:
   m_GameObject: {fileID: 2149903137274083208}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: cf2f4f48c57855a4faee32e736b71983, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: 9238fea243098de47a94d37e44fa7d47, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -12697,7 +12697,6 @@ GameObject:
   - component: {fileID: 4281923178117481248}
   - component: {fileID: 1413053074880644353}
   - component: {fileID: 1258205159594100236}
-  - component: {fileID: 2750989351498647149}
   - component: {fileID: 8265547262257855571}
   m_Layer: 12
   m_Name: King
@@ -12851,6 +12850,9 @@ MonoBehaviour:
   number: 1
   apCost: 1
   attackArea: 1
+  position:
+    x: 0
+    z: 0
   tiles: []
   gameManager: {fileID: 0}
   isInAttackMode: 0
@@ -12859,10 +12861,11 @@ MonoBehaviour:
   move: {fileID: 0}
   rend: {fileID: 0}
   currentTile: {fileID: 0}
+  blood: 5
   tauntTarget: {fileID: 0}
   tauntRemainTurns: 0
   modelRoot: {fileID: 0}
-  animator: {fileID: 0}
+  animator: {fileID: 3328276974879313023}
   turnManager: {fileID: 0}
 --- !u!114 &1413053074880644353
 MonoBehaviour:
@@ -12896,27 +12899,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridBuildingSystem: {fileID: 0}
   chess: {fileID: 0}
---- !u!95 &2750989351498647149
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5433386401727367742}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 9238fea243098de47a94d37e44fa7d47, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &8265547262257855571
 MonoBehaviour:
   m_ObjectHideFlags: 0

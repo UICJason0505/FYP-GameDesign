@@ -8815,7 +8815,6 @@ GameObject:
   - component: {fileID: 3010996659319289867}
   - component: {fileID: 4426840785095659931}
   - component: {fileID: 9211069866903316063}
-  - component: {fileID: -7369734870435610464}
   m_Layer: 7
   m_Name: ShieldGuard
   m_TagString: King
@@ -8986,6 +8985,9 @@ MonoBehaviour:
   number: 1
   apCost: 1
   attackArea: 1
+  position:
+    x: 0
+    z: 0
   tiles: []
   gameManager: {fileID: 0}
   isInAttackMode: 0
@@ -8997,6 +8999,7 @@ MonoBehaviour:
   tauntTarget: {fileID: 0}
   tauntRemainTurns: 0
   modelRoot: {fileID: 7701175811066684530}
+  animator: {fileID: 5782039460071858762}
   tauntCD: 2
   tauntRange: 1
 --- !u!114 &9211069866903316063
@@ -9013,27 +9016,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualRoot: {fileID: 7701175811066684530}
   yOffset: 180
---- !u!95 &-7369734870435610464
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3985292888810316221}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 92bc161906a4bb9419931067f8947b5f, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3988894042092160645
 GameObject:
   m_ObjectHideFlags: 0
@@ -9934,7 +9916,7 @@ Animator:
   m_GameObject: {fileID: 4184457766577736246}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 02ded044b8e0963439276550f50be6f9, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: 92bc161906a4bb9419931067f8947b5f, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1

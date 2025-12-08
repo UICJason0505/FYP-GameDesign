@@ -2538,7 +2538,7 @@ Animator:
   m_GameObject: {fileID: 1226000269233775601}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 02ded044b8e0963439276550f50be6f9, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: 4fe09435fb960da45b6bc3ff53e196b0, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -8018,7 +8018,6 @@ GameObject:
   - component: {fileID: 5759067098020626744}
   - component: {fileID: 3010996659319289867}
   - component: {fileID: 1960115936206752328}
-  - component: {fileID: -4244173935572115796}
   m_Layer: 11
   m_Name: Peasant
   m_TagString: King
@@ -8130,6 +8129,9 @@ MonoBehaviour:
   number: 1
   apCost: 1
   attackArea: 1
+  position:
+    x: 0
+    z: 0
   tiles: []
   gameManager: {fileID: 0}
   isInAttackMode: 0
@@ -8141,6 +8143,7 @@ MonoBehaviour:
   tauntTarget: {fileID: 0}
   tauntRemainTurns: 0
   modelRoot: {fileID: 0}
+  animator: {fileID: 1207288628407297694}
 --- !u!54 &8832284188166891375
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8214,27 +8217,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualRoot: {fileID: 1226229149359373282}
   yOffset: 180
---- !u!95 &-4244173935572115796
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3985292888810316221}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 4fe09435fb960da45b6bc3ff53e196b0, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3994386218188544954
 GameObject:
   m_ObjectHideFlags: 0
@@ -15423,8 +15405,8 @@ Transform:
   m_GameObject: {fileID: 6855684685854882955}
   serializedVersion: 2
   m_LocalRotation: {x: -0.50000036, y: 0.49999967, z: 0.49999967, w: 0.50000036}
-  m_LocalPosition: {x: -0, y: 0.451089, z: -0.036125183}
-  m_LocalScale: {x: 0.9999999, y: 0.9999999, z: 0.99999994}
+  m_LocalPosition: {x: 0, y: 0.451089, z: -0.036125183}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5111676182635868742}

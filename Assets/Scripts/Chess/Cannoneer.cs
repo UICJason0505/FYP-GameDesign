@@ -53,7 +53,7 @@ public class Cannoneer : Chess
     {
         // 1. 先攻击中心（target）
         target.defend(damage, attacker, target);
-
+        StartCoroutine(AttackRoutine(this));    
         // 2. 再攻击六方向的邻居
         foreach (var dir in directions)
         {
@@ -69,7 +69,6 @@ public class Cannoneer : Chess
 
             // 不攻击己方（可选）
             if (neighbor.player == attacker.player) continue;
-
             neighbor.defend(damage, attacker, neighbor);
         }
     }
@@ -89,7 +88,7 @@ public class Cannoneer : Chess
         if (panel != null) panel.ShowUnit(target.gameObject.name, target.number);
         if (target.number <= 0)
         {
-            Destroy(target.gameObject);
+            StartCoroutine(DieRoutine(target));
             Debug.Log($"{target.name} 被击败！");
             HexTile.RefreshAllChess();
         }
