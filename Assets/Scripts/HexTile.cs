@@ -10,7 +10,7 @@ public class HexTile : MonoBehaviour
     public Color highlighColor = Color.gray;
     public Color baseColor;
     public bool attackable = false;
-    public static Chess[] allChess;
+    public static Chess[] allChess; // 场上所有棋子数组
     [Header("格子数值（棋子经过时加成）")]
     public int tileValue = 1;
     [Header("占用状态（碰撞检测驱动）")]
@@ -27,10 +27,7 @@ public class HexTile : MonoBehaviour
         rend = GetComponent<Renderer>();
         baseColor = rend.material.color;
     }
-    private void Start()
-    {
-        HexTile.RefreshAllChess();
-    }
+
     private void Update()
     {
         if (occupyingChess != null)
@@ -45,7 +42,7 @@ public class HexTile : MonoBehaviour
         }
     }
 
-    public static void RefreshAllChess()
+    public static void RefreshAllChess() // 刷新场上所有棋子信息，存入数组中
     {
         allChess = FindObjectsOfType<Chess>();
     }

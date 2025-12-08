@@ -1,12 +1,12 @@
 using System.Linq;
 using UnityEngine;
-using static MovingObject;
 
 public class Peansant : Chess
 {
     [Header("Peansant属性")]
     private int initialValue = 3; // 初始数值
     private int attackDistance = 1;
+    private int skillDistance = 1;
     TurnManager turnManager; // Awake 用于获取全局引用，避免 move 为 null
     private bool skillSelecting = false;
 
@@ -28,16 +28,6 @@ public class Peansant : Chess
         // 设置单位基础属性
         number = initialValue;
         attackArea = attackDistance;
-
-        // 根据游戏对象名称分配玩家阵营
-        if (this.gameObject.name == "Peansant")
-        {
-            player = turnManager.players[2]; // Red, Blue, |Green|, Yellow 
-        }
-        else
-        {
-            player = turnManager.players[3]; // Red, Blue, Green, |Yellow| 
-        }
     }
 
     protected override void Update()
@@ -57,23 +47,45 @@ public class Peansant : Chess
         {
             TrySelectTile();
         }
+
+        if (skillSelecting && Input.GetMouseButtonDown(1))
+        {
+            skillSelecting = false;
+            ResetTiles();
+        }
     }
 
     private void TrySelectTile()
     {
+        // 射线检测获取鼠标点击的格子
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (!Physics.Raycast(ray, out RaycastHit hit)) return;
 
         HexTile tile = hit.collider.GetComponent<HexTile>();
         if (tile == null) return;
 
-        // ★ 技能效果：tileValue + 1
+        // 技能效果：tileValue + 1
         tile.tileValue += 1;
         Debug.Log($"Peansant 技能：格子({tile.coordinates.x},{tile.coordinates.z}) tileValue 现在 = {tile.tileValue}");
         StartCoroutine(SkillRoutine(this));
         // 技能使用完毕
         ResetTiles();
         skillSelecting = false;
+    }
+
+    public override void showAttackableTiles()
+    {
+        for (int i = 0; i < GameManager.Instance.tiles.Length; i++)
+        {
+            HexTile tile = GameManager.Instance.tiles[i];
+            int distX = tile.coordinates.x - position.x;
+            int distZ = tile.coordinates.z - position.z;
+            int dist = distX + distZ;
+            if ((Mathf.Abs(distX) + Mathf.Abs(distZ) + Mathf.Abs(dist)) / 2 <= skillDistance) //为了严谨，覆写。这里不要用攻击范围，而是用技能范围
+            {
+                tile.HighlightTile();
+            }
+        }
     }
 
     public override int attack()

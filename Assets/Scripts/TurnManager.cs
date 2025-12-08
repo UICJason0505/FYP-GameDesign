@@ -38,6 +38,8 @@ public class TurnManager : MonoBehaviour
         players[0].canOperate = true;
         UpdateTurnText();
         nextTurnButton.onClick.AddListener(AdvanceTurn);
+
+        HexTile.RefreshAllChess();
     }
     public void Update()
     {

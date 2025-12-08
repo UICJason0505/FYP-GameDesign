@@ -305,7 +305,7 @@ public class Chess : MonoBehaviour
             panel.ShowUnit(gameObject.name, number);
         }
     }
-    public void showAttackableTiles()//显示可攻击范围
+    public virtual void showAttackableTiles()//显示可攻击范围
     {
         for (int i = 0; i < GameManager.Instance.tiles.Length; i++)
         {
@@ -319,7 +319,7 @@ public class Chess : MonoBehaviour
             }
         }
     }
-    public void ResetTiles()//攻击范围颜色显示
+    public virtual void ResetTiles()//攻击范围颜色显示
     {
         for (int i = 0; i < GameManager.Instance.tiles.Length; i++)
         {

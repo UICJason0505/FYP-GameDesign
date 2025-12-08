@@ -4,8 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static HexMath;
-using static MovingObject;
 using static UnityEditor.FilePathAttribute;
 //private bool isSelected = false;
 public class King : Chess
@@ -254,6 +252,7 @@ public class King : Chess
                 }
             }
 
+            HexTile.RefreshAllChess(); // 刷新场上棋子信息
             ExitSummonMode();
         }
     }

@@ -29,14 +29,6 @@ public class Cannoneer : Chess
     {
         number = initialValue;
         attackArea = attackDistance;
-        if (this.gameObject.name == "Cannoneer") //假定阵营
-        {
-            player = turnManager.players[0];
-        }
-        else
-        {
-            player = turnManager.players[1];
-        }
     }
 
     private static readonly HexMath.Coordinates[] directions = new HexMath.Coordinates[]
@@ -67,8 +59,6 @@ public class Cannoneer : Chess
             Chess neighbor = HexTile.GetChessAt(neighborCoor);
             if (neighbor == null) continue;
 
-            // 不攻击己方（可选）
-            if (neighbor.player == attacker.player) continue;
             neighbor.defend(damage, attacker, neighbor);
         }
     }
