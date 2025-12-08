@@ -176,9 +176,10 @@ public class King : Chess
         if (Input.GetKeyDown(KeyCode.C) && !isInAttackMode)
         {
             EnterSummonMode();
+            //FYJ召唤UI
+            panel.subPanelUI.TogglePanel();
             return;
         }
-
         base.Update();
     }
     void EnterSummonMode()

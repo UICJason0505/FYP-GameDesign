@@ -149,6 +149,7 @@ public class MovingObject : MonoBehaviour
         }
         else if (HasMovedOneStep(coords, currentCoords))
         {
+            
             player.actionPoints--;
             coords = currentCoords;
             position = currentPosition;

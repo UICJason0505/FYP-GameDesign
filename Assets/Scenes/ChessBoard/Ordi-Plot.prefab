@@ -885,7 +885,7 @@ Transform:
   m_GameObject: {fileID: 6771192004127460615}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 6}
+  m_LocalPosition: {x: 1, y: 0, z: 5.196152}
   m_LocalScale: {x: 2.3, y: 1, z: 2.3}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1703,11 +1703,11 @@ MeshCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!114 &6779114273531420452
@@ -1722,6 +1722,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04b1a3f4b0865c94881555ae3580080a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coordinates:
+    x: 0
+    z: 0
   centerWorld: {x: 0, y: 0, z: 0}
   rend: {fileID: 0}
   canAttack: 1
@@ -1729,3 +1732,5 @@ MonoBehaviour:
   baseColor: {r: 0, g: 0, b: 0, a: 0}
   attackable: 0
   tileValue: 1
+  isOccupied: 0
+  occupyingChess: {fileID: 0}

@@ -49,18 +49,7 @@ public class UnitInfoPanelController : MonoBehaviour
         // 检查模式按键
         CheckMode(KeyCode.Z, zIndicator);
         CheckMode(KeyCode.X, xIndicator);
-        CheckMode(KeyCode.V, vIndicator);
-
-        // 单独处理C
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            HandleModeSwitch(KeyCode.C, cIndicator);
-
-            if (selectedKey == KeyCode.C && nameText.text == "King" && subPanelUI != null)
-            {
-                subPanelUI.ShowPanel();
-            }
-        }
+        CheckMode(KeyCode.C, cIndicator);
     }
 
     private void CheckMode(KeyCode key, Image indicator)
@@ -133,6 +122,12 @@ public class UnitInfoPanelController : MonoBehaviour
         nameText.text = unitName;
         numberText.text = blood.ToString();
         gameObject.SetActive(true);
+        //无论打开哪种单位信息，SubUI 必须保持关闭
+        if (subPanelUI != null)
+        {
+            subPanelUI.HidePanel();
+            subPanelUI.gameObject.SetActive(false);
+        }
     }
 
     public void Hide()

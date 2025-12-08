@@ -13,6 +13,10 @@ public class HexTile : MonoBehaviour
     public static Chess[] allChess;
     [Header("格子数值（棋子经过时加成）")]
     public int tileValue = 1;
+    [Header("占用状态（碰撞检测驱动）")]
+    public bool isOccupied = false;
+    public Chess occupyingChess = null;
+
     private void Awake()
     {
         MeshRenderer mr = GetComponent<MeshRenderer>();
@@ -27,6 +31,20 @@ public class HexTile : MonoBehaviour
     {
         HexTile.RefreshAllChess();
     }
+    private void Update()
+    {
+        if (occupyingChess != null)
+        {
+            float dist = Vector3.Distance(occupyingChess.transform.position, centerWorld);
+            if (dist > radius * 1.2f)
+            {
+                // 离太远视为离开
+                isOccupied = false;
+                occupyingChess = null;
+            }
+        }
+    }
+
     public static void RefreshAllChess()
     {
         allChess = FindObjectsOfType<Chess>();
@@ -66,4 +84,27 @@ public class HexTile : MonoBehaviour
         }
         return null;
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        Chess chess = other.GetComponentInParent<Chess>();
+        if (chess == null) return;
+
+        // 标记占用
+        isOccupied = true;
+        occupyingChess = chess;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        Chess chess = other.GetComponentInParent<Chess>();
+        if (chess == null) return;
+
+        // 只有同一个棋子离开时才清空
+        if (occupyingChess == chess)
+        {
+            isOccupied = false;
+            occupyingChess = null;
+        }
+    }
+
 }
