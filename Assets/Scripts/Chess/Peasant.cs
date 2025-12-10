@@ -64,13 +64,18 @@ public class Peansant : Chess
         HexTile tile = hit.collider.GetComponent<HexTile>();
         if (tile == null) return;
 
-        // 技能效果：tileValue + 1
-        tile.tileValue += 1;
-        Debug.Log($"Peansant 技能：格子({tile.coordinates.x},{tile.coordinates.z}) tileValue 现在 = {tile.tileValue}");
-        StartCoroutine(SkillRoutine(this));
-        // 技能使用完毕
-        ResetTiles();
-        skillSelecting = false;
+        // 使用技能消耗两点AP
+        if (player.HasEnoughActionPoints(2))
+        {
+            // 技能效果：tileValue + 1
+            tile.tileValue += 1;
+            Debug.Log($"Peansant 技能：格子({tile.coordinates.x},{tile.coordinates.z}) tileValue 现在 = {tile.tileValue}");
+            player.actionPoints -= 2;
+            StartCoroutine(SkillRoutine(this));
+            // 技能使用完毕
+            ResetTiles();
+            skillSelecting = false;
+        }
     }
 
     public override void showAttackableTiles()

@@ -63,7 +63,6 @@ public class Cannoneer : Chess
         }
     }
 
-
     public override int attack()
     {
         return this.number;
