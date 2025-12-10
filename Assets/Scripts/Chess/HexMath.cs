@@ -10,7 +10,6 @@ public class HexMath : MonoBehaviour
         public int z;
         public int y => -x - z;
         public Coordinates(int x, int z) { this.x = x; this.z = z; }
-        public override int GetHashCode() => (x, z).GetHashCode();
     }
 
     private static Coordinates RoundAxial(float qf, float rf)

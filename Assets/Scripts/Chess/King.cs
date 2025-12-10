@@ -245,10 +245,28 @@ public class King : Chess
                 if (tile != null && tile.attackable)   // 或者你自己的条件，比如 tile.canSummon
                 {
                     // 注意 prefab 下标是 0 开始，所以要 -1
-                    GameObject prefab = gameManager.prefabs[choose - 1];
-                    var chess = Instantiate(prefab, tile.centerWorld + Vector3.up * 0.6f, Quaternion.identity);
-                    chess.GetComponent<Chess>().player = this.player;
-                    chess.GetComponent<Renderer>().material.color = ColorFromName(this.player.playerName);
+                    if(choose == 1 ||choose == 2)
+                    {
+                        if (player.HasEnoughActionPoints(1))
+                        {
+                            GameObject prefab = gameManager.prefabs[choose - 1];
+                            var chess = Instantiate(prefab, tile.centerWorld + Vector3.up * 0.6f, Quaternion.identity);
+                            chess.GetComponent<Chess>().player = this.player;
+                            chess.GetComponent<Renderer>().material.color = ColorFromName(this.player.playerName);
+                            player.actionPoints -= 1;
+                        }
+                    }
+                    if (choose == 3 || choose == 4 || choose == 5 || choose == 6)
+                    {
+                        if (player.HasEnoughActionPoints(2))
+                        {
+                            GameObject prefab = gameManager.prefabs[choose - 1];
+                            var chess = Instantiate(prefab, tile.centerWorld + Vector3.up * 0.6f, Quaternion.identity);
+                            chess.GetComponent<Chess>().player = this.player;
+                            chess.GetComponent<Renderer>().material.color = ColorFromName(this.player.playerName);
+                            player.actionPoints -= 2;
+                        }
+                    }
                 }
             }
 
