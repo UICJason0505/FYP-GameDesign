@@ -8,13 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StartMenu.unity
     guid: 6c5a1834f5b614a4fb5ae76b2ba7829c
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Main.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 0
     path: Assets/Scenes/MapTEST.unity
     guid: b5b0353e061ef7c449f14d3d6cb653f7
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Map1.unity
     guid: 1a0cbe3b7beb48b43b5c8914c5689e63
   - enabled: 0

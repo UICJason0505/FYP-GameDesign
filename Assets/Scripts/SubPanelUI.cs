@@ -6,7 +6,7 @@ public class SubPanelUI : MonoBehaviour
     public Image[] slots = new Image[6];
     private int selectedIndex = -1;
 
-    public Color normalColor = Color.gray;
+    public Color normalColor = Color.white;
     public Color activeColor = Color.white;
 
     void Start()
@@ -19,20 +19,21 @@ public class SubPanelUI : MonoBehaviour
     {
         if (!gameObject.activeSelf) return;
 
-        // 数字键
-        for (int i = 0; i < slots.Length; i++)
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
-            {
-                ToggleSlot(i);
-            }
-        }
+
 
         // 点击鼠标清空
         if (Input.GetMouseButtonDown(0))
         {
             ClearSelection();
         }
+    }
+    public void SelectSlot(int index)
+    {
+        if (index < 0 || index >= slots.Length) return;
+
+        SetAllToNormal();
+        slots[index].color = activeColor;
+        selectedIndex = index;
     }
 
     public void ShowPanel()
@@ -45,14 +46,6 @@ public class SubPanelUI : MonoBehaviour
     public void HidePanel()
     {
         gameObject.SetActive(false);
-    }
-
-    public void TogglePanel()
-    {
-        if (gameObject.activeSelf)
-            HidePanel();
-        else
-            ShowPanel();
     }
 
     private void ToggleSlot(int index)

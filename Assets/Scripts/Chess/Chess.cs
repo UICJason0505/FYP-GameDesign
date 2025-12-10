@@ -28,6 +28,7 @@ public class Chess : MonoBehaviour
     int damage;
     bool isAttacking;
     public int blood = 5;
+    public TurnManager turnManager;
     // ========= 嘲讽系统（所有棋子共享） ===========
     [HideInInspector] public Chess tauntTarget = null;
     [HideInInspector] public int tauntRemainTurns = 0;
@@ -75,12 +76,38 @@ public class Chess : MonoBehaviour
         {
             move = FindObjectOfType<MovingObject>();
         }
+        var M = FindObjectOfType<TurnManager>();
+        turnManager = M.GetComponent<TurnManager>();
     }
 
     // Update is called once per frame
     //为实现继承修改为 protected virtual
     protected virtual void Update()
     {
+        if(this.currentTile.gameObject.layer == LayerMask.NameToLayer("Water"))
+        {
+            if(this.gameObject.layer == LayerMask.NameToLayer("King"))
+            {
+                for (int i = 0; i < turnManager.players.Count; i++)
+                {
+                    if (turnManager.players[i] == this.player)
+                    {
+                        turnManager.players.RemoveAt(i);
+                        break;
+                    }
+                }
+                Chess[] chess = FindObjectsOfType<Chess>();
+                for (int i = 0; i < chess.Length; i++)
+                {
+                    if (chess[i] != this && chess[i].player == this.player)
+                    {
+                        StartCoroutine(DieRoutine(chess[i]));
+                    }
+                }
+                StartCoroutine(DieRoutine(this));
+            }
+            return;
+        }
         if (Input.GetMouseButtonDown(1))
         {
             ResetTiles();

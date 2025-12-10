@@ -51,13 +51,13 @@ public class MovingObject : MonoBehaviour
     // Left click handling
     private void HandleLeftClick()
     {
+        // === FYJ：检测阵营是否允许操作 ===
         GameObject clickedObject = RayToGetObj();
         if (clickedObject == null) return;
 
         PlacebleObject placebleObject = clickedObject.GetComponent<PlacebleObject>();
         if (placebleObject == null) return;
 
-        // === FYJ：检测阵营是否允许操作 ===
         King clickedChess = clickedObject.GetComponent<King>();
         if (clickedChess != null)
         {
@@ -92,11 +92,48 @@ public class MovingObject : MonoBehaviour
             lineRenderer.positionCount = 1;
             lineRenderer.SetPosition(0, originPosition);
         }
+
+        // 放下物体（拖拽状态下点击左键）
         else if (currentState == ObjectState.Dragging)
         {
+            Coordinates targetCoords = WorldToCoordinates(selectedObj.transform.position, HexTile.radius);
+            Chess movingChess = selectedObj.GetComponent<Chess>();
+
+            // === 用 allChess 判断是否有其他棋子占据目标格子 ===
+            bool occupiedByOther = false;
+
+            foreach (var other in HexTile.allChess)
+            {
+                if (other == null) continue;
+                if (other == movingChess) continue;  // 自己不算占用
+
+                if (other.position.x == targetCoords.x &&
+                    other.position.z == targetCoords.z)
+                {
+                    occupiedByOther = true;
+                    break;
+                }
+            }
+
+            // 如果被别人占用 → 不允许放下
+            if (occupiedByOther)
+            {
+                Debug.Log("❌ 该格子已被其他棋子占用，不能放下！");
+                if (UnitInfoPanelController.Instance != null)
+                    UnitInfoPanelController.Instance.ShowInvalidAction("Tile is occupied!");
+
+                // 不结束拖拽，让玩家继续移动
+                return;
+            }
+
+            // ✔ 可以放下
             currentState = ObjectState.None;
             Debug.Log("物体已放下");
             ClearPath();
+
+            Vector3 fixedPos = selectedObj.transform.position;
+            fixedPos.y = 0.375f;
+            selectedObj.transform.position = fixedPos;
         }
     }
 
@@ -140,6 +177,32 @@ public class MovingObject : MonoBehaviour
         selectedObj.transform.position = Snap(mousePosition);
 
         currentCoords = WorldToCoordinates(selectedObj.transform.position, HexTile.radius);
+
+        // === 新增：检查拖动经过的格子是否被其他棋子占据 ===
+        bool occupiedByOther = false;
+
+        foreach (var other in HexTile.allChess)
+        {
+            if (other == null) continue;
+            if (other == selectedObj.GetComponent<Chess>()) continue;  // 自己不算
+
+            if (other.position.x == currentCoords.x &&
+                other.position.z == currentCoords.z)
+            {
+                occupiedByOther = true;
+                break;
+            }
+        }
+
+        // 如果被占用 → 不能经过，回到 originPosition
+        if (occupiedByOther)
+        {
+            selectedObj.transform.position = originPosition;
+            Debug.Log("❌ 不能经过被占用的格子！");
+            return; // 直接终止本帧拖拽逻辑
+        }
+
+
         currentPosition = selectedObj.transform.position;
 
         Debug.Log($"拖拽前物体坐标: ({currentCoords.x}, {currentCoords.z})");
@@ -206,13 +269,13 @@ public class MovingObject : MonoBehaviour
     // 判断是否移动了（根据坐标差）
     private bool HasMovedOneStep(Coordinates start, Coordinates current)
     {
-        int distance = Mathf.Max(Mathf.Abs(current.x - start.x), Mathf.Abs(current.z - start.z), Mathf.Abs((current.x - start.x) + (current.z - start.z)));
+        int distance = (Mathf.Abs(current.x - start.x) + Mathf.Abs(current.z - start.z) + Mathf.Abs((current.x - start.x) + (current.z - start.z))) / 2;
         return distance == 1;
     }
 
     private bool HasMovedALot(Coordinates start, Coordinates current)
     {
-        int distance = Mathf.Max(Mathf.Abs(current.x - start.x), Mathf.Abs(current.z - start.z), Mathf.Abs((current.x - start.x) + (current.z - start.z)));
+        int distance = (Mathf.Abs(current.x - start.x) + Mathf.Abs(current.z - start.z)+  Mathf.Abs((current.x - start.x) + (current.z - start.z))) / 2;
         return distance > 1;
     }
 

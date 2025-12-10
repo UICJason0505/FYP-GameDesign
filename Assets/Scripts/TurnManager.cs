@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -14,12 +15,15 @@ public class TurnManager : MonoBehaviour
     public TMP_Text turnText;
     public Button nextTurnButton;
     private String[] names = { "Red", "Blue", "Green", "Yellow" };
+    public UnitInfoPanelController unitInfoPanel;
+    private bool gameEnded = false;
     public TMP_Text actionPointText;
     public TMP_Text currentPlayerText;
     public Transform redSpawn;
     public Transform blueSpawn;
     public Transform greenSpawn;
     public Transform yellowSpawn;
+    [SerializeField] public TMP_Text EndingBroadcast; 
 
     [Header("Prefabs")]
     public GameObject kingPrefab;
@@ -39,11 +43,29 @@ public class TurnManager : MonoBehaviour
         UpdateTurnText();
         nextTurnButton.onClick.AddListener(AdvanceTurn);
 
+        EndingBroadcast.gameObject.SetActive(false);
+
         HexTile.RefreshAllChess();
     }
     public void Update()
     {
         UpdateTurnText();
+        // ★ 新增：检测是否只剩一个 King（即只剩一个玩家）
+        if (!gameEnded && players.Count == 1)
+        {
+            gameEnded = true;
+            StartCoroutine(GameOverRoutine(players[0].playerName));
+        }
+    }
+    private IEnumerator GameOverRoutine(string winner)
+    {
+        EndingBroadcast.gameObject.SetActive(true);
+        yield return new WaitForSeconds(2f);
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
     }
 
     void AdvanceTurn()
