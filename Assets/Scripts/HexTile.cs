@@ -21,7 +21,7 @@ public class HexTile : MonoBehaviour
     {
         MeshRenderer mr = GetComponent<MeshRenderer>();
         centerWorld = mr.bounds.center;
-        radius = Mathf.Max(mr.bounds.size.x, mr.bounds.size.z) * 0.5f;
+        radius = mr.bounds.size.z * 0.5f;
         coordinates = HexMath.WorldToCoordinates(centerWorld, radius);
         TileManager.Register(this, coordinates);
         rend = GetComponent<Renderer>();
