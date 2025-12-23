@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Chess
   - King
+  - Water
   layers:
   - Default
   - TransparentFX

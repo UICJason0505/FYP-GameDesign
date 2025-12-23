@@ -40,6 +40,7 @@ public class HexTile : MonoBehaviour
                 occupyingChess = null;
             }
         }
+        if (this.gameObject.layer == LayerMask.NameToLayer("Water")) isOccupied = true;
     }
 
     public static void RefreshAllChess() // 刷新场上所有棋子信息，存入数组中

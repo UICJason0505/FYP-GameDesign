@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEditor.FilePathAttribute;
 //private bool isSelected = false;
 public class King : Chess
 {
@@ -39,7 +37,7 @@ public class King : Chess
     {
         if (panel != null)
         {
-            panel.ShowUnit(player.playerName, number);
+            panel.ShowUnit(player.playerName, blood);
         }
     }
 
@@ -170,6 +168,11 @@ public class King : Chess
     }
     protected override void Update()
     {
+        if (currentTile.gameObject.layer == LayerMask.NameToLayer("Water"))
+        {
+            this.blood -= 5;
+            KingDeathCheck();
+        }
         // 只有当前选中的 King 才能响应 C 键和召唤
         if (SelectionManager.selectedObj != gameObject)
         {
@@ -189,7 +192,7 @@ public class King : Chess
         {
             EnterSummonMode();
             //FYJ召唤UI
-            panel.subPanelUI.TogglePanel();
+            // panel.subPanelUI.TogglePanel();       ====TogglePanel() 不存在，暂时注释====
             return;
         }
         base.Update();
@@ -199,12 +202,15 @@ public class King : Chess
         isInSummonMode = true;
         choose = -1;
         ShowSummonArea();   // 高亮可召唤区域
+
+        panel.subPanelUI.ShowPanel();
     }
 
     void ExitSummonMode()
     {
         isInSummonMode = false;
         ResetTiles();       // 清除高亮
+        panel.subPanelUI.HidePanel();
     }
     void UpdateSummonMode()
     {
@@ -250,7 +256,7 @@ public class King : Chess
                         if (player.HasEnoughActionPoints(1))
                         {
                             GameObject prefab = gameManager.prefabs[choose - 1];
-                            var chess = Instantiate(prefab, tile.centerWorld + Vector3.up * 0.6f, Quaternion.identity);
+                            var chess = Instantiate(prefab, tile.centerWorld + Vector3.up * 0.25f, Quaternion.identity);
                             chess.GetComponent<Chess>().player = this.player;
                             chess.GetComponent<Renderer>().material.color = ColorFromName(this.player.playerName);
                             player.actionPoints -= 1;
