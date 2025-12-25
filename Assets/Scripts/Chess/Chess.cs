@@ -41,8 +41,7 @@ public class Chess : MonoBehaviour
         Idle = 0,
         Attack = 1,
         Death = 2,
-        Walk = 3,
-        Skill = 4
+        Skill = 3
     };
     public void Init(string className, int id, Player owner)
     {
