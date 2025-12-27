@@ -118,7 +118,7 @@ public class MovingObject : MonoBehaviour
             // 如果被别人占用 → 不允许放下
             if (occupiedByOther)
             {
-                Debug.Log("❌ 该格子已被其他棋子占用，不能放下！");
+                Debug.Log("该格子已被其他棋子占用，不能放下！");
                 if (UnitInfoPanelController.Instance != null)
                     UnitInfoPanelController.Instance.ShowInvalidAction("Tile is occupied!");
 
@@ -126,7 +126,7 @@ public class MovingObject : MonoBehaviour
                 return;
             }
 
-            // ✔ 可以放下
+            // 可以放下
             currentState = ObjectState.None;
             Debug.Log("物体已放下");
             ClearPath();
@@ -198,7 +198,7 @@ public class MovingObject : MonoBehaviour
         if (occupiedByOther)
         {
             selectedObj.transform.position = originPosition;
-            Debug.Log("❌ 不能经过被占用的格子！");
+            Debug.Log(" 不能经过被占用的格子！");
             return; // 直接终止本帧拖拽逻辑
         }
 
