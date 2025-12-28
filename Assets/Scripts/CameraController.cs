@@ -45,10 +45,18 @@ public class CameraController : MonoBehaviour
         rg.y = 0;
         rg.Normalize();
 
-        if (Input.GetKey(KeyCode.W)) moveDirection += fw;
-        if (Input.GetKey(KeyCode.S)) moveDirection -= fw;
-        if (Input.GetKey(KeyCode.A)) moveDirection -= rg;
-        if (Input.GetKey(KeyCode.D)) moveDirection += rg;
+        bool hasMovementInput = false;
+
+        if (Input.GetKey(KeyCode.W)) { moveDirection += fw; hasMovementInput = true; }
+        if (Input.GetKey(KeyCode.S)) { moveDirection -= fw; hasMovementInput = true; }
+        if (Input.GetKey(KeyCode.A)) { moveDirection -= rg; hasMovementInput = true; }
+        if (Input.GetKey(KeyCode.D)) { moveDirection += rg; hasMovementInput = true; }
+
+        // 当按下WASD时，清除跟随目标
+        if (hasMovementInput && followTarget != null)
+        {
+            followTarget = null;
+        }
 
         float finalSpeed = panSpeed;
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))

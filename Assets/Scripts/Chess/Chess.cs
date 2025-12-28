@@ -30,10 +30,10 @@ public class Chess : MonoBehaviour
     public int blood = 5;
     public TurnManager turnManager;
     protected bool inputLocked = false;
-    // ========= 嘲讽系统（所有棋子共享） ===========
-    [HideInInspector] public Chess tauntTarget = null;
-    [HideInInspector] public int tauntRemainTurns = 0;
     public Transform modelRoot;
+
+    // 在 Chess 类的字段区域添加
+    protected Chess protector = null; // 记录谁在保护这个单位
 
     // ========== 动画相关 ==========
     public Animator animator;
@@ -150,48 +150,10 @@ public class Chess : MonoBehaviour
                 gameManager.attacker = null;
             }
         }
-        if(attacker != null && (attacker.gameObject.layer == LayerMask.NameToLayer("King") || this.gameObject.layer == LayerMask.NameToLayer("King")))
-        {
-            
-        }
+        if(attacker != null && (attacker.gameObject.layer == LayerMask.NameToLayer("King") || this.gameObject.layer == LayerMask.NameToLayer("King"))) {}
         else 
         { 
             if (attacker == null || attacker.player == null) return;
-
-            //     嘲讽强制攻击系统       //
-            if (attacker.tauntTarget != null)
-            {
-                // 检查嘲讽目标是否仍存活
-                if (attacker.tauntTarget == null || attacker.tauntTarget.player == null)
-                {
-                    attacker.tauntTarget = null;
-                    attacker.tauntRemainTurns = 0;
-                }
-                else
-                {
-                // 检查是否在攻击范围内
-                    int dist = HexMath.HexDistance(attacker.position, attacker.tauntTarget.position);
-
-                    if (dist <= attacker.attackArea)
-                    {
-                        Debug.Log($"{attacker.name} 因嘲讽被迫攻击 {attacker.tauntTarget.name}");
-
-                        int dmg = attacker.attack();
-                        attacker.tauntTarget.defend(dmg, attacker, attacker.tauntTarget);
-
-                        attacker.player.actionPoints -= attacker.apCost;
-
-                        attacker.ResetTiles();
-                        attacker.isInAttackMode = false;
-
-                        attacker.tauntRemainTurns--;
-                        if (attacker.tauntRemainTurns <= 0)
-                        attacker.tauntTarget = null;
-
-                        return; // 阻止手动选择攻击
-                    }
-                }
-            }
         }
         
 
@@ -316,21 +278,29 @@ public class Chess : MonoBehaviour
 
         return;
     }
-    public virtual void KingAttack(Chess attacker, Chess target)
-    {
 
-    }
-    public virtual void KingDefend(Chess attacker, Chess target)
+    // 添加一个方法来设置保护者
+    public void SetProtector(Chess protectorChess)
     {
+        protector = protectorChess;
+    }
 
-    }
-    public virtual void CheckDeath(Chess unit)
+    // 添加一个方法来清除保护者
+    public void ClearProtector()
     {
+        protector = null;
+    }
 
-    }
-    public virtual void KingDeathCheck()
+    // 获取保护者
+    public Chess GetProtector()
     {
+        return protector;
     }
+
+    public virtual void KingAttack(Chess attacker, Chess target){}
+    public virtual void KingDefend(Chess attacker, Chess target){}
+    public virtual void CheckDeath(Chess unit){}
+    public virtual void KingDeathCheck(){}
     void OnMouseDown()//UI显示
     {
         if (SelectionManager.isAttackMode) return;
@@ -392,12 +362,6 @@ public class Chess : MonoBehaviour
         position = currentTile.coordinates;
     }
 
-    // 接收到嘲讽时由嘲讽者或 GM 调用
-    public void ReceiveTaunt(Chess taunter, int duration = 1)
-    {
-        tauntTarget = taunter;
-        tauntRemainTurns = duration;
-    }
     public IEnumerator AttackRoutine(Chess unit)
     {
         Animator anim = unit.animator;

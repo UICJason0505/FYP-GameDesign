@@ -26,7 +26,7 @@ public class ShieldGuard : Chess
         if (Input.GetKeyDown(KeyCode.C) && SelectionManager.selectedObj == gameObject)
         {
         
-        } 
+        }
     }
 
 

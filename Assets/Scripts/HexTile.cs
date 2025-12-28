@@ -22,11 +22,11 @@ public class HexTile : MonoBehaviour
         MeshRenderer mr = GetComponent<MeshRenderer>();
         centerWorld = mr.bounds.center;
         radius = mr.bounds.size.z * 0.5f;
+        if (this.CompareTag("Water")) radius = 1.132021f;
         coordinates = HexMath.WorldToCoordinates(centerWorld, radius);
         TileManager.Register(this, coordinates);
         rend = GetComponent<Renderer>();
         baseColor = rend.material.color;
-        if (this.CompareTag("Water")) radius = 1.132021f;
     }
 
     private void Update()

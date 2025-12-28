@@ -11,8 +11,8 @@ public class MovingObject : MonoBehaviour
     private static Coordinates currentCoords; // 指针坐标
     private Vector3 originPosition; // 棋子的原transform位置
     private int originalNumber; // 棋子的原数值
-    private Vector3 lastPosition; // 棋子上一次合法的transform位置
-    private Vector3 currentPosition; // 棋子现在的transform位置
+    private Vector3 lastPosition; // 棋子的transform位置
+    private Vector3 currentPosition; // 指针的transform位置
     private Player player; // 当前玩家
     public Vector3 centerWorld; //Test
     private LineRenderer lineRenderer; // 用来绘制路径
@@ -88,7 +88,7 @@ public class MovingObject : MonoBehaviour
             originPosition = mr.bounds.center;
             coords = WorldToCoordinates(originPosition, HexTile.radius);
 
-            // 初始化合法位置
+            // 确保 position 初始化为当前位置
             lastPosition = originPosition;
 
             Debug.Log($"选中时物体坐标: ({coords.x}, {coords.z})");
@@ -150,8 +150,7 @@ public class MovingObject : MonoBehaviour
     {
         if (currentState == ObjectState.Dragging)
         {
-            ResetPosition();
-            ClearPath();
+            ReturnToOriginalPosition();
         }
         else if (currentState == ObjectState.Selected)
         {
@@ -204,7 +203,7 @@ public class MovingObject : MonoBehaviour
         HexTile currentTile = GetTileAtCoordinates(currentCoords);
         Chess movingChess = selectedObj.GetComponent<Chess>();
 
-        if (currentTile != null && currentTile.isOccupied && currentTile.occupyingChess != movingChess)
+        if (currentTile != null && currentTile.isOccupied)
         {
             selectedObj.transform.position = lastPosition;
             Debug.Log("不能经过被占用的格子！");
@@ -249,7 +248,7 @@ public class MovingObject : MonoBehaviour
             
             player.actionPoints--;
             coords = currentCoords;
-            position = currentPosition;
+            lastPosition = currentPosition;
             //FYJ 加数值
             var chess = selectedObj.GetComponent<Chess>();
             for (int i = 0; i < GameManager.Instance.tiles.Length; i++)
@@ -275,16 +274,9 @@ public class MovingObject : MonoBehaviour
         currentState = ObjectState.None; // 结束拖拽
         Unhighlight(); // 取消高亮
         ClearPath(); // 清除路径
-    }
 
-    // Reset position to origin
-    private void ResetPosition()
-    {
-        selectedObj.GetComponent<Chess>().number = originalNumber;
-        selectedObj.transform.position = originPosition;
-        player.actionPoints = currentAP;
-        currentState = ObjectState.None;
-        Unhighlight();
+        // 重置 position 为原始位置
+        lastPosition = originPosition;
     }
 
     // Raycast to detect object clicked
