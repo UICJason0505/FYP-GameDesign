@@ -4,7 +4,6 @@ public class ShieldGuard : Chess
 {
     [Header("ShieldGuard Skill Settings")]
     public int tauntCD = 2;
-    private int tauntTimer = 0;
     public int tauntRange = 1;
     TurnManager turnManager;
 
@@ -22,47 +21,16 @@ public class ShieldGuard : Chess
     protected override void Update()
     {
         base.Update();
-        if (tauntTimer > 0) tauntTimer--;
 
-        // 释放嘲讽
+        // 释放援护
         if (Input.GetKeyDown(KeyCode.C) && SelectionManager.selectedObj == gameObject)
         {
-            TryTaunt();
-        }
+        
+        } 
     }
 
-    // 嘲讽技能
-    void TryTaunt()
-    {
-        if (tauntTimer > 0)
-        {
-            Debug.Log("嘲讽技能冷却中");
-            return;
-        }
-
-        Debug.Log($"{name} 释放嘲讽！");
-        tauntTimer = tauntCD;
-        StartCoroutine(SkillRoutine(this));
-        BroadcastTaunt();
-    }
-
-    void BroadcastTaunt()
-    {
-        foreach (Chess c in FindObjectsOfType<Chess>())
-        {
-            if (c == this) continue;
-            if (c.player == this.player) continue;
-
-            int dist = HexMath.HexDistance(c.position, this.position);
-            if (dist <= tauntRange)
-            {
-                c.GetComponent<ITauntable>()?.ReceiveTaunt(this);
-            }
-        }
-    }
 
     // 重写攻击受伤
-
     // 盾卫造成伤害减半
     public override int attack()
     {

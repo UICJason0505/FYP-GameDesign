@@ -8140,10 +8140,14 @@ MonoBehaviour:
   move: {fileID: 0}
   rend: {fileID: 0}
   currentTile: {fileID: 0}
+  blood: 5
+  turnManager: {fileID: 0}
   tauntTarget: {fileID: 0}
   tauntRemainTurns: 0
   modelRoot: {fileID: 0}
   animator: {fileID: 1207288628407297694}
+  number2Prefab: {fileID: 1685321987188226, guid: debebb1601036a34cbaf3c805e586ef8, type: 3}
+  number3Prefab: {fileID: 1505818122754266, guid: 21e8b9865a452024aa5b26c0e6ff4be3, type: 3}
 --- !u!54 &8832284188166891375
 Rigidbody:
   m_ObjectHideFlags: 0

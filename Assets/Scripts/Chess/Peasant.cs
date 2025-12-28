@@ -1,14 +1,22 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class Peansant : Chess
 {
-    [Header("Peansant属性")]
+    [Header("Peansant State")]
     private int initialValue = 3; // 初始数值
     private int attackDistance = 1;
     private int skillDistance = 1;
-    TurnManager turnManager; // Awake 用于获取全局引用，避免 move 为 null
     private bool skillSelecting = false;
+
+    // 添加数字预制体引用
+    [Header("Number Prefab")]
+    public GameObject number2Prefab; // 数字2
+    public GameObject number3Prefab; // 数字3
+
+    // 记录每个地块上的数字对象
+    private Dictionary<HexTile, GameObject> tileNumberObjects = new Dictionary<HexTile, GameObject>();
 
     private void Awake()
     {
@@ -34,14 +42,22 @@ public class Peansant : Chess
     {
         base.Update();
 
-        // 按下 C 进入技能选择状态
-        if (Input.GetKeyDown(KeyCode.C))
+            // 按下 C 进入技能选择状态
+        if (Input.GetKeyDown(KeyCode.C) && SelectionManager.selectedObj == gameObject)
         {
-            skillSelecting = true;
-            showAttackableTiles();
-            Debug.Log("Peansant 准备使用技能：选择格子");
+            if (skillSelecting == false)
+            {
+                skillSelecting = true;
+                showAttackableTiles();
+                Debug.Log("Peansant 准备使用技能：选择格子");
+            }
+            else if (skillSelecting == true)
+            {
+                skillSelecting = false;
+                ResetTiles();
+                return; 
+            }    
         }
-
         // 鼠标点击格子时
         if (skillSelecting && Input.GetMouseButtonDown(0))
         {
@@ -64,17 +80,85 @@ public class Peansant : Chess
         HexTile tile = hit.collider.GetComponent<HexTile>();
         if (tile == null) return;
 
+        // 检查地块是否在技能范围内
+        int distX = tile.coordinates.x - position.x;
+        int distZ = tile.coordinates.z - position.z;
+        int dist = distX + distZ;
+        if ((Mathf.Abs(distX) + Mathf.Abs(distZ) + Mathf.Abs(dist)) / 2 > skillDistance)
+        {
+            Debug.Log("地块不在技能范围内！");
+            return;
+        }
+
         // 使用技能消耗两点AP
         if (player.HasEnoughActionPoints(2))
         {
+            if (tile.tileValue >= 3)
+            {
+                Debug.Log("该地块已达到最大数值3，无法再次使用技能！");
+                skillSelecting = false;
+                ResetTiles();
+                return;
+            }
             // 技能效果：tileValue + 1
             tile.tileValue += 1;
-            Debug.Log($"Peansant 技能：格子({tile.coordinates.x},{tile.coordinates.z}) tileValue 现在 = {tile.tileValue}");
+            Debug.Log($"Peansant使用了技能！使格子({tile.coordinates.x},{tile.coordinates.z}) 的tileValue变为： {tile.tileValue}！");
             player.actionPoints -= 2;
-            StartCoroutine(SkillRoutine(this));
+            StartCoroutine(SkillRoutine(this)); // 播放动画
+
+            // 更新地块上的数字显示
+            UpdateNumberOnTile(tile);
+
             // 技能使用完毕
             ResetTiles();
             skillSelecting = false;
+        }
+    }
+
+    // 更新地块上的数字y预制体显示
+    private void UpdateNumberOnTile(HexTile tile)
+    {
+        // 移除旧的数字对象
+        if (tileNumberObjects.ContainsKey(tile) && tileNumberObjects[tile] != null)
+        {
+            Destroy(tileNumberObjects[tile]);
+        }
+
+        // 根据tileValue选择要显示的数字预制体
+        GameObject numberPrefab = null;
+        if (tile.tileValue == 2)
+        {
+            numberPrefab = number2Prefab;
+        }
+        else if (tile.tileValue == 3)
+        {
+            numberPrefab = number3Prefab;
+        }
+        else
+        {
+            // 如果tileValue不是2或3，就不显示数字
+            return;
+        }
+
+        if (numberPrefab != null)
+        {
+            // 设置位置
+            Vector3 spawnPosition = new Vector3(
+                tile.centerWorld.x - 0.24f, // 左右 加往右，减往左
+                0.28f,                      // 高低
+                tile.centerWorld.z - 0.43f  // 上下 加往上，减往下
+            );
+
+            // 设置旋转角度：x旋转270度，y旋转180度
+            Quaternion spawnRotation = Quaternion.Euler(270, 180, 0);
+
+            GameObject numberObj = Instantiate(numberPrefab, spawnPosition, spawnRotation);
+
+            // 缩小一点，使棋子能盖住这个数字
+            numberObj.transform.localScale = Vector3.one * 0.85f;
+
+            // 记录这个数字对象
+            tileNumberObjects[tile] = numberObj;
         }
     }
 

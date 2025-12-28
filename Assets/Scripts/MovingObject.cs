@@ -11,8 +11,8 @@ public class MovingObject : MonoBehaviour
     private static Coordinates currentCoords; // 指针坐标
     private Vector3 originPosition; // 棋子的原transform位置
     private int originalNumber; // 棋子的原数值
-    private Vector3 position; // 棋子的transform位置
-    private Vector3 currentPosition; // 指针的transform位置
+    private Vector3 lastPosition; // 棋子上一次合法的transform位置
+    private Vector3 currentPosition; // 棋子现在的transform位置
     private Player player; // 当前玩家
     public Vector3 centerWorld; //Test
     private LineRenderer lineRenderer; // 用来绘制路径
@@ -87,6 +87,10 @@ public class MovingObject : MonoBehaviour
             var mr = selectedObj.GetComponent<Renderer>();
             originPosition = mr.bounds.center;
             coords = WorldToCoordinates(originPosition, HexTile.radius);
+
+            // 初始化合法位置
+            lastPosition = originPosition;
+
             Debug.Log($"选中时物体坐标: ({coords.x}, {coords.z})");
 
             // 开始绘制路径
@@ -100,6 +104,7 @@ public class MovingObject : MonoBehaviour
             Coordinates targetCoords = WorldToCoordinates(selectedObj.transform.position, HexTile.radius);
             Chess movingChess = selectedObj.GetComponent<Chess>();
 
+            /** 实际上不需要这一段代码，因为正常情况下拖拽时不会将棋子放到被占用的地方上，但是加上会保险一点
             // === 用 allChess 判断是否有其他棋子占据目标格子 ===
             bool occupiedByOther = false;
 
@@ -126,6 +131,8 @@ public class MovingObject : MonoBehaviour
                 // 不结束拖拽，让玩家继续移动
                 return;
             }
+            **/
+
 
             // 可以放下
             currentState = ObjectState.None;
@@ -171,6 +178,20 @@ public class MovingObject : MonoBehaviour
         }
     }
 
+    // 通过坐标获取对应的 HexTile 说实话，这段代码不应该写在这里的
+    private HexTile GetTileAtCoordinates(Coordinates coords)
+    {
+        for (int i = 0; i < GameManager.Instance.tiles.Length; i++)
+        {
+            HexTile tile = GameManager.Instance.tiles[i];
+            if (tile.coordinates.x == coords.x && tile.coordinates.z == coords.z)
+            {
+                return tile;
+            }
+        }
+        return null;
+    }
+
     // Handle dragging object movement
     private void HandleDragging()
     {
@@ -179,6 +200,18 @@ public class MovingObject : MonoBehaviour
 
         currentCoords = WorldToCoordinates(selectedObj.transform.position, HexTile.radius);
 
+        // === 直接使用 HexTile 的 isOccupied 判断 ===
+        HexTile currentTile = GetTileAtCoordinates(currentCoords);
+        Chess movingChess = selectedObj.GetComponent<Chess>();
+
+        if (currentTile != null && currentTile.isOccupied && currentTile.occupyingChess != movingChess)
+        {
+            selectedObj.transform.position = lastPosition;
+            Debug.Log("不能经过被占用的格子！");
+            return;
+        }
+
+        /** 采用坐标而非碰撞检测的方式去判断棋盘格是否被占据了，可以作为isOccupied的正确参考
         // === 新增：检查拖动经过的格子是否被其他棋子占据 ===
         bool occupiedByOther = false;
 
@@ -202,7 +235,7 @@ public class MovingObject : MonoBehaviour
             Debug.Log(" 不能经过被占用的格子！");
             return; // 直接终止本帧拖拽逻辑
         }
-
+        **/
 
         currentPosition = selectedObj.transform.position;
 
