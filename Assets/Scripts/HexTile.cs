@@ -26,6 +26,7 @@ public class HexTile : MonoBehaviour
         TileManager.Register(this, coordinates);
         rend = GetComponent<Renderer>();
         baseColor = rend.material.color;
+        if (this.CompareTag("Water")) radius = 1.132021f;
     }
 
     private void Update()

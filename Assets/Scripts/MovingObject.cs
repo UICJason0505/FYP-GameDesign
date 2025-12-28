@@ -84,7 +84,8 @@ public class MovingObject : MonoBehaviour
             selectedObj = clickedObject;
             currentState = ObjectState.Selected;
             Highlight();
-            originPosition = selectedObj.transform.position;
+            var mr = selectedObj.GetComponent<Renderer>();
+            originPosition = mr.bounds.center;
             coords = WorldToCoordinates(originPosition, HexTile.radius);
             Debug.Log($"选中时物体坐标: ({coords.x}, {coords.z})");
 
