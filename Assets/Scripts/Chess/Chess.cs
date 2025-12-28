@@ -29,6 +29,7 @@ public class Chess : MonoBehaviour
     bool isAttacking;
     public int blood = 5;
     public TurnManager turnManager;
+    protected bool inputLocked = false;
     // ========= 嘲讽系统（所有棋子共享） ===========
     [HideInInspector] public Chess tauntTarget = null;
     [HideInInspector] public int tauntRemainTurns = 0;
@@ -445,7 +446,7 @@ public class Chess : MonoBehaviour
         while (true)
         {
             AnimatorStateInfo info = anim.GetCurrentAnimatorStateInfo(0);
-            if (info.IsName("Attack") && info.normalizedTime >= 1f)
+            if (info.IsName("Skill") && info.normalizedTime >= 1f)
                 break;
             yield return null;
         }

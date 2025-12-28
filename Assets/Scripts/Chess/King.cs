@@ -267,7 +267,7 @@ public class King : Chess
                         if (player.HasEnoughActionPoints(2))
                         {
                             GameObject prefab = gameManager.prefabs[choose - 1];
-                            var chess = Instantiate(prefab, tile.centerWorld + Vector3.up * 0.6f, Quaternion.identity);
+                            var chess = Instantiate(prefab, tile.centerWorld + Vector3.up * 0.25f, Quaternion.identity);
                             chess.GetComponent<Chess>().player = this.player;
                             chess.GetComponent<Renderer>().material.color = ColorFromName(this.player.playerName);
                             player.actionPoints -= 2;

@@ -2352,7 +2352,7 @@ MonoBehaviour:
   baseColor: {r: 0, g: 0, b: 0, a: 0}
   attackable: 0
   tileValue: 1
-  isOccupied: 0
+  isOccupied: 1
   occupyingChess: {fileID: 0}
 --- !u!64 &146422800
 MeshCollider:
@@ -2994,7 +2994,7 @@ MonoBehaviour:
   baseColor: {r: 0, g: 0, b: 0, a: 0}
   attackable: 0
   tileValue: 1
-  isOccupied: 0
+  isOccupied: 1
   occupyingChess: {fileID: 0}
 --- !u!1001 &183336421
 PrefabInstance:
@@ -3249,7 +3249,7 @@ MonoBehaviour:
   baseColor: {r: 0, g: 0, b: 0, a: 0}
   attackable: 0
   tileValue: 1
-  isOccupied: 0
+  isOccupied: 1
   occupyingChess: {fileID: 0}
 --- !u!1001 &194727328
 PrefabInstance:
@@ -3378,7 +3378,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.594
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -4241,7 +4241,7 @@ MonoBehaviour:
   baseColor: {r: 0, g: 0, b: 0, a: 0}
   attackable: 0
   tileValue: 1
-  isOccupied: 0
+  isOccupied: 1
   occupyingChess: {fileID: 0}
 --- !u!1001 &254100006
 PrefabInstance:
@@ -4763,7 +4763,7 @@ MonoBehaviour:
   baseColor: {r: 0, g: 0, b: 0, a: 0}
   attackable: 0
   tileValue: 1
-  isOccupied: 0
+  isOccupied: 1
   occupyingChess: {fileID: 0}
 --- !u!1001 &313531615
 PrefabInstance:
@@ -6415,7 +6415,7 @@ MonoBehaviour:
   baseColor: {r: 0, g: 0, b: 0, a: 0}
   attackable: 0
   tileValue: 1
-  isOccupied: 0
+  isOccupied: 1
   occupyingChess: {fileID: 0}
 --- !u!1 &408760439
 GameObject:
@@ -8581,7 +8581,7 @@ MonoBehaviour:
   baseColor: {r: 0, g: 0, b: 0, a: 0}
   attackable: 0
   tileValue: 1
-  isOccupied: 0
+  isOccupied: 1
   occupyingChess: {fileID: 0}
 --- !u!1001 &552166144
 PrefabInstance:
@@ -8715,7 +8715,7 @@ MonoBehaviour:
   baseColor: {r: 0, g: 0, b: 0, a: 0}
   attackable: 0
   tileValue: 1
-  isOccupied: 0
+  isOccupied: 1
   occupyingChess: {fileID: 0}
 --- !u!1 &557464631
 GameObject:
@@ -9616,7 +9616,7 @@ MonoBehaviour:
   baseColor: {r: 0, g: 0, b: 0, a: 0}
   attackable: 0
   tileValue: 1
-  isOccupied: 0
+  isOccupied: 1
   occupyingChess: {fileID: 0}
 --- !u!64 &650138787
 MeshCollider:
@@ -25305,7 +25305,7 @@ MonoBehaviour:
   baseColor: {r: 0, g: 0, b: 0, a: 0}
   attackable: 0
   tileValue: 1
-  isOccupied: 0
+  isOccupied: 1
   occupyingChess: {fileID: 0}
 --- !u!1001 &1621621570
 PrefabInstance:
@@ -26764,7 +26764,7 @@ MonoBehaviour:
   baseColor: {r: 0, g: 0, b: 0, a: 0}
   attackable: 0
   tileValue: 1
-  isOccupied: 0
+  isOccupied: 1
   occupyingChess: {fileID: 0}
 --- !u!1001 &1704997408
 PrefabInstance:
@@ -27369,7 +27369,7 @@ MonoBehaviour:
   baseColor: {r: 0, g: 0, b: 0, a: 0}
   attackable: 0
   tileValue: 1
-  isOccupied: 0
+  isOccupied: 1
   occupyingChess: {fileID: 0}
 --- !u!1001 &1740441700
 PrefabInstance:
@@ -31865,7 +31865,7 @@ MonoBehaviour:
   baseColor: {r: 0, g: 0, b: 0, a: 0}
   attackable: 0
   tileValue: 1
-  isOccupied: 0
+  isOccupied: 1
   occupyingChess: {fileID: 0}
 --- !u!4 &2080796443 stripped
 Transform:
