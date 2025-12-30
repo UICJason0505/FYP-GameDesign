@@ -135,13 +135,17 @@ public class MovingObject : MonoBehaviour
 
 
             // 可以放下
-            currentState = ObjectState.None;
+            currentState = ObjectState.Selected;
             Debug.Log("物体已放下");
             ClearPath();
 
+            // 修正 y 轴位置
             Vector3 fixedPos = selectedObj.transform.position;
             fixedPos.y = 0.375f;
             selectedObj.transform.position = fixedPos;
+
+            // 更新位置
+            originPosition = selectedObj.transform.position;
         }
     }
 

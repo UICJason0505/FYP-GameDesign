@@ -89,6 +89,9 @@ public class TurnManager : MonoBehaviour
         }
 
         players[turnCount].canOperate = true;
+        ClearProtectionsForPlayer(players[turnCount]); // 清除所有棋子的保护者信息
+        NotifyShieldGuardsTurnStart(players[turnCount]);
+
         UpdateTurnText();
     }
     public void UpdateTurnText()
@@ -144,4 +147,30 @@ public class TurnManager : MonoBehaviour
         }
     }
 
+
+    // 清除所有棋子的保护者信息
+    void ClearProtectionsForPlayer(Player player)
+    {
+        Chess[] allChess = FindObjectsOfType<Chess>();
+        foreach (Chess c in allChess)
+        {
+            if (c.player == player)
+            {
+                c.ClearProtector();
+            }
+        }
+    }
+
+
+    void NotifyShieldGuardsTurnStart(Player currentPlayer)
+    {
+        Chess[] allChess = FindObjectsOfType<Chess>();
+        foreach (Chess c in allChess)
+        {
+            if (c is ShieldGuard guard)
+            {
+                guard.OnTurnStart(currentPlayer);
+            }
+        }
+    }
 }

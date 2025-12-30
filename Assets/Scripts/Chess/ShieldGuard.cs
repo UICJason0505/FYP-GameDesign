@@ -3,8 +3,9 @@
 public class ShieldGuard : Chess
 {
     [Header("ShieldGuard Skill Settings")]
-    public int tauntCD = 2;
-    public int tauntRange = 1;
+    public int guardCD = 2;
+    public int currentCD = 0; // 当前冷却计数器
+    private bool usedThisTurn = false;
     TurnManager turnManager;
 
 
@@ -25,8 +26,60 @@ public class ShieldGuard : Chess
         // 释放援护
         if (Input.GetKeyDown(KeyCode.C) && SelectionManager.selectedObj == gameObject)
         {
-        
+            TryActivateGuard();
         }
+    }
+
+    void TryActivateGuard()
+    {
+        if (usedThisTurn)
+        {
+            Debug.Log("本回合已经使用过援护");
+            return;
+        }
+
+        if (currentCD > 0)
+        {
+            Debug.Log($"援护冷却中，还剩 {currentCD} 回合");
+            return;
+        }
+
+        ActivateGuard();
+        usedThisTurn = true;
+        currentCD = guardCD;
+    }
+
+
+
+    void ActivateGuard()
+    {
+        Chess[] allChess = FindObjectsOfType<Chess>();
+
+        foreach (Chess unit in allChess)
+        {
+            if (unit == this) continue;
+            if (unit.player != this.player) continue;
+
+            // 六边形距离 1
+            if (HexMath.HexDistance(unit.position, this.position) == 1)
+            {
+                unit.SetProtector(this);
+                Debug.Log($"{name} 正在援护 {unit.name}");
+            }
+        }
+
+        StartCoroutine(SkillRoutine(this));
+    }
+
+
+    public void OnTurnStart(Player currentPlayer)
+    {
+        if (currentPlayer != this.player) return;
+
+        usedThisTurn = false;
+
+        if (currentCD > 0)
+            currentCD--;
     }
 
 

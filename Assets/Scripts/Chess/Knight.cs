@@ -271,7 +271,7 @@ public class Knight : Chess
 
         if (destIsWater)
         {
-            // ✅ 推下水：允许推，但不占用 D
+            // 推下水：允许推，但不占用 D
             pushed.position = d;
             pushed.transform.position = destWorld + Vector3.up * 0.25f;
 
@@ -334,7 +334,7 @@ public class Knight : Chess
         }
     }
 
-    // ✅ 鼠标相关：只能调用 GridBuildingSystem.private TryGetHoveredTile(out HexTile)
+    // 鼠标相关：只能调用 GridBuildingSystem.private TryGetHoveredTile(out HexTile)
     private bool TryGetHoveredByGBS(out HexTile tile)
     {
         tile = null;

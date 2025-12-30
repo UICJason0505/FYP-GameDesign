@@ -253,8 +253,8 @@ public class Chess : MonoBehaviour
                 }
                 else
                 {
-                    // 普通单体攻击
-                    defend(damage, attacker, selectedChess);
+                    // 普通单体攻击本来用单个defend()，但现在考虑到盾卫，会在 TakeDamage 里处理援护逻辑
+                    selectedChess.TakeDamage(damage, attacker);
                     attacker.player.actionPoints -= apCost;
                     attacker.ResetTiles();
                     attacker.isInAttackMode = false;
@@ -285,17 +285,20 @@ public class Chess : MonoBehaviour
         protector = protectorChess;
     }
 
+
     // 添加一个方法来清除保护者
     public void ClearProtector()
     {
         protector = null;
     }
 
+
     // 获取保护者
     public Chess GetProtector()
     {
         return protector;
     }
+
 
     public virtual void KingAttack(Chess attacker, Chess target){}
     public virtual void KingDefend(Chess attacker, Chess target){}
@@ -335,9 +338,10 @@ public class Chess : MonoBehaviour
 
     public virtual int attack()//结算攻击
     {
-        //攻击动画播放
         return 0;
     }
+
+
     public virtual void defend(int demage, Chess attacker, Chess target)//结算伤害和血量（number）6个兵种
     {
         //等待攻击动画播放后进行受伤动画
@@ -345,11 +349,29 @@ public class Chess : MonoBehaviour
         return;
     }
 
+
+    // 援护机制的统一入口
+    public void TakeDamage(int damage, Chess attacker)
+    {
+        // 通用规则：援护
+        if (protector != null)
+        {
+            Debug.Log($"{protector.name} 援护 {name}");
+            protector.TakeDamage(damage, attacker);
+            return;
+        }
+
+        // 调用真正的受伤逻辑（子类）
+        defend(damage, attacker, this);
+    }
+
+
     public void CollectTileValue(HexTile tile)//收集格子值
     {
         int value = tile.GetTileValue();
         number += value;
     }
+
 
     // 为所有棋子统一更新 position（与 King 中的逻辑一致）
     void OnTriggerStay(Collider other) => UpdatePositionFromTile(other);
