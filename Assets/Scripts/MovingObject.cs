@@ -21,6 +21,7 @@ public class MovingObject : MonoBehaviour
     public enum ObjectState { None, Selected, Dragging }
     public ObjectState currentState = ObjectState.None;
 
+
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
@@ -29,6 +30,7 @@ public class MovingObject : MonoBehaviour
         lineRenderer.endWidth = 0.1f;
         turnManager = FindObjectOfType<TurnManager>();
     }
+
 
     void Update()
     {
@@ -47,6 +49,7 @@ public class MovingObject : MonoBehaviour
         // 如果正在拖动物体
         if (currentState == ObjectState.Dragging && player.actionPoints > 0) HandleDragging();
     }
+
 
     // Left click handling
     private void HandleLeftClick()
@@ -146,8 +149,12 @@ public class MovingObject : MonoBehaviour
 
             // 更新位置
             originPosition = selectedObj.transform.position;
+
+            // 刷新所有棋子的保护者信息
+            Chess.RefreshAllShieldGuards();
         }
     }
+
 
     // Right click handling
     private void HandleRightClick()
@@ -165,6 +172,7 @@ public class MovingObject : MonoBehaviour
         }
     }
 
+
     // Start dragging object
     private void StartDragging()
     {
@@ -181,6 +189,7 @@ public class MovingObject : MonoBehaviour
         }
     }
 
+
     // 通过坐标获取对应的 HexTile 说实话，这段代码不应该写在这里的
     private HexTile GetTileAtCoordinates(Coordinates coords)
     {
@@ -194,6 +203,7 @@ public class MovingObject : MonoBehaviour
         }
         return null;
     }
+
 
     // Handle dragging object movement
     private void HandleDragging()
@@ -269,6 +279,7 @@ public class MovingObject : MonoBehaviour
         UpdatePath(selectedObj.transform.position);
     }
 
+
     // 返回到原始位置，并结束拖拽和选中
     private void ReturnToOriginalPosition()
     {
@@ -283,6 +294,7 @@ public class MovingObject : MonoBehaviour
         lastPosition = originPosition;
     }
 
+
     // Raycast to detect object clicked
     public GameObject RayToGetObj()
     {
@@ -296,6 +308,7 @@ public class MovingObject : MonoBehaviour
         return null;
     }
 
+
     // 判断是否移动了（根据坐标差）
     private bool HasMovedOneStep(Coordinates start, Coordinates current)
     {
@@ -303,17 +316,20 @@ public class MovingObject : MonoBehaviour
         return distance == 1;
     }
 
+
     private bool HasMovedALot(Coordinates start, Coordinates current)
     {
         int distance = (Mathf.Abs(current.x - start.x) + Mathf.Abs(current.z - start.z)+  Mathf.Abs((current.x - start.x) + (current.z - start.z))) / 2;
         return distance > 1;
     }
 
+
     // Snap 方法，通过调用 GridBuildingSystem 的 Snap 函数来实现对齐
     private Vector3 Snap(Vector3 rootPos)
     {
         return GridBuildingSystem.Instance.Snap(rootPos);
     }
+
 
     // 更新路径（在物体移动时绘制路径）
     private void UpdatePath(Vector3 currentPosition)
@@ -323,11 +339,13 @@ public class MovingObject : MonoBehaviour
         lineRenderer.SetPosition(currentPosCount, currentPosition);
     }
 
+
     // 清除路径（物体放下或取消选中时调用）
     private void ClearPath()
     {
         lineRenderer.positionCount = 0;
     }
+
 
     // 高亮物体
     private static void Highlight()
@@ -341,6 +359,7 @@ public class MovingObject : MonoBehaviour
             }
         }
     }
+
 
     // 取消高亮物体
     private static void Unhighlight()

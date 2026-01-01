@@ -31,6 +31,14 @@ public class HexTile : MonoBehaviour
 
     private void Update()
     {
+        // 检查 occupyingChess 是否已经被销毁
+        if (occupyingChess != null && occupyingChess.gameObject == null)
+        {
+            // 如果棋子已经被销毁，清除引用
+            isOccupied = false;
+            occupyingChess = null;
+        }
+
         if (occupyingChess != null)
         {
             float dist = Vector3.Distance(occupyingChess.transform.position, centerWorld);

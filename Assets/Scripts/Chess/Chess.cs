@@ -300,10 +300,35 @@ public class Chess : MonoBehaviour
     }
 
 
+    public virtual void RefreshProtection()
+    {
+        // 默认单位不做任何事
+    }
+
+
+    // 
+    public static void RefreshAllShieldGuards()
+    {
+        ShieldGuard[] guards = FindObjectsOfType<ShieldGuard>();
+        foreach (var guard in guards)
+        {
+            guard.RefreshProtection();
+        }
+    }
+
+
     public virtual void KingAttack(Chess attacker, Chess target){}
+
+
     public virtual void KingDefend(Chess attacker, Chess target){}
+
+
     public virtual void CheckDeath(Chess unit){}
+
+
     public virtual void KingDeathCheck(){}
+
+
     void OnMouseDown()//UI显示
     {
         if (SelectionManager.isAttackMode) return;
@@ -313,6 +338,8 @@ public class Chess : MonoBehaviour
             panel.ShowUnit(gameObject.name, number);
         }
     }
+
+
     public virtual void showAttackableTiles()//显示可攻击范围
     {
         for (int i = 0; i < GameManager.Instance.tiles.Length; i++)
@@ -327,6 +354,8 @@ public class Chess : MonoBehaviour
             }
         }
     }
+
+
     public virtual void ResetTiles()//攻击范围颜色显示
     {
         for (int i = 0; i < GameManager.Instance.tiles.Length; i++)
@@ -335,6 +364,7 @@ public class Chess : MonoBehaviour
             tile.ResetTile();
         }
     }
+
 
     public virtual int attack()//结算攻击
     {
@@ -372,7 +402,6 @@ public class Chess : MonoBehaviour
         number += value;
     }
 
-
     // 为所有棋子统一更新 position（与 King 中的逻辑一致）
     void OnTriggerStay(Collider other) => UpdatePositionFromTile(other);
 
@@ -383,6 +412,7 @@ public class Chess : MonoBehaviour
         if (currentTile == null) return;
         position = currentTile.coordinates;
     }
+
 
     public IEnumerator AttackRoutine(Chess unit)
     {
@@ -400,6 +430,8 @@ public class Chess : MonoBehaviour
         anim.SetInteger("State", (int)Anime.Idle);
         isAttacking = false;
     }
+
+
     public IEnumerator DieRoutine(Chess unit)
     {
         // 切到死亡状态
@@ -421,9 +453,23 @@ public class Chess : MonoBehaviour
             yield return null;
             info = anim.GetCurrentAnimatorStateInfo(0);
         }
+
+        // 清除占用状态
+        if (unit.currentTile != null)
+        {
+            if (unit.currentTile.occupyingChess == unit)
+            {
+                unit.currentTile.isOccupied = false;
+                unit.currentTile.occupyingChess = null;
+                Debug.Log($"{unit.name} 清除占用状态: {unit.currentTile.name}");
+            }
+        }
+
         // 播完再销毁
         Destroy(unit.gameObject);
     }
+
+
     public IEnumerator SkillRoutine(Chess unit)
     {
         Animator anim = unit.animator;
